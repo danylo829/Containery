@@ -16,11 +16,12 @@ from .api.routes import api
 container.register_blueprint(api, url_prefix='/api')
 
 def container_info (id):
-    result, status = Docker.inspect_container(id)
-    if status != 200:
-        return jsonify(result), status
-
-    container_details = result
+    response, status_code = Docker.inspect_container(id)
+    container_details = []
+    if status_code not in range(200, 300):
+        return response, status_code
+    else:
+        container_details = response.json()
 
     general_info = {
         "id": container_details["Id"],
@@ -60,7 +61,11 @@ def container_info (id):
         } for net, network in container_details['NetworkSettings']['Networks'].items()]
     }
 
-    return container_info
+    return container_info, 200
+
+def container_name (id):
+    response, status_code = container_info(id)
+    return response['general_info']['name'] if status_code in range(200, 300) else "Unknown Container"  # Fallback name
 
 @container.before_request
 @login_required
@@ -69,21 +74,24 @@ def before_request():
 
 @container.route('/list', methods=['GET'])
 def get_list():
-    result, status = Docker.get_containers()
-    if status != 200:
-        return jsonify(result), status
+    response, status_code = Docker.get_containers()
+    containers = []
+    if status_code not in range(200, 300):
+        flash(f'Error ({status_code}): {response.text}', 'error')
+    else:
+        containers = response.json()
 
-    containers = result
     rows = []
-    for container in containers:
-        row = {
-            'id': container['Id'],
-            'name': container['Names'][0].strip('/'),
-            'status': container['Status'],
-            'image': container['Image'],
-            'imageID': container['ImageID']
-        }
-        rows.append(row)
+    if containers is not None:
+        for container in containers:
+            row = {
+                'id': container['Id'],
+                'name': container['Names'][0].strip('/'),
+                'status': container['Status'],
+                'image': container['Image'],
+                'imageID': container['ImageID']
+            }
+            rows.append(row)
 
     rows = sorted(rows, key=lambda x: x['name'], reverse=True)
 
@@ -98,11 +106,17 @@ def get_list():
 
 @container.route('/<id>', methods=['GET'])
 def info(id): 
-    container = container_info(id)
+    response, status_code = container_info(id)
+    container = []
+    if status_code not in range(200, 300):
+        flash(f'Error ({status_code}): {response.text}', 'error')
+    else:
+        container = response
+
     breadcrumbs = [
         {"name": "Dashboard", "url": url_for('main.dashboard.index')},
         {"name": "Containers", "url": url_for('main.container.get_list')},
-        {"name": container['general_info']['name'], "url": None},
+        {"name": container_name(id), "url": None},
     ]
     page_title = 'Container Details'
     
@@ -111,19 +125,19 @@ def info(id):
 
 @container.route('/<id>/logs', methods=['GET'])
 def logs(id):
-    result, status = Docker.get_logs(id)
+    response, status_code = Docker.get_logs(id)
     logs = []
-    if status != 200:
-        flash(f'Error getting logs', 'error')
+    if status_code not in range(200, 300):
+        flash(f'Error ({status_code}): {response.text}', 'error')
     else:
-        logs = result
+        logs = response
 
     log_text = ''.join(log['message'] for log in logs)
     
     breadcrumbs = [
         {"name": "Dashboard", "url": url_for('main.dashboard.index')},
         {"name": "Containers", "url": url_for('main.container.get_list')},
-        {"name": container_info(id)['general_info']['name'], "url": url_for('main.container.info', id=id)},
+        {"name": container_name(id), "url": url_for('main.container.info', id=id)},
         {"name": "Logs", "url": None},
     ]
     page_title = 'Container Logs'
@@ -133,27 +147,24 @@ def logs(id):
 
 @container.route('/<id>/processes', methods=['GET'])
 def processes(id):
-    result, status = Docker.get_processes(id)
-    # return result, status
+    response, status_code = Docker.get_processes(id)
     processes = []
-    if status not in range(200, 300):
+    if status_code not in range(200, 300):
         # Custom error messages
-        if status == 409:
-            id = result['message'].split(' ')[1]
-            name = container_info(id)['general_info']['name']
-            flash(f'container {name} is not running', 'error')
+        if status_code == 409:
+            id = response.json()['message'].split(' ')[1]
+            name = container_name(id)
+            flash(f'Container {name} is not running', 'error')
         # Default error message
         else:
-            flash(result['message'], 'error')
+            flash(f'Error ({status_code}): {response.text}', 'error')
     else:
-        processes = result
+        processes = response.json()
 
-    # return processes, status
-    
     breadcrumbs = [
         {"name": "Dashboard", "url": url_for('main.dashboard.index')},
         {"name": "Containers", "url": url_for('main.container.get_list')},
-        {"name": container_info(id)['general_info']['name'], "url": url_for('main.container.info', id=id)},
+        {"name": container_name(id), "url": url_for('main.container.info', id=id)},
         {"name": "Processes", "url": None},
     ]
     page_title = 'Container Processes'
@@ -165,7 +176,7 @@ def console(id):
     breadcrumbs = [
         {"name": "Dashboard", "url": url_for('main.dashboard.index')},
         {"name": "Containers", "url": url_for('main.container.get_list')},
-        {"name": container_info(id)['general_info']['name'], "url": url_for('main.container.info', id=id)},
+        {"name": container_name(id), "url": url_for('main.container.info', id=id)},
         {"name": "Terminal", "url": None},
     ]
     page_title = 'Container terminal'
@@ -189,7 +200,6 @@ def handle_start_session(data):
 @socketio.on('input')
 def handle_command(data):
     command = data['command']
-    print(command)
     sid = request.sid  # Using flask.request for session ID
 
     response = Docker.handle_command(command, sid)

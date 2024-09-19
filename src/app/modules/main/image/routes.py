@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, jsonify
+from flask import Blueprint, render_template, url_for, jsonify, flash
 from flask_login import login_required
 
 from app.utils.docker import Docker
@@ -7,11 +7,12 @@ from app.utils.common import format_docker_timestamp
 image = Blueprint('image', __name__, template_folder='templates', static_folder='static')
 
 def image_info(id):
-    result, status = Docker.inspect_image(id)
-    if status != 200:
-        return jsonify(result), status
-
-    image_details = result
+    response, status_code = Docker.inspect_image(id)
+    image_details = []
+    if status_code not in range(200, 300):
+        return response, status_code
+    else:
+        image_details = response.json()
 
     general_info = {
         "architecture": image_details["Architecture"],
@@ -33,7 +34,7 @@ def image_info(id):
     
     cmd = image_details["Config"].get("Cmd", [])
 
-    image_info = {
+    image = {
         'general_info': general_info,
         'env_vars': env_vars,
         'labels': labels,
@@ -42,7 +43,11 @@ def image_info(id):
         'cmd': cmd
     }
 
-    return image_info
+    return image, 200
+
+def image_name(id):
+    response, status_code = image_info(id)
+    return response['repo_tags'][0].split(":")[0] if status_code in range(200, 300) else "Unknown Image"  # Fallback name
 
 @image.before_request
 @login_required
@@ -51,11 +56,13 @@ def before_request():
 
 @image.route('/list', methods=['GET'])
 def get_list():
-    result, status = Docker.get_images()
-    if status != 200:
-        return jsonify(result), status
+    response, status_code = Docker.get_images()
+    images = []
+    if status_code not in range(200, 300):
+        flash(f'Error ({status_code}): {response.text}', 'error')
+    else:
+        images = response.json()
 
-    images = result
     rows = []
     for image in images:
         row = {
@@ -77,11 +84,17 @@ def get_list():
 
 @image.route('/<id>', methods=['GET'])
 def info(id):
-    image = image_info(id)
+    response, status_code = image_info(id)
+    image = []
+    if status_code not in range(200, 300):
+        flash(f'Error ({status_code}): {response.text}', 'error')
+    else:
+        image = response
+
     breadcrumbs = [
         {"name": "Dashboard", "url": url_for('main.dashboard.index')},
         {"name": "Images", "url": url_for('main.image.get_list')},
-        {"name": image['repo_tags'][0].split(":")[0], "url": None},
+        {"name": image_name(id), "url": None},
     ]
     page_title = 'Image Details'
     

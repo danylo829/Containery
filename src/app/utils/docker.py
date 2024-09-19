@@ -1,8 +1,5 @@
 import json
-import pycurl
-from io import BytesIO
-import time
-import struct, io
+import requests_unixsocket
 
 import socket
 import select
@@ -12,74 +9,53 @@ from app.models import GlobalSettings
 clients = {}  # Dictionary to store client connections
 
 class Docker:
-    @staticmethod
-    def perform_request(endpoint, method='GET', data=None):
-        docker_url = f'http://unix/{GlobalSettings.get_setting("docker_api_version")}{endpoint}'
-        buffer = BytesIO()
-        curl = pycurl.Curl()
-        curl.setopt(curl.URL, docker_url)
-        curl.setopt(curl.WRITEFUNCTION, buffer.write)
-        curl.setopt(curl.UNIX_SOCKET_PATH, GlobalSettings.get_setting("docker_socket"))
+    def __init__(self):
+        self.socket_path = GlobalSettings.get_setting("docker_socket")
+        self.encoded_socket_path = self.socket_path.replace('/', '%2F')
 
-        curl.setopt(curl.TIMEOUT, 100)  # total timeout in seconds
-        curl.setopt(curl.CONNECTTIMEOUT, 5)  # connection timeout in seconds
-
-        if method == 'POST':
-            curl.setopt(curl.POST, 1)
-        elif method == 'DELETE':
-            curl.setopt(curl.CUSTOMREQUEST, 'DELETE')
-
-        if data:
-            curl.setopt(curl.POSTFIELDS, json.dumps(data))
-            curl.setopt(curl.HTTPHEADER, ['Content-Type: application/json'])
-
+    def perform_request(self, path, method='GET'):
+        url = f'http+unix://{self.encoded_socket_path}{path}'
+        session = requests_unixsocket.Session()
         try:
-            curl.perform()
-            response_code = curl.getinfo(curl.RESPONSE_CODE)
-            response_body = buffer.getvalue()
+            if method == 'GET':
+                response = session.get(url)
+            if method == 'POST':
+                response = session.post(url)
 
-            try:
-                response_text = response_body.decode('utf-8')
-                return json.loads(response_text), response_code
-            except (UnicodeDecodeError, json.JSONDecodeError):
-                # If decoding fails, return raw response
-                return response_body, response_code
+            return response, response.status_code
 
         except Exception as e:
-            return {'error': str(e)}, 500
-
-        finally:
-            curl.close()
-
+            return str(e), 500
+    
     @staticmethod
     def info():
-        return Docker.perform_request('/info')
+        return Docker().perform_request('/info')
 
     # **************** Container ****************
     
     @staticmethod
     def get_containers():
-        return Docker.perform_request('/containers/json?all=true')
+        return Docker().perform_request('/containers/json?all=true')
 
     @staticmethod
     def inspect_container(id):
-        return Docker.perform_request(f'/containers/{id}/json')
+        return Docker().perform_request(f'/containers/{id}/json')
 
     @staticmethod
     def get_processes(id):
-        return Docker.perform_request(f'/containers/{id}/top')
+        return Docker().perform_request(f'/containers/{id}/top')
 
     @staticmethod
     def get_logs(id, stdout=True, stderr=True):
-        endpoint = f'/containers/{id}/logs?stdout={str(stdout).lower()}&stderr={str(stderr).lower()}'
-        response_body, response_code = Docker.perform_request(endpoint)
+        path = f'/containers/{id}/logs?stdout={str(stdout).lower()}&stderr={str(stderr).lower()}'
+        response, status_code = Docker().perform_request(path)
         messages = []
         offset = 0
 
-        data = response_body
+        if status_code not in range(200, 300):
+            return response, status_code
 
-        if not data:
-            return 'No data', 500
+        data = response.content
 
         while offset < len(data):
             # Extract message stream type
@@ -91,11 +67,11 @@ class Docker:
             elif stream_type == 2:
                 message_type = 'stderr'
             else:
-                return 'Invalid stream type', 500
+                message_type = 'unknown'
 
             # Extract the length of the message
             length_bytes = data[offset + 4:offset + 8]
-            message_length = struct.unpack('>I', length_bytes)[0]
+            message_length = (length_bytes[0] << 24) + (length_bytes[1] << 16) + (length_bytes[2] << 8) + length_bytes[3]
 
             # Extract the message based on the length
             message_start = offset + 8
@@ -115,28 +91,28 @@ class Docker:
 
     @staticmethod
     def restart_container(id):
-        return Docker.perform_request(f'/containers/{id}/restart', method='POST')
+        return Docker().perform_request(f'/containers/{id}/restart', method='POST')
 
     # **************** ********* ****************
 
     # ****************** Image ******************
     @staticmethod
     def get_images():
-        return Docker.perform_request('/images/json')
+        return Docker().perform_request('/images/json')
 
     @staticmethod
     def inspect_image(id):
-        return Docker.perform_request(f'/images/{id}/json')
+        return Docker().perform_request(f'/images/{id}/json')
     
     # ****************** ***** ******************
 
     @staticmethod
     def get_volumes():
-        return Docker.perform_request('/volumes')
+        return Docker().perform_request('/volumes')
 
     @staticmethod
     def get_networks():
-        return Docker.perform_request('/networks')
+        return Docker().perform_request('/networks')
 
     # **************** Exec and Interactive Session ****************
     @staticmethod
@@ -206,4 +182,4 @@ class Docker:
         if client:
             client.send(command.encode('utf-8'))
         else:
-            return 'No active session found.'
+            return 'No active session found.\n'

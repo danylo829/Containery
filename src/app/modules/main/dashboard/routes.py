@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, render_template, jsonify
+from flask import Blueprint, redirect, url_for, render_template, jsonify, flash
 from flask_login import login_required
 
 from app.utils.docker import Docker
@@ -15,10 +15,12 @@ def before_request():
 
 @dashboard.route('/', methods=['GET'])
 def index():
-
-    result, status = Docker.info()
-
-    info = result
+    response, status_code = Docker.info()
+    info = []
+    if status_code not in range(200, 300):
+        flash(f'Error ({status_code}): {response.text}', 'error')
+    else:
+        info = response.json()
 
     breadcrumbs = [
         {"name": "Dashboard", "url": None},

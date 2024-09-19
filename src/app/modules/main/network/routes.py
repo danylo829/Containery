@@ -12,11 +12,13 @@ def before_request():
 
 @network.route('/list', methods=['GET'])
 def get_list():
-    result, status = Docker.get_networks()
-    if status != 200:
-        return jsonify(result), status
+    response, status_code = Docker.get_networks()
+    networks = []
+    if status_code not in range(200, 300):
+        flash(f'Error ({status_code}): {response.text}', 'error')
+    else:
+        networks = response.json()
 
-    networks = result
     rows = []
     for network in networks:
         row = {

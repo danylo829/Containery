@@ -10,5 +10,6 @@ def before_request():
     pass
 
 @api.route('/<id>/restart', methods=['POST'])
-def test(id):
-    return Docker.restart_container(id=id)
+def restart(id):
+    respone, status_code = Docker.restart_container(id)
+    return str(respone), status_code 

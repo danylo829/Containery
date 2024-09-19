@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, jsonify
+from flask import Blueprint, render_template, url_for, jsonify, flash
 from flask_login import login_required
 
 from app.utils.docker import Docker
@@ -12,11 +12,13 @@ def before_request():
 
 @volume.route('/list', methods=['GET'])
 def get_list():
-    result, status = Docker.get_volumes()
-    if status != 200:
-        return jsonify(result), status
+    response, status_code = Docker.get_volumes()
+    volumes = []
+    if status_code not in range(200, 300):
+        flash(f'Error ({status_code}): {response.text}', 'error')
+    else:
+        volumes = response.json().get('Volumes', [])
 
-    volumes = result.get('Volumes', [])
     rows = []
     for volume in volumes:
         row = {

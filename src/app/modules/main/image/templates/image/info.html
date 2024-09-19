@@ -5,72 +5,73 @@
 {% endblock %}
 
 {% block content %}
-<!-- General Info Block -->
-<div class="content-card">
-    <div class="title">
-        <h2>General Info</h2>
-    </div>
-    
-    <p><strong>Architecture:</strong> {{ image.general_info.architecture }}</p>
-    <p><strong>Docker Version:</strong> {{ image.general_info.docker_version }}</p>
-    <p><strong>OS:</strong> {{ image.general_info.os }}</p>
-    <p><strong>Created At:</strong> {{ image.general_info.created_at }}</p>
-    <p><strong>Size:</strong> {{ image.general_info.size }} MB</p>
-    <p><strong>Command:</strong> {{ image.cmd }}</p>
-    <p><strong>Entrypoint:</strong> {{ image.entrypoint }}</p>
-    {% if image.general_info.author %}
-        <p><strong>Author:</strong> {{ image.general_info.author }}</p>
-    {% else %}
-        <p><strong>Author:</strong> -</p>
-    {% endif %}
-    
-    {% if image.general_info.comment %}
-        <p><strong>Comment:</strong> {{ image.general_info.comment }}</p>
-    {% else %}
-        <p><strong>Comment:</strong> -</p>
-    {% endif %}
-</div>
-
-<!-- ENV & Labels Block -->
-<div class="content-card">
-    <h2>Environment Variables</h2>
-    {% if image.env_vars %}
-        <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
-            <table>
-                <tbody>
-                    {% for env in image.env_vars %}
-                    <tr>
-                        <td><strong>{{ env.split('=', 1)[0] }}</strong></td>
-                        <td>{{ env.split('=', 1)[1] }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    {% if image %}
+        <!-- General Info Block -->
+        <div class="content-card">
+            <div class="title">
+                <h2>General Info</h2>
+            </div>
+            
+            <p><strong>Architecture:</strong> {{ image.general_info.architecture }}</p>
+            <p><strong>Docker Version:</strong> {{ image.general_info.docker_version }}</p>
+            <p><strong>OS:</strong> {{ image.general_info.os }}</p>
+            <p><strong>Created At:</strong> {{ image.general_info.created_at }}</p>
+            <p><strong>Size:</strong> {{ image.general_info.size }} MB</p>
+            <p><strong>Command:</strong> {{ image.cmd }}</p>
+            <p><strong>Entrypoint:</strong> {{ image.entrypoint }}</p>
+            {% if image.general_info.author %}
+                <p><strong>Author:</strong> {{ image.general_info.author }}</p>
+            {% else %}
+                <p><strong>Author:</strong> -</p>
+            {% endif %}
+            
+            {% if image.general_info.comment %}
+                <p><strong>Comment:</strong> {{ image.general_info.comment }}</p>
+            {% else %}
+                <p><strong>Comment:</strong> -</p>
+            {% endif %}
         </div>
-    {% else %}
-        <p>No environment variables found.</p>
-    {% endif %}
-</div>
 
-<!-- Labels Block -->
-<div class="content-card">
-    <h2>Labels</h2>
-    {% if image.labels %}
-        <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
-            <table>
-                <tbody>
-                    {% for key, value in image.labels.items() %}
-                    <tr>
-                        <td><strong>{{ key }}</strong></td>
-                        <td>{{ value }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <!-- ENV & Labels Block -->
+        <div class="content-card">
+            <h2>Environment Variables</h2>
+            {% if image.env_vars %}
+                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                    <table>
+                        <tbody>
+                            {% for env in image.env_vars %}
+                            <tr>
+                                <td><strong>{{ env.split('=', 1)[0] }}</strong></td>
+                                <td>{{ env.split('=', 1)[1] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>No environment variables found.</p>
+            {% endif %}
         </div>
-    {% else %}
-        <p>No labels found.</p>
-    {% endif %}
-</div>
 
+        <!-- Labels Block -->
+        <div class="content-card">
+            <h2>Labels</h2>
+            {% if image.labels %}
+                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                    <table>
+                        <tbody>
+                            {% for key, value in image.labels.items() %}
+                            <tr>
+                                <td><strong>{{ key }}</strong></td>
+                                <td>{{ value }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>No labels found.</p>
+            {% endif %}
+        </div>
+    {% endif %}
 {% endblock %}
