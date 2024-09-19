@@ -479,6 +479,7 @@ h2 .loading-spinner .material-icons {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 1rem;
 }
 
 hr {
@@ -679,8 +680,13 @@ select option {
 
 .actions {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    flex-direction: column; /* Stack the divs in a column */
+    align-items: flex-end; /* Align the divs and buttons to the right */
+}
+
+.actions div {
+    display: flex;
+    gap: 10px; /* Add some spacing between the buttons */
 }
 
 .actions a span {
