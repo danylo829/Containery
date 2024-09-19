@@ -195,6 +195,10 @@ def handle_start_session(data):
 
     exec_id = docker.create_exec(exec_create_endpoint, payload=payload)
 
+    if exec_id == None:
+        emit('output', {'data': 'Could not create exec session. Check if container is running.\r\n'})
+        return
+
     socketio.start_background_task(target=docker.start_exec_session, exec_id=exec_id, sid=sid, socketio=socketio, app=current_app._get_current_object())
 
 @socketio.on('input')
