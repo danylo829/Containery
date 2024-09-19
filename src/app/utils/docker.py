@@ -1,162 +1,68 @@
 import json
-import requests_unixsocket
-
 import socket
 import select
-
+import requests_unixsocket
 from app.models import GlobalSettings
-
-clients = {}  # Dictionary to store client connections
 
 class Docker:
     def __init__(self):
-        self.socket_path = GlobalSettings.get_setting("docker_socket")
-        self.encoded_socket_path = self.socket_path.replace('/', '%2F')
+        self.clients = {}  # Store client connections
 
-    def perform_request(self, path, method='GET'):
-        url = f'http+unix://{self.encoded_socket_path}{path}'
+    def perform_request(self, path, method='GET', payload=None):
+        encoded_socket_path = GlobalSettings.get_setting("docker_socket").replace('/', '%2F')
+        url = f'http+unix://{encoded_socket_path}{path}'
         session = requests_unixsocket.Session()
         try:
             if method == 'GET':
                 response = session.get(url)
-            if method == 'POST':
-                response = session.post(url)
+            elif method == 'POST':
+                response = session.post(url, json=payload)
 
             return response, response.status_code
 
         except Exception as e:
             return str(e), 500
     
-    @staticmethod
-    def info():
-        return Docker().perform_request('/info')
+    def create_exec(self, endpoint, payload):
+        """Create an exec instance and return its ID."""
+        response, status_code = self.perform_request(endpoint, method='POST', payload=payload)
+        if status_code in range(200, 300):
+            exec_instance_json = response.json()
+            return exec_instance_json.get("Id")
+        return None
 
-    # **************** Container ****************
-    
-    @staticmethod
-    def get_containers():
-        return Docker().perform_request('/containers/json?all=true')
-
-    @staticmethod
-    def inspect_container(id):
-        return Docker().perform_request(f'/containers/{id}/json')
-
-    @staticmethod
-    def get_processes(id):
-        return Docker().perform_request(f'/containers/{id}/top')
-
-    @staticmethod
-    def get_logs(id, stdout=True, stderr=True):
-        path = f'/containers/{id}/logs?stdout={str(stdout).lower()}&stderr={str(stderr).lower()}'
-        response, status_code = Docker().perform_request(path)
-        messages = []
-        offset = 0
-
-        if status_code not in range(200, 300):
-            return response, status_code
-
-        data = response.content
-
-        while offset < len(data):
-            # Extract message stream type
-            stream_type = data[offset]
-            
-            # Determine stream type
-            if stream_type == 1:
-                message_type = 'stdout'
-            elif stream_type == 2:
-                message_type = 'stderr'
-            else:
-                message_type = 'unknown'
-
-            # Extract the length of the message
-            length_bytes = data[offset + 4:offset + 8]
-            message_length = (length_bytes[0] << 24) + (length_bytes[1] << 16) + (length_bytes[2] << 8) + length_bytes[3]
-
-            # Extract the message based on the length
-            message_start = offset + 8
-            message_end = message_start + message_length
-            message_bytes = data[message_start:message_end].decode('utf-8', errors='ignore')
-
-            # Build the JSON structure
-            messages.append({
-                'type': message_type,
-                'message': message_bytes
-            })
-            
-            # Move the offset to the next message
-            offset = message_end
-
-        return messages, 200
-
-    @staticmethod
-    def restart_container(id):
-        return Docker().perform_request(f'/containers/{id}/restart', method='POST')
-
-    # **************** ********* ****************
-
-    # ****************** Image ******************
-    @staticmethod
-    def get_images():
-        return Docker().perform_request('/images/json')
-
-    @staticmethod
-    def inspect_image(id):
-        return Docker().perform_request(f'/images/{id}/json')
-    
-    # ****************** ***** ******************
-
-    @staticmethod
-    def get_volumes():
-        return Docker().perform_request('/volumes')
-
-    @staticmethod
-    def get_networks():
-        return Docker().perform_request('/networks')
-
-    # **************** Exec and Interactive Session ****************
-    @staticmethod
-    def _send_headers(method, endpoint, payload=None):
-        headers = f"{method} {endpoint} HTTP/1.1\r\nHost: localhost\r\nContent-Type: application/json\r\n"
-        body = json.dumps(payload) if payload else ""
-        headers += f"Content-Length: {len(body)}\r\n\r\n"
-        return headers + body
-
-    @staticmethod
-    def perform_request_exec(endpoint, method="GET", payload=None):
-        client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        client.connect(GlobalSettings.get_setting("docker_socket"))
-
-        request = Docker._send_headers(method, endpoint, payload)
-        client.send(request.encode('utf-8'))
-
-        response = client.recv(4096).decode('utf-8')
-        client.close()
-
-        headers, body = response.split("\r\n\r\n", 1)
-        return body
-
-    @staticmethod
-    def start_exec_session(exec_id, sid, socketio, app):
-        with app.app_context():  # Push the app context manually
+    def start_exec_session(self, exec_id, sid, socketio, app):
+        with app.app_context():
             exec_start_endpoint = f"/exec/{exec_id}/start"
             start_payload = {"Detach": False, "Tty": True, "ConsoleSize": [45, 150]}
 
             client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
             client.connect(GlobalSettings.get_setting("docker_socket"))
 
-            request = Docker._send_headers("POST", exec_start_endpoint, start_payload)
+            # Perform request to start the exec session
+            # Construct the request manually
+            request_line = f"POST {exec_start_endpoint} HTTP/1.1\r\n"
+            request_body = json.dumps(start_payload)  # Ensure proper JSON encoding
+            headers = "Host: docker\r\nContent-Type: application/json\r\nContent-Length: {}\r\n".format(len(request_body))
+            empty_line = "\r\n"
+
+            # Full HTTP request
+            request = request_line + headers + empty_line + request_body
+
+            # Send the request through the client, ensuring it's encoded to bytes
             client.send(request.encode('utf-8'))
 
-            clients[sid] = client
+            # Store client for the session
+            self.clients[sid] = client
 
             received_first_response = False
+            timeout_counter = 0  # Keep track of no data periods
             while True:
-                read_ready, _, _ = select.select([client], [], [], 0.1)
+                read_ready, _, _ = select.select([client], [], [], 1.0)  # Wait for 1 second
                 if client in read_ready:
                     output = client.recv(4096)
                     if not output:
-                        socketio.emit('output', {'data': '\nConnection closed by Docker.'}, to=sid)
+                        socketio.emit('output', {'data': '\nConnection closed by Docker.\r\n'}, to=sid)
                         break
 
                     if not received_first_response:
@@ -173,13 +79,87 @@ class Docker:
 
                     socketio.emit('output', {'data': output}, to=sid)
                     socketio.sleep(0.1)
+                    timeout_counter = 0  # Reset on receiving data
+                else:
+                    timeout_counter += 1
+                    if timeout_counter > 300:  # x seconds with no data
+                        client.send('\u0003'.encode('utf-8')) # send CTRL-C
+                        client.send('\u0004'.encode('utf-8')) # send CTRL-D
+                        socketio.emit('output', {'data': '\r\nSession timeout due to inactivity.\r\n'}, to=sid)
+                        break
 
+            # Close the session
             client.close()
-            del clients[sid]
+            del self.clients[sid]
 
-    def handle_command(command, sid):
-        client = clients.get(sid)
+    def handle_command(self, command, sid):
+        client = self.clients.get(sid)
         if client:
             client.send(command.encode('utf-8'))
         else:
-            return 'No active session found.\n'
+            return 'No active session found.\r\n'
+    
+    def info(self):
+        return self.perform_request('/info')
+
+    def get_containers(self):
+        return self.perform_request('/containers/json?all=true')
+
+    def inspect_container(self, container_id):
+        return self.perform_request(f'/containers/{container_id}/json')
+
+    def get_processes(self, container_id):
+        return self.perform_request(f'/containers/{container_id}/top')
+
+    def get_logs(self, container_id, stdout=True, stderr=True):
+        path = f'/containers/{container_id}/logs?stdout={str(stdout).lower()}&stderr={str(stderr).lower()}'
+        response, status_code = self.perform_request(path)
+        messages = []
+        offset = 0
+
+        if status_code not in range(200, 300):
+            return response, status_code
+
+        data = response.content
+
+        while offset < len(data):
+            stream_type = data[offset]
+
+            if stream_type == 1:
+                message_type = 'stdout'
+            elif stream_type == 2:
+                message_type = 'stderr'
+            else:
+                message_type = 'unknown'
+
+            length_bytes = data[offset + 4:offset + 8]
+            message_length = (length_bytes[0] << 24) + (length_bytes[1] << 16) + (length_bytes[2] << 8) + length_bytes[3]
+
+            message_start = offset + 8
+            message_end = message_start + message_length
+            message_bytes = data[message_start:message_end].decode('utf-8', errors='ignore')
+
+            messages.append({
+                'type': message_type,
+                'message': message_bytes
+            })
+
+            offset = message_end
+
+        return messages, 200
+
+    def restart_container(self, container_id):
+        return self.perform_request(f'/containers/{container_id}/restart', method='POST')
+
+    def get_images(self):
+        return self.perform_request('/images/json')
+
+    def inspect_image(self, image_id):
+        return self.perform_request(f'/images/{image_id}/json')
+
+    def get_volumes(self):
+        return self.perform_request('/volumes')
+
+    def get_networks(self):
+        return self.perform_request('/networks')
+

@@ -4,6 +4,8 @@ from app.utils.docker import Docker
 
 api = Blueprint('container', __name__)
 
+docker = Docker()
+
 @api.before_request
 @login_required
 def before_request():
@@ -11,5 +13,5 @@ def before_request():
 
 @api.route('/<id>/restart', methods=['POST'])
 def restart(id):
-    respone, status_code = Docker.restart_container(id)
+    respone, status_code = docker.restart_container(id)
     return str(respone), status_code 

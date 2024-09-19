@@ -7,15 +7,16 @@ import psutil
 
 dashboard = Blueprint('dashboard', __name__, template_folder='templates', static_folder='static')
 
+docker = Docker()
+
 @dashboard.before_request
 @login_required
 def before_request():
     pass
 
-
 @dashboard.route('/', methods=['GET'])
 def index():
-    response, status_code = Docker.info()
+    response, status_code = docker.info()
     info = []
     if status_code not in range(200, 300):
         flash(f'Error ({status_code}): {response.text}', 'error')

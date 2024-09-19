@@ -15,8 +15,10 @@ from .api.routes import api
 
 container.register_blueprint(api, url_prefix='/api')
 
+docker = Docker()
+
 def container_info (id):
-    response, status_code = Docker.inspect_container(id)
+    response, status_code = docker.inspect_container(id)
     container_details = []
     if status_code not in range(200, 300):
         return response, status_code
@@ -74,7 +76,7 @@ def before_request():
 
 @container.route('/list', methods=['GET'])
 def get_list():
-    response, status_code = Docker.get_containers()
+    response, status_code = docker.get_containers()
     containers = []
     if status_code not in range(200, 300):
         flash(f'Error ({status_code}): {response.text}', 'error')
@@ -125,7 +127,7 @@ def info(id):
 
 @container.route('/<id>/logs', methods=['GET'])
 def logs(id):
-    response, status_code = Docker.get_logs(id)
+    response, status_code = docker.get_logs(id)
     logs = []
     if status_code not in range(200, 300):
         flash(f'Error ({status_code}): {response.text}', 'error')
@@ -147,7 +149,7 @@ def logs(id):
 
 @container.route('/<id>/processes', methods=['GET'])
 def processes(id):
-    response, status_code = Docker.get_processes(id)
+    response, status_code = docker.get_processes(id)
     processes = []
     if status_code not in range(200, 300):
         # Custom error messages
@@ -191,17 +193,15 @@ def handle_start_session(data):
     exec_create_endpoint = f"/containers/{container_id}/exec"
     payload = {"AttachStdin": True, "AttachStdout": True, "AttachStderr": True, "Tty": True, "Cmd": ["/bin/bash"], "User": 'root'}
 
-    exec_instance = Docker.perform_request_exec(exec_create_endpoint, method='POST', payload=payload)
-    exec_instance_json = json.loads(exec_instance)
-    exec_id = exec_instance_json.get("Id")
+    exec_id = docker.create_exec(exec_create_endpoint, payload=payload)
 
-    socketio.start_background_task(target=Docker.start_exec_session, exec_id=exec_id, sid=sid, socketio=socketio, app=current_app._get_current_object())
+    socketio.start_background_task(target=docker.start_exec_session, exec_id=exec_id, sid=sid, socketio=socketio, app=current_app._get_current_object())
 
 @socketio.on('input')
 def handle_command(data):
     command = data['command']
     sid = request.sid  # Using flask.request for session ID
 
-    response = Docker.handle_command(command, sid)
+    response = docker.handle_command(command, sid)
     if response:
         emit('output', {'data': response})
