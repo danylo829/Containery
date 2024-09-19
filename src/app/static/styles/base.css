@@ -746,6 +746,31 @@ select option {
     max-width: 300px;
 }
 
+.status {
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.status.running {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+}
+
+.status.stopped {
+    background-color: var(--error-bg);
+    color: var(--error-text)
+}
+
+.status.exited {
+    background-color: var(--error-bg);
+    color: var(--error-text)
+}
+
+.status.paused {
+    background-color: var(--info-bg);
+    color: var(--info-text)
+}
+
 @keyframes slideUp {
     0% {
         transform: translateY(50px);

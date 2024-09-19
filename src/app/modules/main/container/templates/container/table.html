@@ -25,7 +25,7 @@
                 {% for row in rows %}
                 <tr>
                     <td><a href="{{ url_for('main.container.info', id=row.id) }}">{{ row.name }}</a></td>
-                    <td>{{ row.status }}</td>
+                    <td><span>{{ row.status }}</span></td>
                     <td><a href="{{ url_for('main.image.info', id=row.imageID) }}">{{ row.image }}</a></td>
                     <td>
                         <a class="restart-btn" data-id="{{ row.id }}"><span class="material-icons">refresh</span></a>
