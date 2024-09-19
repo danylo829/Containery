@@ -175,7 +175,7 @@ def processes(id):
         {"name": container_name(id), "url": url_for('main.container.info', id=id)},
         {"name": "Processes", "url": None},
     ]
-    page_title = 'Container Processes'
+    page_title = f'{container_name(id)} processes'
     
     return render_template('container/processes.html', processes=processes, breadcrumbs=breadcrumbs, page_title=page_title)
 

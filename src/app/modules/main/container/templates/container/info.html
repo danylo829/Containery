@@ -10,7 +10,7 @@
         <!-- General Info Block -->
         <div class="content-card">
             <div class="title">
-                <h2>General</h2>
+                <h2>{{ container.general_info.name }}</h2>
                 <div class="actions">
                     <div>
                         <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons">troubleshoot</span></a> <!-- Logs -->
@@ -25,8 +25,6 @@
                     </div>
                 </div>
             </div>
-            
-            <p><strong>Name:</strong> {{ container.general_info.name }}</p>
             <p><strong>Image:</strong><a href="{{ url_for('main.image.info', id=container.image.id) }}"> {{ container.image.name }}</a></p>
             <p><strong>Status:</strong> 
                 <span class="status {{ container.general_info.status }}">
