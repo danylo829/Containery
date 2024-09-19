@@ -10,6 +10,11 @@
         <div class="content-card">
             <div class="title">
                 <h2>{{ image.repo_tags[0] }}</h2>
+                <div class="actions">
+                    <div>
+                        <a href="#"><span class="material-icons icon-button">delete</span></a> <!-- Delete -->
+                    </div>
+                </div>
             </div>
             
             <p><strong>Architecture:</strong> {{ image.general_info.architecture }}</p>
