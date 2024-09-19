@@ -49,7 +49,7 @@ def image_info(id):
 
 def image_name(id):
     response, status_code = image_info(id)
-    return response['repo_tags'][0].split(":")[0] if status_code in range(200, 300) else "Unknown Image"  # Fallback name
+    return response['repo_tags'][0] if 'repo_tags' in response and response['repo_tags'] and status_code in range(200, 300) else "Unamed Image"
 
 @image.before_request
 @login_required
