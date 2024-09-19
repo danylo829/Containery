@@ -1,24 +1,55 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // const xterm = new Terminal();
-    const xterm = new Terminal();
+    const form = document.getElementById('start-form');
+    const terminalWrapper = document.getElementById('terminal-wrapper');
     const container = document.getElementById('terminal-container');
+    const xterm = new Terminal();
+    const commandSelect = document.getElementById('command-select');
+    const commandInput = document.getElementById('command-input');
+    const submitBtn = document.getElementById('submit-btn');
+    let socket;
+
     xterm.open(container);
-    const socket = io();
 
-    xterm.resize(150, 45);
-
-    socket.emit('start_session', {
-        container_id: container_id
+    // Disable select when there is any input in custom command
+    commandInput.addEventListener('input', function () {
+        if (commandInput.value.length > 0) {
+            commandSelect.disabled = true;  // Disable the select dropdown
+        } else {
+            commandSelect.disabled = false; // Enable the select dropdown
+        }
     });
 
-    xterm.onData(e => {
-        socket.emit('input', {
-            command: e
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();  // Prevent the form from submitting the traditional way
+
+        const user = document.getElementById('user').value;
+        const containerId = submitBtn.getAttribute('data-container-id');
+
+        // Use custom command if present, otherwise use selected command
+        const command = commandInput.value.length > 0 ? commandInput.value : commandSelect.value;
+
+        form.style.display = 'none';
+        terminalWrapper.style.display = 'block';
+
+        socket = io();
+
+        socket.emit('start_session', {
+            container_id: containerId,
+            user: user,
+            command: command
         });
-    });
 
-    socket.on('output', function(data) {
-        const output = data.data;
-        xterm.write(output);
+        xterm.resize(150, 45);
+
+        xterm.onData(e => {
+            socket.emit('input', {
+                command: e
+            });
+        });
+
+        socket.on('output', function(data) {
+            const output = data.data;
+            xterm.write(output);
+        });
     });
 });

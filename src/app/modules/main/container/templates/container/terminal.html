@@ -2,9 +2,6 @@
 
 {% block custom_header %}
     <link rel="stylesheet" href="https://unpkg.com/xterm/css/xterm.css" />
-    <script>
-        const container_id = '{{ container_id }}';
-    </script>
     <script src="https://unpkg.com/xterm/lib/xterm.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
     <script src="{{ url_for('main.container.static', filename='js/terminal.js') }}" defer></script>
@@ -12,7 +9,19 @@
 
 {% block content %}
 <div class="content-box">
-    <div class="terminal-wrapper">
+    <form id="start-form">
+        <label for="command-select">Command:</label>
+        <select name="command" id="command-select">
+            <option value="/bin/bash">/bin/bash</option>
+            <option value="/bin/sh">/bin/sh</option>
+        </select>
+        <input type="text" id="command-input" name="command" placeholder="Custom command">
+        <label for="user">User:</label>
+        <input type="text" id="user" name="user" value="root" required>
+        
+        <input id="submit-btn" type="submit" data-container-id="{{ container_id }}" value="Exec">
+    </form>
+    <div class="terminal-wrapper" id="terminal-wrapper" style="display: none;">
         <div id="terminal-container"></div>
     </div>
 </div>

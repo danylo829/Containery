@@ -178,7 +178,7 @@ ul {
     justify-content: space-between;
 }
 
-.search-box input {
+input {
     padding: 10px;
     border: 1px solid var(--accent-color);
     border-radius: 4px;
@@ -623,7 +623,7 @@ input[type="submit"] {
     border-radius: 10px;
     background: var(--accent-color);
     color: white;
-    font-size: 16px;
+    font-size: medium;
     cursor: pointer;
 }
 
@@ -646,6 +646,10 @@ select {
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     position: relative;
     display: inline-block;
+}
+
+select:disabled {
+    border: 1px solid var(--bg-color);
 }
 
 select:focus {
@@ -715,6 +719,25 @@ select option {
     background-color: black;
     padding: 10px;
     border-radius: 10px;
+}
+
+#terminal-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#start-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#start-form * {
+    margin-bottom: 1vh;
+    width: 100%;
+    max-width: 300px;
 }
 
 @keyframes slideUp {

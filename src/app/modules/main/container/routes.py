@@ -188,10 +188,12 @@ def console(id):
 @socketio.on('start_session')
 def handle_start_session(data):
     container_id = data['container_id']
+    cmd = data['command']
+    user = data['user']
     sid = request.sid  # Now using flask.request for session ID
 
     exec_create_endpoint = f"/containers/{container_id}/exec"
-    payload = {"AttachStdin": True, "AttachStdout": True, "AttachStderr": True, "Tty": True, "Cmd": ["/bin/bash"], "User": 'root'}
+    payload = {"AttachStdin": True, "AttachStdout": True, "AttachStderr": True, "Tty": True, "Cmd": [f"{cmd}"], "User": f"{user}"}
 
     exec_id = docker.create_exec(exec_create_endpoint, payload=payload)
 
