@@ -33,6 +33,11 @@ def container_info (id):
         "restart_policy": container_details["HostConfig"]["RestartPolicy"]["Name"]
     }
 
+    image = {
+        "id": container_details["Image"],
+        "name": container_details["Config"]["Image"]
+    }
+
     env_vars = container_details["Config"].get("Env", [])
 
     labels = container_details["Config"].get("Labels", {})
@@ -50,6 +55,7 @@ def container_info (id):
 
     container_info = {
         'general_info': general_info,
+        'image': image,
         'env_vars': env_vars,
         'labels': labels,
         'volumes': [{

@@ -27,6 +27,7 @@
             </div>
             
             <p><strong>Name:</strong> {{ container.general_info.name }}</p>
+            <p><strong>Image:</strong><a href="{{ url_for('main.image.info', id=container.image.id) }}"> {{ container.image.name }}</a></p>
             <p><strong>Status:</strong> {{ container.general_info.status }}</p>
             <p><strong>Created At:</strong> {{ container.general_info.created_at }}</p>
             <p><strong>Restart policy:</strong> {{ container.general_info.restart_policy }}</p>
