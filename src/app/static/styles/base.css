@@ -481,6 +481,7 @@ h2 .loading-spinner .material-icons {
     justify-content: space-between;
     align-items: center;
     margin-top: 1rem;
+    overflow-wrap: anywhere;
 }
 
 hr {
@@ -839,5 +840,13 @@ select option {
 
     .nav-menu li, .nav-menu li:hover {
         border: none;
+    }
+
+    .content-card {
+        padding-inline: 1rem;
+    }
+
+    .actions div {
+        gap: unset;
     }
 }
