@@ -200,8 +200,8 @@ input[type="password"] {
 }
 
 .form-validate-error {
-    background-color: var(--flash-error-bg);
-    color: var(--flash-error-text);
+    background-color: var(--error-bg);
+    color: var(--error-text);
     padding: 1rem;
     display: flex;
     justify-content: center;
@@ -557,23 +557,23 @@ hr {
 }
 
 .flash-message.info {
-    background-color: var(--flash-info-bg);
-    color: var(--flash-info-text);
+    background-color: var(--info-bg);
+    color: var(--info-text);
 }
 
 .flash-message.success {
-    background-color: var(--flash-success-bg);
-    color: var(--flash-success-text);
+    background-color: var(--success-bg);
+    color: var(--success-text);
 }
 
 .flash-message.warning {
-    background-color: var(--flash-warning-bg);
-    color: var(--flash-warning-text);
+    background-color: var(--warning-bg);
+    color: var(--warning-text);
 }
 
 .flash-message.error {
-    background-color: var(--flash-error-bg);
-    color: var(--flash-error-text);
+    background-color: var(--error-bg);
+    color: var(--error-text);
 }
 
 /* Hide the default checkbox */

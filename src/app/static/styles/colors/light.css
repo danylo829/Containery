@@ -6,12 +6,12 @@ body {
     --accent-color: #007bff;
     --accent-color-darken: #5192d8;
 
-    --flash-info-bg: #007bff;
-    --flash-info-text: #ffffff;
-    --flash-success-bg: #28a745;
-    --flash-success-text: #ffffff;
-    --flash-warning-bg: #ffc107;
-    --flash-warning-text: #212529;
-    --flash-error-bg: #dc3545;
-    --flash-error-text: #ffffff;
+    --info-bg: #007bff;
+    --info-text: #ffffff;
+    --success-bg: #28a745;
+    --success-text: #ffffff;
+    --warning-bg: #ffc107;
+    --warning-text: #212529;
+    --error-bg: #dc3545;
+    --error-text: #ffffff;
 }
