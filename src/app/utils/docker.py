@@ -46,7 +46,6 @@ class Docker:
             headers = "Host: docker\r\nContent-Type: application/json\r\nContent-Length: {}\r\n".format(len(request_body))
             empty_line = "\r\n"
 
-            # Full HTTP request
             request = request_line + headers + empty_line + request_body
 
             # Send the request through the client, ensuring it's encoded to bytes
@@ -79,16 +78,15 @@ class Docker:
 
                     socketio.emit('output', {'data': output}, to=sid)
                     socketio.sleep(0.1)
-                    timeout_counter = 0  # Reset on receiving data
+                    timeout_counter = 0 
                 else:
                     timeout_counter += 1
-                    if timeout_counter > 300:  # x seconds with no data
-                        client.send('\u0003'.encode('utf-8')) # send CTRL-C
+                    if timeout_counter > 300:
                         client.send('\u0004'.encode('utf-8')) # send CTRL-D
                         socketio.emit('output', {'data': '\r\nSession timeout due to inactivity.\r\n'}, to=sid)
-                        break
 
             # Close the session
+            client.shutdown(socket.SHUT_WR)
             client.close()
             del self.clients[sid]
 
