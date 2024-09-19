@@ -193,7 +193,7 @@ def handle_start_session(data):
     sid = request.sid  # Using flask.request for session ID
 
     exec_create_endpoint = f"/containers/{container_id}/exec"
-    payload = {"AttachStdin": True, "AttachStdout": True, "AttachStderr": True, "Tty": True, "Cmd": cmd, "User": f"{user}"}
+    payload = {"AttachStdin": True, "AttachStdout": True, "AttachStderr": True, "Tty": True, "Cmd": cmd, "User": user}
 
     exec_id = docker.create_exec(exec_create_endpoint, payload=payload)
 
