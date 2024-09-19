@@ -711,6 +711,12 @@ select option {
     margin-bottom: 20px;
 }
 
+.terminal-wrapper {
+    background-color: black;
+    padding: 10px;
+    border-radius: 10px;
+}
+
 @keyframes slideUp {
     0% {
         transform: translateY(50px);
