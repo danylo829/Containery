@@ -1,0 +1,27 @@
+{% extends "auth.html" %}
+
+{% block content %}
+    <div class="auth">
+        <div class="auth-container">
+            <h2>Login</h2>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                {{ form.username.label }}
+                {{ form.username() }}
+    
+                {% for error in form.username.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+    
+                {{ form.password.label }}
+                {{ form.password() }}
+    
+                {% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+    
+                {{ form.submit() }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

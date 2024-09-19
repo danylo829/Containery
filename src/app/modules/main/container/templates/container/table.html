@@ -1,0 +1,41 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
+    <script src="{{ url_for('main.static', filename='js/actions.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Search">
+        <a id="refresh-page-btn"><span class="material-icons">restart_alt</span></a>
+    </div>
+    <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+        <table id="container-table">
+            <thead>
+                <tr>
+                    <th data-sort="name">Name</th>
+                    <th data-sort="status">Status</th>
+                    <th data-sort="image">Image</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="container-list">
+                {% for row in rows %}
+                <tr>
+                    <td><a href="{{ url_for('main.container.info', id=row.id) }}">{{ row.name }}</a></td>
+                    <td>{{ row.status }}</td>
+                    <td><a href="{{ url_for('main.image.info', id=row.imageID) }}">{{ row.image }}</a></td>
+                    <td>
+                        <a class="restart-btn" data-id="{{ row.id }}"><span class="material-icons">refresh</span></a>
+                        <a href="{{ url_for('main.container.logs', id=row.id) }}"><span class="material-icons">troubleshoot</span></a>
+                        <a href="{{ url_for('main.container.console', id=row.id) }}"><span class="material-icons">terminal</span></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

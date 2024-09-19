@@ -1,0 +1,144 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
+    <script src="{{ url_for('main.static', filename='js/actions.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<!-- General Info Block -->
+<div class="content-card">
+    <div class="title">
+        <h2>General Info</h2>
+        <div class="actions">
+            <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons">troubleshoot</span></a> <!-- Logs -->
+            <a href="{{ url_for('main.container.processes', id=container.general_info.id) }}"><span class="material-icons icon-button">list_alt</span></a> <!-- Processes -->
+            <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons icon-button">play_arrow</span></a> <!-- Start -->
+            <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons icon-button">pause</span></a> <!-- Stop -->
+            <a class="restart-btn" data-id="{{ container.general_info.id }}"><span class="material-icons icon-button">refresh</span></a> <!-- Restart -->
+            <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons icon-button">delete</span></a> <!-- Kill -->
+        </div>
+    </div>
+    
+    <p><strong>Name:</strong> {{ container.general_info.name }}</p>
+    <p><strong>Status:</strong> {{ container.general_info.status }}</p>
+    <p><strong>Created At:</strong> {{ container.general_info.created_at }}</p>
+    <p><strong>Restart policy:</strong> {{ container.general_info.restart_policy }}</p>
+</div>
+
+<!-- ENV & Labels Block -->
+<div class="content-card">
+    <h2>Environment Variables</h2>
+    {% if container.env_vars %}
+        <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+            <table>
+                <tbody>
+                    {% for env in container.env_vars %}
+                    <tr>
+                        <td><strong>{{ env.split('=', 1)[0] }}</strong></td>
+                        <td>{{ env.split('=', 1)[1] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No environment variables found.</p>
+    {% endif %}
+</div>
+
+<div class="content-card">
+    <h2>Labels</h2>
+    {% if container.labels %}
+        <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+            <table>
+                <tbody>
+                    {% for key, value in container.labels.items() %}
+                    <tr>
+                        <td><strong>{{ key }}</strong></td>
+                        <td>{{ value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>                
+            </table>
+        </div>
+    {% else %}
+        <p>No labels found.</p>
+    {% endif %}
+</div>
+
+<!-- Volumes Block -->
+<div class="content-card">
+    <h2>Volumes</h2>
+    {% if container.volumes %}
+        <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Host Path</th>
+                        <th>Container Path</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for volume in container.volumes %}
+                    <tr>
+                        <td>{{ volume.host_path }}</td>
+                        <td>{{ volume.container_path }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No volumes found.</p>
+    {% endif %}
+</div>
+
+<!-- Network Info Block -->
+<div class="content-card">
+    <h2>Network Info</h2>
+    {% if container.network_info %}
+        <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+            <table id="container-table">
+                <thead>
+                    <tr>
+                        <th data-sort="name">Name</th>
+                        <th data-sort="ip">IP</th>
+                        <th data-sort="ports">Ports</th>
+                    </tr>
+                </thead>
+                <tbody id="container-list">
+                    {% for network in container.network_info %}
+                    <tr>
+                        <td>{{ network.network_name }}</td>
+                        <td>{{ network.self_ip if network.self_ip else '-' }}</td>
+                        <td>
+                            {% if network.exposed_ports %}
+                                {% for port, bindings in network.exposed_ports.items() %}
+                                    {% if bindings %}
+                                        {% for binding in bindings %}
+                                            {% if binding.HostIp and binding.HostPort %}
+                                                {% if '::' not in binding.HostIp %}
+                                                    {{ port }} -> {{ binding.HostIp }}:{{ binding.HostPort }}<hr>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ port }}<hr>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No network information found.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

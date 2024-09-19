@@ -1,0 +1,32 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Search">
+        <button class="icon-button" id="refresh-page-btn"><span class="material-icons">restart_alt</span></button>
+    </div>
+    <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+        <table id="volume-table">
+            <thead>
+                <tr>
+                    <th data-sort="name">Name</th>
+                    <th data-sort="mountpoint">Mountpoint</th>
+                </tr>
+            </thead>
+            <tbody id="volume-list">
+                {% for row in rows %}
+                <tr>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.mountpoint }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

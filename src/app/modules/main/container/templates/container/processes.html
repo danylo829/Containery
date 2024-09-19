@@ -1,0 +1,34 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Search">
+        <a id="refresh-page-btn"><span class="material-icons">restart_alt</span></a>
+    </div>
+    <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+        <table id="process-table">
+            <thead>
+                <tr>
+                    {% for title in processes['Titles'] %}
+                        <th data-sort="{{ title }}">{{ title }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody id="process-list">
+                {% for process in processes['Processes'] %}
+                <tr>
+                    {% for value in process %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

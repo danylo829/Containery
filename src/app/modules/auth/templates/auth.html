@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Containery</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('auth.static', filename='styles/auth.css') }}">
+</head>
+<body>
+    <header>
+        {% block header %}
+            <h1>Containery</h1>
+        {% endblock %}
+    </header>
+    <main>
+        {% block content %}
+        <!-- Custom content for auth pages -->
+        {% endblock %}
+        <!-- Display flashed messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </main>
+</body>
+</html>

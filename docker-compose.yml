@@ -1,0 +1,16 @@
+services:
+  app:
+    build: .
+    container_name: containery
+    restart: "unless-stopped"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src:/containery
+      - containery_data:/app_data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - FLASK_ENV=development
+
+volumes:
+  containery_data:

@@ -1,0 +1,17 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    <link rel="stylesheet" href="https://unpkg.com/xterm/css/xterm.css" />
+    <script>
+        const container_id = '{{ container_id }}';
+    </script>
+    <script src="https://unpkg.com/xterm/lib/xterm.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <script src="{{ url_for('main.container.static', filename='js/terminal.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <div id="terminal-container"></div>
+</div>
+{% endblock %}

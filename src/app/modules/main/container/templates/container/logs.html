@@ -1,0 +1,13 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    <script src="{{ url_for('main.container.static', filename='js/logs.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <div class="log-box">
+        <textarea id="log-textarea" class="{{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}" readonly>{{ log_text }}</textarea>
+    </div>
+</div>
+{% endblock %}

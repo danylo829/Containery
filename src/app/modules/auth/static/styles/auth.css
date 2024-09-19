@@ -1,0 +1,117 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+header {
+    background-color: var(--accent-color);
+    color: white;
+    width: 20%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    padding-inline: 5vw;
+}
+
+main {
+    margin-left: 20%;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 80%;
+    transition: margin-left 0.3s;
+}
+
+h2 {
+    color: var(--accent-color);
+    text-align: center;
+}
+
+.auth-container, .flash-danger, .flash-message {
+    background: var(--bg-color-box);
+    border-radius: 8px;
+    box-shadow: 2px 0 8px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 5vw;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    margin-top: 20px;
+}
+
+.flash-message {
+    background-color: var(--accent-color);
+    text-align: center;
+}
+
+.flash-danger {
+    background-color: rgb(255, 164, 164);
+    text-align: center;
+}
+
+.auth-container > form > input {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent-color);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background: var(--accent-color-darken);
+}
+
+span {
+    color: red;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    form {
+        padding: 10px;
+    }
+
+    header {
+        width: 100vw;
+        position: fixed;
+        height: unset;
+        align-items: unset;
+    }
+    main {
+        margin: auto;
+    }
+}
