@@ -13,7 +13,7 @@ function updateUsage() {
             document.querySelector('.cpu-usage .usage-text').innerText = `${data.cpu}%`;
 
             document.querySelector('.ram-usage .progress').style.width = data.ram_percent + '%';
-            document.querySelector('.ram-usage .usage-text').innerText = `${data.ram_absolute}GB / ${data.ram_total}GB`;
+            document.querySelector('.ram-usage .usage-text').innerText = `${data.ram_absolute}GB / ${data.ram_total} GB`;
         })
         .catch(error => console.error('Error fetching usage data:', error));
 }
