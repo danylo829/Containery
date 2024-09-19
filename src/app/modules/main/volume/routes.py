@@ -5,6 +5,8 @@ from app.utils.docker import Docker
 
 volume = Blueprint('volume', __name__, template_folder='templates', static_folder='app/modules/main/volume/static')
 
+docker = Docker()
+
 @volume.before_request
 @login_required
 def before_request():
@@ -12,7 +14,7 @@ def before_request():
 
 @volume.route('/list', methods=['GET'])
 def get_list():
-    response, status_code = Docker.get_volumes()
+    response, status_code = docker.get_volumes()
     volumes = []
     if status_code not in range(200, 300):
         flash(f'Error ({status_code}): {response.text}', 'error')

@@ -6,8 +6,10 @@ from app.utils.common import format_docker_timestamp
 
 image = Blueprint('image', __name__, template_folder='templates', static_folder='static')
 
+docker = Docker()
+
 def image_info(id):
-    response, status_code = Docker.inspect_image(id)
+    response, status_code = docker.inspect_image(id)
     image_details = []
     if status_code not in range(200, 300):
         return response, status_code
@@ -56,7 +58,7 @@ def before_request():
 
 @image.route('/list', methods=['GET'])
 def get_list():
-    response, status_code = Docker.get_images()
+    response, status_code = docker.get_images()
     images = []
     if status_code not in range(200, 300):
         flash(f'Error ({status_code}): {response.text}', 'error')
