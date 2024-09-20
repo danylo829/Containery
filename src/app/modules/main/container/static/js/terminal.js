@@ -20,6 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     form.addEventListener('submit', (event) => {
+        
+        window.onbeforeunload = function(e) {
+            e.preventDefault();
+        };
+
         event.preventDefault();  // Prevent the form from submitting the traditional way
 
         const user = document.getElementById('user').value;
@@ -39,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             command: command
         });
 
-        xterm.resize(150, 45);
+        xterm.resize(150, 44);
 
         xterm.onData(e => {
             socket.emit('input', {
