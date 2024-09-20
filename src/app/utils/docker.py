@@ -31,10 +31,10 @@ class Docker:
             return exec_instance_json.get("Id")
         return None
 
-    def start_exec_session(self, exec_id, sid, socketio, app):
+    def start_exec_session(self, exec_id, sid, socketio, app, timeout=5):
         with app.app_context():
             exec_start_endpoint = f"/exec/{exec_id}/start"
-            start_payload = {"Detach": False, "Tty": True, "ConsoleSize": [45, 150]}
+            start_payload = {"Detach": False, "Tty": True, "ConsoleSize": [44, 150]}
 
             client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
             client.connect(GlobalSettings.get_setting("docker_socket"))
@@ -81,8 +81,10 @@ class Docker:
                     timeout_counter = 0 
                 else:
                     timeout_counter += 1
-                    if timeout_counter > 300:
-                        client.send('\u0004'.encode('utf-8')) # send CTRL-D
+                    if timeout_counter > timeout:
+                        client.send('\u0003'.encode('utf-8'))   # Send CTRL-C in case there is process running
+                        socketio.sleep(3)                       # Allow time for the process to respond in case there is process running
+                        client.send('\u0004'.encode('utf-8'))   # Send CTRL-D
                         socketio.emit('output', {'data': '\r\nSession timeout due to inactivity.\r\n'}, to=sid)
 
             # Close the session
