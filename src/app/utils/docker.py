@@ -31,67 +31,66 @@ class Docker:
             return exec_instance_json.get("Id")
         return None
 
-    def start_exec_session(self, exec_id, sid, socketio, app, timeout=5):
-        with app.app_context():
-            exec_start_endpoint = f"/exec/{exec_id}/start"
-            start_payload = {"Detach": False, "Tty": True, "ConsoleSize": [44, 150]}
+    def start_exec_session(self, exec_id, sid, socketio, docker_socket, timeout=5):
+        exec_start_endpoint = f"/exec/{exec_id}/start"
+        start_payload = {"Detach": False, "Tty": True, "ConsoleSize": [44, 150]}
 
-            client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            client.connect(GlobalSettings.get_setting("docker_socket"))
+        client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        client.connect(docker_socket)
 
-            # Perform request to start the exec session
-            # Construct the request manually
-            request_line = f"POST {exec_start_endpoint} HTTP/1.1\r\n"
-            request_body = json.dumps(start_payload)  # Ensure proper JSON encoding
-            headers = "Host: docker\r\nContent-Type: application/json\r\nContent-Length: {}\r\n".format(len(request_body))
-            empty_line = "\r\n"
+        # Perform request to start the exec session
+        # Construct the request manually
+        request_line = f"POST {exec_start_endpoint} HTTP/1.1\r\n"
+        request_body = json.dumps(start_payload)  # Ensure proper JSON encoding
+        headers = f"Host: docker\r\nContent-Type: application/json\r\nContent-Length: {len(request_body)}\r\n"
+        empty_line = "\r\n"
 
-            request = request_line + headers + empty_line + request_body
+        request = request_line + headers + empty_line + request_body
 
-            # Send the request through the client, ensuring it's encoded to bytes
-            client.send(request.encode('utf-8'))
+        # Send the request through the client, ensuring it's encoded to bytes
+        client.send(request.encode('utf-8'))
 
-            # Store client for the session
-            self.clients[sid] = client
+        # Store client for the session
+        self.clients[sid] = client
 
-            received_first_response = False
-            timeout_counter = 0  # Keep track of no data periods
-            while True:
-                read_ready, _, _ = select.select([client], [], [], 1.0)  # Wait for 1 second
-                if client in read_ready:
-                    output = client.recv(4096)
-                    if not output:
-                        socketio.emit('output', {'data': '\nConnection closed by Docker.\r\n'}, to=sid)
-                        break
+        received_first_response = False
+        timeout_counter = 0  # Keep track of no data periods
+        while True:
+            read_ready, _, _ = select.select([client], [], [], 1.0)  # Wait for 1 second
+            if client in read_ready:
+                output = client.recv(4096)
+                if not output:
+                    socketio.emit('output', {'data': '\nConnection closed by Docker.\r\n'}, to=sid)
+                    break
 
-                    # Remove headers from output at first response
-                    if not received_first_response:
-                        raw_data = output.decode('utf-8', errors='ignore')
-                        header_end = raw_data.find("\r\n\r\n")
-                        if header_end != -1:
-                            output = raw_data[header_end + 4:]
-                            received_first_response = True
-                        else:
-                            continue
+                # Remove headers from output at first response
+                if not received_first_response:
+                    raw_data = output.decode('utf-8', errors='ignore')
+                    header_end = raw_data.find("\r\n\r\n")
+                    if header_end != -1:
+                        output = raw_data[header_end + 4:]
+                        received_first_response = True
+                    else:
+                        continue
 
-                    if not isinstance(output, str):
-                        output = output.decode('utf-8')
+                if not isinstance(output, str):
+                    output = output.decode('utf-8')
 
-                    socketio.emit('output', {'data': output}, to=sid)
-                    socketio.sleep(0.1)
-                    timeout_counter = 0 
-                else:
-                    timeout_counter += 1
-                    if timeout_counter > timeout:
-                        client.send('\u0003'.encode('utf-8'))   # Send CTRL-C in case there is process running
-                        socketio.sleep(3)                       # Allow time for the process to respond in case there is process running
-                        client.send('\u0004'.encode('utf-8'))   # Send CTRL-D
-                        socketio.emit('output', {'data': '\r\nSession timeout due to inactivity.\r\n'}, to=sid)
+                socketio.emit('output', {'data': output}, to=sid)
+                socketio.sleep(0.1)
+                timeout_counter = 0 
+            else:
+                timeout_counter += 1
+                if timeout_counter > timeout:
+                    client.send('\u0003'.encode('utf-8'))   # Send CTRL-C in case there is process running
+                    socketio.sleep(3)                       # Allow time for the process to respond in case there is process running
+                    client.send('\u0004'.encode('utf-8'))   # Send CTRL-D
+                    socketio.emit('output', {'data': '\r\nSession timeout due to inactivity.\r\n'}, to=sid)
 
-            # Close the session
-            client.shutdown(socket.SHUT_WR)
-            client.close()
-            del self.clients[sid]
+        # Close the session
+        client.shutdown(socket.SHUT_WR)
+        client.close()
+        del self.clients[sid]
 
     def handle_command(self, command, sid):
         client = self.clients.get(sid)

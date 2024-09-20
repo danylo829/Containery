@@ -6,6 +6,7 @@ import json
 
 from app.utils.docker import Docker
 from app.utils.common import format_docker_timestamp
+from app.models import GlobalSettings
 
 from app import socketio
 
@@ -207,7 +208,7 @@ def handle_start_session(data):
         emit('output', {'data': 'Could not create exec session. Check if container is running.\r\n'})
         return
 
-    socketio.start_background_task(target=docker.start_exec_session, exec_id=exec_id, sid=sid, socketio=socketio, app=current_app._get_current_object())
+    socketio.start_background_task(target=docker.start_exec_session, exec_id=exec_id, sid=sid, socketio=socketio, docker_socket=GlobalSettings.get_setting("docker_socket"))
 
 @socketio.on('input')
 def handle_command(data):
