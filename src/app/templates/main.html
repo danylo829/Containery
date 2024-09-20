@@ -14,7 +14,7 @@
     {% block custom_header %}
     {% endblock %}
 </head>
-<body class="{{ PersonalSettings.get_setting(current_user.id, 'theme').lower() }}">
+<body>
     <div class="container">
         <aside class="sidebar{{ ' closed' if session.get('sidebar_state', 'open') == 'closed' else '' }}">
             <div class="sidebar-header">
