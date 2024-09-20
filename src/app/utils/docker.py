@@ -64,6 +64,7 @@ class Docker:
                         socketio.emit('output', {'data': '\nConnection closed by Docker.\r\n'}, to=sid)
                         break
 
+                    # Remove headers from output at first response
                     if not received_first_response:
                         raw_data = output.decode('utf-8', errors='ignore')
                         header_end = raw_data.find("\r\n\r\n")
