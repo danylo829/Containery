@@ -46,10 +46,7 @@ class GlobalSettings(db.Model):
     defaults = {
         'docker_socket': {
             'default': '/var/run/docker.sock'
-        },
-        'docker_api_version': {
-            'default': 'v1.45'
-        },
+        }
     }
 
     @classmethod
