@@ -14,10 +14,6 @@ class User(UserMixin, db.Model):
     
     personal_settings = db.relationship('PersonalSettings', backref='user', uselist=False, cascade="all, delete-orphan")
 
-    @property
-    def password(self):
-        raise AttributeError('Password is not a readable attribute.')
-
     @classmethod
     def update_password(cls, username, new_password):
         user = cls.query.filter_by(username=username).first()
