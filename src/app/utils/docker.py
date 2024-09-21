@@ -31,7 +31,7 @@ class Docker:
             return exec_instance_json.get("Id")
         return None
 
-    def start_exec_session(self, exec_id, sid, socketio, docker_socket, timeout=5):
+    def start_exec_session(self, exec_id, sid, socketio, docker_socket, timeout=300):
         exec_start_endpoint = f"/exec/{exec_id}/start"
         start_payload = {"Detach": False, "Tty": True, "ConsoleSize": [44, 150]}
 
