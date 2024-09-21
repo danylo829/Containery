@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-import time
+from time import time
 
 db = SQLAlchemy()
 
@@ -10,7 +10,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(150), nullable=False)
-    created_at = db.Column(db.Integer, default=lambda: int(time.time()), nullable=False)
+    created_at = db.Column(db.Integer, default=lambda: int(time()), nullable=False)
     
     personal_settings = db.relationship('PersonalSettings', backref='user', uselist=False, cascade="all, delete-orphan")
 
