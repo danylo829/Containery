@@ -86,7 +86,7 @@ def get_list():
     response, status_code = docker.get_containers()
     containers = []
     if status_code not in range(200, 300):
-        flash(f'Error ({status_code}): {response.text}', 'error')
+        return render_template('error.html', message=response.text, code=status_code), status_code
     else:
         containers = response.json()
 
@@ -118,7 +118,7 @@ def info(id):
     response, status_code = container_info(id)
     container = []
     if status_code not in range(200, 300):
-        flash(f'Error ({status_code}): {response.text}', 'error')
+        return render_template('error.html', message=response.text, code=status_code), status_code
     else:
         container = response
 
@@ -137,7 +137,7 @@ def logs(id):
     response, status_code = docker.get_logs(id)
     logs = []
     if status_code not in range(200, 300):
-        flash(f'Error ({status_code}): {response.text}', 'error')
+        return render_template('error.html', message=response.text, code=status_code), status_code
     else:
         logs = response
 
@@ -166,7 +166,7 @@ def processes(id):
             flash(f'Container {name} is not running', 'error')
         # Default error message
         else:
-            flash(f'Error ({status_code}): {response.text}', 'error')
+            return render_template('error.html', message=response.text, code=status_code), status_code
     else:
         processes = response.json()
 
