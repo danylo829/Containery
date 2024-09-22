@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
-from app.models import User, GlobalSettings
+from app.models import User, Role, GlobalSettings
 from .forms import LoginForm, AdminSetupForm
 
 auth = Blueprint('auth', __name__, url_prefix='/auth', template_folder='templates', static_folder='static')
@@ -35,7 +35,7 @@ def install():
         username = form.username.data
         password = form.password.data
 
-        result = User.create_user(username=username, password=password)
+        result = User.create_user(username=username, password=password, role=Role.ADMIN)
         if result:
             flash(result[1], result[0])
         else:

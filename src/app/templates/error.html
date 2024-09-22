@@ -1,0 +1,16 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+{% endblock %}
+
+{% block content %}
+    <div class="content-box">
+        <div class="error-container">
+            <div class="error-box">
+                <span class="material-icons error-icon">error_outline</span>
+                <h1 class="error-code">{{ code }}</h1>
+            </div>
+            <p class="error-text">{{ message }}</p>
+        </div>
+    </div>
+{% endblock %}
