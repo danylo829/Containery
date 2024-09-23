@@ -65,9 +65,7 @@ ul {
 
 .nav-menu li {
     transition: all .3s cubic-bezier(.05,0,0,1);
-    border-radius: 10px;
     margin: 5px 10px;
-    border: 1px solid var(--bg-color-box);
 }
 
 .nav-menu li:hover {
