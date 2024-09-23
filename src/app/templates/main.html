@@ -27,7 +27,8 @@
                     <li><a href="{{ url_for('main.image.get_list') }}"><span class="material-icons nav-icon">image</span><span class="nav-text">Images</span></a></li>
                     <li><a href="{{ url_for('main.network.get_list') }}"><span class="material-icons nav-icon">network_check</span><span class="nav-text">Networks</span></a></li>
                     <li><a href="{{ url_for('main.volume.get_list') }}"><span class="material-icons nav-icon">storage</span><span class="nav-text">Volumes</span></a></li>
-                    <li><a href="#"><span class="material-icons nav-icon">settings</span><span class="nav-text">Settings</span></a></li>                    
+                    <li><a href="{{ url_for('user.get_list') }}"><span class="material-icons nav-icon">group</span><span class="nav-text">Users</span></a></li>
+                    <li><a href="#"><span class="material-icons nav-icon">settings</span><span class="nav-text">Settings</span></a></li>
                 </ul>
             </nav>
         </aside>
@@ -48,7 +49,7 @@
                 <div class="user-section">
                     <span class="material-icons user-icon">person</span>
                     <div class="user-panel" id="userPanel">
-                        <a href="{{ url_for('user.info') }}">{{ current_user.username }}</a>
+                        <a href="{{ url_for('user.profile') }}">{{ current_user.username }}</a>
                         <a href="{{ url_for('auth.logout') }}">
                             <span class="material-icons">
                                 logout

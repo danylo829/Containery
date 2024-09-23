@@ -1,0 +1,65 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <div class="user-header">
+        <div class="user-details">
+            <h2>{{ user.username }}</h2>
+            <span class="role-badge">{{ user.role }}</span>
+        </div>
+    </div>
+    <div class="user-info">
+        <p><strong>Created At:</strong> {{ utils.format_unix_timestamp(user.created_at) }}</p>
+    </div>
+    {% if current_user.id == user.id %}
+        <p><a href="{{ url_for('user.profile') }}">Edit Your Profile</a></p>
+    {% endif %}
+</div>
+
+{% if current_user.id != user.id %}
+    <div class="content-card">
+        <h2>Security</h2>
+        <h3>Change user's password</h3>
+        <form method="POST" action="{{ url_for('user.view_profile', id=user.id) }}">
+            {{ password_form.hidden_tag() }}
+            
+            <div class="table-box">
+                <table>
+                    <tr>
+                        <td><strong>New Password</strong></td>
+                        <td>
+                            <label for="new_password" style="display:none;">New Password</label>
+                            {{ password_form.new_password() }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Confirm</strong></td>
+                        <td>
+                            <label for="confirm_new_password" style="display:none;">Confirm New Password</label>
+                            {{ password_form.confirm_new_password() }}
+                        </td>
+                    </tr>
+                    {% for error in password_form.confirm_new_password.errors %}
+                        <tr>
+                            <td colspan="2">
+                                <div class="form-validate-error">
+                                    <span>{{ error }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        
+            <div class="submit-box">
+                {{ password_form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+        
+    </div>
+{% endif %}
+
+{% endblock %}

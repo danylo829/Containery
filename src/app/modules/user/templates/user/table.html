@@ -1,0 +1,37 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Search">
+         <div class="table-actions">
+            <a href="{{ url_for('user.add') }}"><span class="material-icons">add</span></a>
+            <a id="refresh-page-btn"><span class="material-icons">restart_alt</span></a>
+         </div>
+    </div>
+    <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+        <table id="user-table">
+            <thead>
+                <tr>
+                    <th data-sort="username">Username</th>
+                    <th data-sort="role">Role</th>
+                    <th data-sort="created_at">Created At</th>
+                </tr>
+            </thead>
+            <tbody id="user-list">
+                {% for user in users %}
+                <tr>
+                    <td><a href="{{ url_for('user.view_profile', id=user.id) }}">{{ user.username }}</a></td>
+                    <td>{{ user.role }}</td>
+                    <td>{{ utils.format_unix_timestamp(user.created_at) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <form method="POST" action="{{ url_for('user.add') }}">
+        {{ add_user_form.hidden_tag() }}
+        
+        <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+            <table>
+                <tr>
+                    <td><strong>{{ add_user_form.username.label }}</strong></td>
+                    <td>
+                        {{ add_user_form.username() }}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>{{ add_user_form.password.label.text }}</strong></td>
+                    <td>
+                        {{ add_user_form.password() }}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>{{ add_user_form.role.label.text }}</strong></td>
+                    <td>
+                        {{ add_user_form.role() }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    
+        {{ add_user_form.submit() }}
+    </form>
+    
+</div>
+
+{% endblock %}

@@ -35,9 +35,9 @@ class User(UserMixin, db.Model):
     @classmethod
     def create_user(cls, username, password, role):
         if cls.query.filter_by(username=username).first():
-            return ("danger", "Username already exists")
+            return "Username already exists"
 
-        user = cls(username=username, password_hash=generate_password_hash(password), role=role.value)
+        user = cls(username=username, password_hash=generate_password_hash(password), role=role)
         db.session.add(user)
         db.session.commit()
 
@@ -71,7 +71,6 @@ class GlobalSettings(db.Model):
             db.session.add(setting)
 
         db.session.commit()
-
 
 class PersonalSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)

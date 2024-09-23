@@ -35,7 +35,7 @@ def install():
         username = form.username.data
         password = form.password.data
 
-        result = User.create_user(username=username, password=password, role=Role.ADMIN)
+        result = User.create_user(username=username, password=password, role=Role.ADMIN.value)
         if result:
             flash(result[1], result[0])
         else:

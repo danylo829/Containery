@@ -10,17 +10,34 @@
 {% block content %}
 <div class="content-box">
     <form id="start-form">
-        <label for="command-select">Command:</label>
-        <select name="command" id="command-select">
-            <option value="/bin/bash">/bin/bash</option>
-            <option value="/bin/sh">/bin/sh</option>
-        </select>
-        <input type="text" id="command-input" name="command" placeholder="Custom command">
-        <label for="user">User:</label>
-        <input type="text" id="user" name="user" value="root" required>
-        
+        <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+            <table>
+                <tr>
+                    <td><strong>Command</strong></td>
+                    <td>
+                        <select name="command" id="command-select">
+                            <option value="/bin/bash">/bin/bash</option>
+                            <option value="/bin/sh">/bin/sh</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr></tr>
+                    <td><strong>Custom command</strong></td>
+                    <td>
+                        <input type="text" id="command-input" name="command" placeholder="Custom command">
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>User</strong></td>
+                    <td>
+                        <input type="text" id="user" name="user" value="root" required>
+                    </td>
+                </tr>
+            </table>
+        </div>
         <input id="submit-btn" type="submit" data-container-id="{{ container_id }}" value="Exec">
     </form>
+
     <div class="terminal-wrapper" id="terminal-wrapper" style="display: none;">
         <div id="terminal-container"></div>
     </div>

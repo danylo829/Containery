@@ -18,10 +18,18 @@ document.querySelectorAll('.restart-btn').forEach(button => {
             if (response.status === 204) {
                 localStorage.setItem('flash_message', 'Container restarted successfully!');
                 localStorage.setItem('flash_type', 'success');
+            } else if (response.status === 403) {
+                localStorage.setItem('flash_message', 'You do not have permission to restart containers.');
+                localStorage.setItem('flash_type', 'error');
             } else {
                 localStorage.setItem('flash_message', 'Failed to restart container.');
                 localStorage.setItem('flash_type', 'error');
             }
+            window.location.reload();
+        })
+        .catch(error => {
+            localStorage.setItem('flash_message', 'An error occurred.');
+            localStorage.setItem('flash_type', 'error');
             window.location.reload();
         });
     });

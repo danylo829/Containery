@@ -19,35 +19,47 @@
 <div class="content-card">
     <h2>Security</h2>
     <h3>Change password</h3>
-    <form method="POST" action="{{ url_for('user.info') }}">
-        {{ password_form.csrf_token(id = "password") }}
-        <div class="form-group">
-            <label for="current_password"><strong>Current Password</strong></label>
-            {{ password_form.current_password(class="form-control") }}
+    <form method="POST" action="{{ url_for('user.profile') }}">
+        {{ password_form.hidden_tag() }}
+
+        <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+            <table>
+                <tr>
+                    <td><strong>{{ password_form.current_password.label }}</strong></td>
+                    <td>
+                        {{ password_form.current_password() }}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>{{ password_form.new_password.label }}</strong></td>
+                    <td>
+                        {{ password_form.new_password() }}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>{{ password_form.confirm_new_password.label }}</strong></td>
+                    <td>
+                        {{ password_form.confirm_new_password() }}
+                    </td>
+                </tr>
+            </table>
         </div>
-        <div class="form-group">
-            <label for="new_password"><strong>New Password</strong></label>
-            {{ password_form.new_password(class="form-control") }}
-        </div>
-        <div class="form-group">
-            <label for="confirm_new_password"><strong>Confirm New Password</strong></label>
-            {{ password_form.confirm_new_password(class="form-control") }}
-        </div>
+        
         {% for error in password_form.confirm_new_password.errors %}
             <div class="form-validate-error">
-                <span">{{ error }}</span>
+                <span>{{ error }}</span>
             </div>
         {% endfor %}
-        <div class="submit-box">
-            {{ password_form.submit(class="btn btn-primary") }}
-        </div>
+        
+        {{ password_form.submit() }}
     </form>
 </div>
 
 <div class="content-card">
     <h2>Personal settings</h2>
-    <form method="POST" action="{{ url_for('user.info') }}">
-        {{ settings_form.csrf_token(id = "settings") }}
+    <form method="POST" action="{{ url_for('user.profile') }}">
+        {{ settings_form.hidden_tag() }}
+        
         <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
             <table>
                 <tr>
@@ -65,10 +77,10 @@
                 </tr>
             </table>
         </div>
-        <div class="submit-box">
-            {{ settings_form.submit(class="btn btn-primary") }}
-        </div>
+
+        {{ settings_form.submit() }}
     </form>
 </div>
+
 
 {% endblock %}
