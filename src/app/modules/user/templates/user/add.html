@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="content-box">
+<div class="content-box small">
     <form method="POST" action="{{ url_for('user.add') }}">
         {{ add_user_form.hidden_tag() }}
         
@@ -33,7 +33,6 @@
     
         {{ add_user_form.submit() }}
     </form>
-    
 </div>
 
 {% endblock %}

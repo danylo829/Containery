@@ -150,6 +150,27 @@ ul {
     overflow-x: auto;
 }
 
+.content-box.small {
+    max-width: fit-content;
+    margin-inline: auto;
+}
+
+.content-box form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-box form input[type='submit'] {
+    max-width: min-content;
+    min-width: 5vw;
+}
+
+.content-box form .table-box {
+    min-width: 30rem;
+}
+
 .content-card {
     background-color: var(--bg-color-box);
     border-radius: 10px;
@@ -727,21 +748,6 @@ select option {
     overflow: hidden;
 }
 
-.content-box form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.content-box form input[type='submit'] {
-    max-width: min-content;
-    min-width: 5vw;
-}
-
-.content-box form .table-box {
-    width: 50vw;
-}
-
 .status {
     padding: 5px 10px;
     border-radius: 10px;
@@ -880,5 +886,6 @@ select option {
 
     .content-box form .table-box {
         width: unset;
+        min-width: none;
     }
 }

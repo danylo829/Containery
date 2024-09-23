@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const contenBox = document.querySelector('.content-box.small');
     const form = document.getElementById('start-form');
     const terminalWrapper = document.getElementById('terminal-wrapper');
     const container = document.getElementById('terminal-container');
@@ -13,9 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Disable select when there is any input in custom command
     commandInput.addEventListener('input', function () {
         if (commandInput.value.length > 0) {
-            commandSelect.disabled = true;  // Disable the select dropdown
+            commandSelect.disabled = true;
         } else {
-            commandSelect.disabled = false; // Enable the select dropdown
+            commandSelect.disabled = false;
         }
     });
 
@@ -35,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.style.display = 'none';
         terminalWrapper.style.display = 'block';
+        contenBox.classList.remove("small");
 
         socket = io();
 
