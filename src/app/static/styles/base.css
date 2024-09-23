@@ -716,6 +716,12 @@ select option {
     border-radius: 5px;
 }
 
+span.delete:hover {
+    transition: all .3s cubic-bezier(.05,0,0,1);
+    border: unset !important;
+    color: var(--error-bg);
+}
+
 .role-badge {
     display: inline-block;
     background-color: var(--accent-color);

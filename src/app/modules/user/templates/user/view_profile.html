@@ -5,10 +5,22 @@
 
 {% block content %}
 <div class="content-card">
-    <div class="user-header">
+    <div class="title">
         <div class="user-details">
             <h2>{{ user.username }}</h2>
             <span class="role-badge">{{ user.role }}</span>
+        </div>
+        <div class="actions">
+            <div>
+                <form method="POST" action="{{ url_for('user.delete', user_id=user.id) }}" id="delete-form-{{ user.id }}">
+                    <input id="csrf_token_delete_set" name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+                    <button type="submit" style="display:none;"></button>
+                
+                    <a href="#" onclick="document.getElementById('delete-form-{{ user.id }}').submit();">
+                        <span class="material-icons icon-button delete">delete</span>
+                    </a>
+                </form>
+            </div>
         </div>
     </div>
     <div class="user-info">
@@ -24,7 +36,7 @@
         <h2>Security</h2>
         <h3>Change user's password</h3>
         <form method="POST" action="{{ url_for('user.view_profile', id=user.id) }}">
-            {{ password_form.hidden_tag() }}
+            {{ password_form.csrf_token(id = 'password_csrf') }}
             
             <div class="table-box">
                 <table>

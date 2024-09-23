@@ -45,6 +45,15 @@ class User(UserMixin, db.Model):
         for key, config in PersonalSettings.defaults.items():
             PersonalSettings.set_setting(user.id, key, config['default'])
 
+    @classmethod
+    def delete_user(cls, user_id):
+        user = cls.query.get(user_id)
+        if user and user_id != 1:
+            db.session.delete(user)
+            db.session.commit()
+            return True
+        return False
+
 class GlobalSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     setting_key = db.Column(db.String(150), unique=True, nullable=False)

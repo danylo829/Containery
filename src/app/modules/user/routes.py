@@ -113,6 +113,19 @@ def add():
                            page_title=page_title,
                            add_user_form=add_user_form)
 
+@user.route('/delete/<int:user_id>', methods=['POST'])
+@role([Role.ADMIN], allow=True)
+def delete(user_id):
+    result = User.delete_user(user_id)
+    
+    if result:
+        flash('User deleted successfully!', 'success')
+    else:
+        flash('User deletion failed.', 'error')
+    
+    return redirect(url_for('user.get_list'))
+
+
 @user.route('/list', methods=['GET'])
 @role([Role.ADMIN], allow=True)
 def get_list():
