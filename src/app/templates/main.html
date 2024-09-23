@@ -27,9 +27,14 @@
                     <li><a href="{{ url_for('main.image.get_list') }}"><span class="material-icons nav-icon">image</span><span class="nav-text">Images</span></a></li>
                     <li><a href="{{ url_for('main.network.get_list') }}"><span class="material-icons nav-icon">network_check</span><span class="nav-text">Networks</span></a></li>
                     <li><a href="{{ url_for('main.volume.get_list') }}"><span class="material-icons nav-icon">storage</span><span class="nav-text">Volumes</span></a></li>
-                    <li><a href="{{ url_for('user.get_list') }}"><span class="material-icons nav-icon">group</span><span class="nav-text">Users</span></a></li>
-                    <li><a href="#"><span class="material-icons nav-icon">settings</span><span class="nav-text">Settings</span></a></li>
                 </ul>
+                {% if current_user.role == Role.ADMIN.value %}
+                    <hr>
+                    <ul>
+                        <li><a href="{{ url_for('user.get_list') }}"><span class="material-icons nav-icon">group</span><span class="nav-text">Users</span></a></li>
+                        <li><a href="#"><span class="material-icons nav-icon">settings</span><span class="nav-text">Settings</span></a></li>
+                    </ul> 
+                {% endif %}
             </nav>
         </aside>
         <div class="main-content">
