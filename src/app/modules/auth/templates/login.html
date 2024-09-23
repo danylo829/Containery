@@ -5,7 +5,7 @@
         <div class="auth-container">
             <h2>Welcome</h2>
             <form method="POST" action="">
-                {{ form.hidden_tag() }}
+                {{ form.csrf_token() }}
                 {{ form.username.label }}
                 {{ form.username() }}
     

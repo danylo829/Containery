@@ -6,7 +6,7 @@
 {% block content %}
 <div class="content-box small">
     <form method="POST" action="{{ url_for('user.add') }}">
-        {{ add_user_form.hidden_tag() }}
+        {{ add_user_form.csrf_token() }}
         
         <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
             <table>
