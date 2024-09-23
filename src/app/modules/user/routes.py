@@ -13,7 +13,6 @@ def before_request():
     pass
 
 @user.route('/profile', methods=['GET', 'POST'])
-@login_required
 def profile():
     settings_form = PersonalSettingsForm()
     password_form = ChangeOwnPasswordForm()
@@ -52,7 +51,6 @@ def profile():
                            password_form=password_form)
 
 @user.route('/profile/<int:id>', methods=['GET', 'POST'])
-@login_required
 @role([Role.ADMIN], allow=True)
 def view_profile(id):
     user = User.query.get_or_404(id)
@@ -80,7 +78,6 @@ def view_profile(id):
 
 
 @user.route('/add', methods=['GET', 'POST'])
-@login_required
 @role([Role.ADMIN], allow=True)
 def add():
     add_user_form = AddUserForm()
@@ -117,7 +114,6 @@ def add():
                            add_user_form=add_user_form)
 
 @user.route('/list', methods=['GET'])
-@login_required
 @role([Role.ADMIN], allow=True)
 def get_list():
     users = User.query.all()
