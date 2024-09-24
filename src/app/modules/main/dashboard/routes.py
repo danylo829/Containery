@@ -31,8 +31,27 @@ def index():
 
 @dashboard.route('/usage', methods=['GET'])
 def get_usage():
+    # CPU usage
     cpu_usage = psutil.cpu_percent(interval=1)
+
+    # RAM usage
     ram_usage_percent = psutil.virtual_memory().percent
     ram_usage_absolute = round((psutil.virtual_memory().used / 1024 / 1024 / 1024), 2)
     ram_total = round((psutil.virtual_memory().total / 1024 / 1024 / 1024), 2)
-    return jsonify(cpu=cpu_usage, ram_percent=ram_usage_percent, ram_absolute=ram_usage_absolute, ram_total=ram_total)
+
+    # Load average
+    load_average = psutil.getloadavg()  # Returns a tuple (1min, 5min, 15min)
+
+    io_stats = psutil.disk_io_counters()
+    io_read_bytes = round(io_stats.read_bytes / 1024, 2)  # Convert to GB
+    io_write_bytes = round(io_stats.write_bytes / 1024, 2)  # Convert to GB
+
+    return jsonify(
+        cpu=cpu_usage,
+        ram_percent=ram_usage_percent,
+        ram_absolute=ram_usage_absolute,
+        ram_total=ram_total,
+        load_average=load_average,
+        io_read_bytes=io_read_bytes,
+        io_write_bytes=io_write_bytes
+    )

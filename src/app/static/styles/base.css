@@ -408,19 +408,21 @@ a:hover {
     padding: 0 5px;
 }
 
-.usage-stats {
+.usage-row {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
 }
 
-.cpu-usage, .ram-usage {
+.cpu-usage, .ram-usage, .load-average, .io-operations {
     flex: 1;
-    margin-right: 1rem;
+    padding: 0 1rem;
 }
 
-.cpu-usage:last-child, .ram-usage:last-child {
-    margin-right: 0;
+.stat-table {
+    border-collapse: collapse;
+}
+
+.stat-table td {
+    width: 50%; /* Each column takes up half the space */
 }
 
 .progress-bar {
