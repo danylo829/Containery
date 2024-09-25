@@ -123,17 +123,31 @@
                                 <td>{{ network.self_ip if network.self_ip else '-' }}</td>
                                 <td>
                                     {% if network.exposed_ports %}
+                                        {% set all_bindings = [] %}
                                         {% for port, bindings in network.exposed_ports.items() %}
                                             {% if bindings %}
                                                 {% for binding in bindings %}
                                                     {% if binding.HostIp and binding.HostPort %}
                                                         {% if '::' not in binding.HostIp %}
-                                                            {{ port }} -> {{ binding.HostIp }}:{{ binding.HostPort }}<hr>
+                                                            {% set _ = all_bindings.append((port, binding.HostIp, binding.HostPort)) %}
                                                         {% endif %}
+                                                    {% else %}
+                                                        {% set _ = all_bindings.append((port, None, None)) %}
                                                     {% endif %}
                                                 {% endfor %}
                                             {% else %}
-                                                {{ port }}<hr>
+                                                {% set _ = all_bindings.append((port, None, None)) %}
+                                            {% endif %}
+                                        {% endfor %}
+        
+                                        {% for port, host_ip, host_port in all_bindings %}
+                                            {% if host_ip and host_port %}
+                                                {{ port }} -> {{ host_ip }}:{{ host_port }}
+                                            {% else %}
+                                                {{ port }}
+                                            {% endif %}
+                                            {% if not loop.last %}
+                                                <hr>
                                             {% endif %}
                                         {% endfor %}
                                     {% else %}
@@ -149,5 +163,6 @@
                 <p>No network information found.</p>
             {% endif %}
         </div>
+                   
     {% endif %}
 {% endblock %}
