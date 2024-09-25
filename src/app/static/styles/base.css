@@ -883,15 +883,11 @@ span.delete:hover {
     }
 
     .search-box input {
-        max-width: 200px;
-    }
-
-    .content-box form {
-        align-items: center;
+        max-width: 50%;
     }
 
     .content-box form .table-box {
         width: unset;
-        min-width: none;
+        min-width: unset;
     }
 }
