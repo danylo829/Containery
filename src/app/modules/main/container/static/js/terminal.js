@@ -7,9 +7,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const commandSelect = document.getElementById('command-select');
     const commandInput = document.getElementById('command-input');
     const submitBtn = document.getElementById('submit-btn');
-    let socket;
 
-    xterm.open(container);
+    charWidth = 9 + 0.2; //a small offset so vertical scroll slider does not overlap text
+    charHeight = 17;
+
+    let socket;
+    let execId;
+
+    function getContainerSize() {
+        const { width, height } = container.getBoundingClientRect();
+    
+        const cols = Math.floor(width / charWidth);
+    
+        const rows = Math.floor(height / charHeight);
+    
+        return { cols, rows };
+    }
+
+    const resizeObserver = new ResizeObserver(entries => {
+        for (let entry of entries) {
+            if (!execId) {
+                return;
+            }
+            const { cols, rows } = getContainerSize();
+
+            socket.emit('resize_session', {
+                exec_id: execId,
+                cols: cols,
+                rows: rows
+            });
+
+            xterm.resize(cols, rows);
+        }
+    });
 
     // Disable select when there is any input in custom command
     commandInput.addEventListener('input', function () {
@@ -21,12 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     form.addEventListener('submit', (event) => {
+        event.preventDefault();
         
         window.onbeforeunload = function(e) {
             e.preventDefault();
         };
 
-        event.preventDefault();  // Prevent the form from submitting the traditional way
+        resizeObserver.observe(container);
 
         const user = document.getElementById('user').value;
         const containerId = submitBtn.getAttribute('data-container-id');
@@ -38,15 +69,20 @@ document.addEventListener('DOMContentLoaded', () => {
         terminalWrapper.style.display = 'block';
         contenBox.classList.remove("small");
 
+        xterm.open(container);
+
         socket = io();
+
+        const { cols, rows } = getContainerSize();
 
         socket.emit('start_session', {
             container_id: containerId,
             user: user,
-            command: command
+            command: command,
+            consoleSize: [rows, cols]
         });
 
-        xterm.resize(150, 44);
+        xterm.resize(cols, rows);
 
         xterm.onData(e => {
             socket.emit('input', {
@@ -57,6 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.on('output', function(data) {
             const output = data.data;
             xterm.write(output);
+        });
+
+        socket.on('exec_id', function(data) {
+            execId = data.execId;
         });
     });
 });

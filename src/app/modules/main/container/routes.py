@@ -197,18 +197,26 @@ def handle_start_session(data):
     container_id = data['container_id']
     cmd = data['command'].split()
     user = data['user']
-    sid = request.sid  # Using flask.request for session ID
+    console_size = data['consoleSize']
+    sid = request.sid
 
     exec_create_endpoint = f"/containers/{container_id}/exec"
     payload = {"AttachStdin": True, "AttachStdout": True, "AttachStderr": True, "Tty": True, "Cmd": cmd, "User": user}
 
     exec_id = docker.create_exec(exec_create_endpoint, payload=payload)
 
-    if exec_id == None:
+    if exec_id is None:
         emit('output', {'data': 'Could not create exec session. Check if container is running.\r\n'})
         return
 
-    socketio.start_background_task(target=docker.start_exec_session, exec_id=exec_id, sid=sid, socketio=socketio, docker_socket=GlobalSettings.get_setting("docker_socket"))
+    emit('exec_id', {'execId': exec_id}, to=sid)
+
+    socketio.start_background_task(target=docker.start_exec_session, 
+                                    exec_id=exec_id,
+                                    sid=sid,
+                                    socketio=socketio,
+                                    docker_socket=GlobalSettings.get_setting("docker_socket"),
+                                    console_size=console_size)
 
 @socketio.on('input')
 def handle_command(data):
@@ -218,3 +226,13 @@ def handle_command(data):
     response = docker.handle_command(command, sid)
     if response:
         emit('output', {'data': response})
+
+@socketio.on('resize_session')
+def handle_resize_session(data):
+    exec_id = data['exec_id']
+    cols = data['cols']
+    rows = data['rows']
+
+    resize_exec_endpoint = f"/exec/{exec_id}/resize?h={rows}&w={cols}"
+
+    response, status_code = docker.perform_request(path=resize_exec_endpoint, method='POST')
