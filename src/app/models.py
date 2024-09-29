@@ -92,7 +92,7 @@ class PersonalSettings(db.Model):
             'default': False,
         },
         'theme': {
-            'options': ['light', 'dark', 'system'],
+            'options': ['light', 'dark', 'dark_mixed', 'system'],
             'default': 'system',
         },
     }

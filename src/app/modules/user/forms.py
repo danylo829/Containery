@@ -7,7 +7,7 @@ class PersonalSettingsForm(FlaskForm):
     constrain_tables_view = BooleanField('Constrain tables view')
     theme = SelectField(
         'Theme',
-        choices=[('light', 'Light'), ('dark', 'Dark'), ('system', 'System')],
+        choices=[('light', 'Light'), ('dark', 'Dark'), ('dark_mixed', 'Dark Mixed'), ('system', 'System')],
         default='system'
     )
     submit = SubmitField('Save Changes', name='submit_settings')
