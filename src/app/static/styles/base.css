@@ -177,6 +177,7 @@ ul {
 
 .breadcrumbs {
     font-size: 0.9rem;
+    overflow-wrap: anywhere;
 }
 
 .breadcrumbs a:hover {
