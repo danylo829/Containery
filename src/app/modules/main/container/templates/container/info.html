@@ -21,7 +21,7 @@
                         <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons icon-button">play_arrow</span></a> <!-- Start -->
                         <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons icon-button">pause</span></a> <!-- Stop -->
                         <a class="restart-btn" data-id="{{ container.general_info.id }}"><span class="material-icons icon-button">refresh</span></a> <!-- Restart -->
-                        <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons icon-button">delete</span></a> <!-- Kill -->
+                        <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons icon-button delete">delete</span></a> <!-- Kill -->
                     </div>
                 </div>
             </div>

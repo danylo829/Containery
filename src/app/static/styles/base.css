@@ -695,31 +695,28 @@ select option {
 
 .actions {
     display: flex;
-    flex-direction: column; /* Stack the divs in a column */
-    align-items: flex-end; /* Align the divs and buttons to the right */
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .actions div {
     display: flex;
-    gap: 10px; /* Add some spacing between the buttons */
+    gap: 10px;
 }
 
-.actions a span {
-    border-radius: 5px;
-    border: 1px solid var(--bg-color-box);
+a span {
+    color:var(--text-color);
     padding: 5px;
 }
 
-.actions a span:hover {
+a span:hover {
     transition: all .3s cubic-bezier(.05,0,0,1);
-    border: 1px solid var(--accent-color);
-    border-radius: 5px;
+    color: var(--accent-color);
 }
 
 span.delete:hover {
     transition: all .3s cubic-bezier(.05,0,0,1);
-    border: unset !important;
-    color: var(--error-bg);
+    color: var(--error-bg) !important;
 }
 
 .role-badge {
