@@ -17,4 +17,22 @@ def before_request():
 @role([Role.READER], allow=False)
 def restart(id):
     respone, status_code = docker.restart_container(id)
-    return str(respone), status_code 
+    return str(respone), status_code
+
+@api.route('/<id>/start', methods=['POST'])
+@role([Role.READER], allow=False)
+def start(id):
+    response, status_code = docker.start_container(id)
+    return str(response), status_code
+
+@api.route('/<id>/stop', methods=['POST'])
+@role([Role.READER], allow=False)
+def stop(id):
+    response, status_code = docker.stop_container(id)
+    return str(response), status_code
+
+@api.route('/<id>/delete', methods=['DELETE'])
+@role([Role.READER], allow=False)
+def delete(id):
+    response, status_code = docker.delete_container(id)
+    return str(response), status_code

@@ -18,10 +18,25 @@
                         <a href="{{ url_for('main.container.console', id=container.general_info.id) }}"><span class="material-icons icon-button">terminal</span></a> <!-- Terminal -->
                     </div>
                     <div>
-                        <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons icon-button">play_arrow</span></a> <!-- Start -->
-                        <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons icon-button">pause</span></a> <!-- Stop -->
-                        <a class="restart-btn" data-id="{{ container.general_info.id }}"><span class="material-icons icon-button">refresh</span></a> <!-- Restart -->
-                        <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons icon-button delete">delete</span></a> <!-- Kill -->
+                        <!-- Start Container -->
+                        <a class="start-btn" data-id="{{ container.general_info.id }}">
+                            <span class="material-icons icon-button">play_arrow</span>
+                        </a>
+
+                        <!-- Stop Container -->
+                        <a class="stop-btn" data-id="{{ container.general_info.id }}">
+                            <span class="material-icons icon-button">pause</span>
+                        </a>
+
+                        <!-- Restart Container -->
+                        <a class="restart-btn" data-id="{{ container.general_info.id }}">
+                            <span class="material-icons icon-button">refresh</span>
+                        </a>
+
+                        <!-- Delete/Kill Container -->
+                        <a class="delete-btn" data-id="{{ container.general_info.id }}">
+                            <span class="material-icons icon-button delete">delete</span>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -15,6 +15,8 @@ class Docker:
         try:
             if method == 'GET':
                 response = session.get(url)
+            if method == 'DELETE':
+                response = session.delete(url)
             elif method == 'POST':
                 response = session.post(url, json=payload)
 
@@ -150,6 +152,15 @@ class Docker:
 
     def restart_container(self, container_id):
         return self.perform_request(f'/containers/{container_id}/restart', method='POST')
+
+    def start_container(self, container_id):
+        return self.perform_request(f'/containers/{container_id}/start', method='POST')
+
+    def stop_container(self, container_id):
+        return self.perform_request(f'/containers/{container_id}/stop', method='POST')
+
+    def delete_container(self, container_id):
+        return self.perform_request(f'/containers/{container_id}', method='DELETE')
 
     def get_images(self):
         return self.perform_request('/images/json')
