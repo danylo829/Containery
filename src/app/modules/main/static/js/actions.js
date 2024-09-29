@@ -87,16 +87,17 @@ function handleResponse(response, action) {
         localStorage.setItem('flash_message', `Container ${action} successfully!`);
         localStorage.setItem('flash_type', 'success');
     } else if (response.status === 403) {
-        localStorage.setItem('flash_message', `You do not have permission to ${action} containers.`);
+        localStorage.setItem('flash_message', 'You do not have permission to perform this action.');
         localStorage.setItem('flash_type', 'error');
     } else {
         localStorage.setItem('flash_message', 'Failed to perform action.');
         localStorage.setItem('flash_type', 'error');
     }
-    if (action != 'deleted') {
-        window.location.reload();   
+    
+    if (response.status == 204 && action == 'deleted') {
+        window.location.href = '/container/list'; 
     } else {
-        window.location.href = '/container/list';
+        window.location.reload();
     }
 }
 
