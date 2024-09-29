@@ -63,16 +63,6 @@ ul {
     margin: 0;
 }
 
-.nav-menu li {
-    transition: all .3s cubic-bezier(.05,0,0,1);
-    margin: 5px 10px;
-}
-
-.nav-menu li:hover {
-    color: var(--accent-color);
-    transition: all .3s cubic-bezier(.05,0,0,1);
-}
-
 .nav-menu li:hover a, .nav-menu li:hover span {
     text-decoration: none;
     color: var(--accent-color);
@@ -378,11 +368,11 @@ td {
 }
 
 .sidebar.closed .nav-text {
-    display: none;
+    visibility: hidden;
 }
 
 .sidebar.closed .sidebar-title {
-    display: none;
+    visibility: hidden;
 }
 
 .sidebar.closed #menu-toggle {
