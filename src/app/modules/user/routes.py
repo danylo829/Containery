@@ -50,32 +50,38 @@ def profile():
                            settings_form=settings_form, 
                            password_form=password_form)
 
-@user.route('/profile/<int:id>', methods=['GET', 'POST'])
+@user.route('', methods=['GET', 'POST'])
 @role([Role.ADMIN], allow=True)
-def view_profile(id):
-    user = User.query.get_or_404(id)
+def view_profile():
+    user_id = request.args.get('id', type=int)
+    user = User.query.get(user_id)
+    
+    if not user_id or not user:
+        message = 'No such user.'
+        code = 404
+        return render_template('error.html', message=message, code=code), code
 
     password_form = ChangeUserPasswordForm()
     role_form = ChangeUserRoleForm(role=user.role)
 
     if password_form.submit.data and password_form.validate_on_submit():
         User.update_password(user.username, password_form.new_password.data)
-        flash('Pssword changed successfully!', 'success')
-        return redirect(url_for('user.view_profile', id=id))
+        flash('Password changed successfully!', 'success')
+        return redirect(url_for('user.view_profile', id=user_id))
 
     if role_form.submit.data and role_form.validate_on_submit():
         selected_role = role_form.role.data
         if selected_role not in Role.__members__:
             flash('No such role', 'info')
-            return redirect(url_for('user.view_profile', id=id))
+            return redirect(url_for('user.view_profile', id=user_id))
         
         result = User.update_role(user.id, Role[selected_role].value)
         if result:
             flash(result, 'error')
-            return redirect(url_for('user.view_profile', id=id))
+            return redirect(url_for('user.view_profile', id=user_id))
 
         flash('Role changed successfully!', 'success')
-        return redirect(url_for('user.view_profile', id=id))
+        return redirect(url_for('user.view_profile', id=user_id))
 
     role_form.role.value = user.role
     
