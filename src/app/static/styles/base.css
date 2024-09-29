@@ -20,7 +20,8 @@ body {
     transition: all .3s cubic-bezier(.05,0,0,1);
     overflow-y: auto;
     overflow-x: hidden;
-    border-right: 1px solid var(--accent-color);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .sidebar-header {
@@ -91,7 +92,7 @@ ul {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    background-color: var(--bg-color);
+    background-color: transparent;
     overflow-y: auto;
 }
 
@@ -100,7 +101,7 @@ ul {
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    background-color: var(--bg-color);
+    background-color: transparent;
     color: var(--text-color);
     top: 0;
     width: -webkit-fill-available;
