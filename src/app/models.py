@@ -19,7 +19,7 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(50), nullable=False, default=Role.READER)
     created_at = db.Column(db.Integer, default=lambda: int(time()), nullable=False)
     
-    personal_settings = db.relationship('PersonalSettings', backref='user', uselist=False, cascade="all, delete-orphan")
+    personal_settings = db.relationship('PersonalSettings', backref='user', cascade="all, delete-orphan")
 
     @classmethod
     def update_password(cls, username, new_password):
