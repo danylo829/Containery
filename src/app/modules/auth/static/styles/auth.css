@@ -8,7 +8,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 header {
@@ -30,7 +30,7 @@ main {
     padding: 20px;
     box-sizing: border-box;
     width: 80%;
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 h2 {

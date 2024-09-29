@@ -17,7 +17,7 @@ body {
     box-shadow: 0 0 10px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     overflow-y: auto;
     overflow-x: hidden;
     border-top-right-radius: 10px;
@@ -48,7 +48,7 @@ body {
     color: var(--text-color);
     font-size: 1.5rem;
     cursor: pointer;
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 ul {
@@ -67,7 +67,7 @@ ul {
 .nav-menu li:hover a, .nav-menu li:hover span {
     text-decoration: none;
     color: var(--accent-color);
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .nav-menu a {
@@ -76,7 +76,7 @@ ul {
     display: flex;
     align-items: center;
     padding: 1rem;
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .nav-icon {
@@ -211,7 +211,7 @@ select {
     font-family: inherit;
     font-size: 1rem;
     outline: none;
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .form-validate-error {
@@ -429,7 +429,7 @@ a:hover {
 .progress {
     height: 100%;
     background-color: var(--accent-color);
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .usage-text {
@@ -450,7 +450,7 @@ a:hover {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     text-decoration: none;
     cursor: pointer;
     box-sizing: border-box;
@@ -531,7 +531,7 @@ hr {
     height: 100%; /* Match the height of the header */
     color: white;
     border-radius: 10px; /* Rounded corners */
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     overflow: hidden;
     display: flex;
     justify-content: space-between;
@@ -615,7 +615,7 @@ input[type="checkbox"] + label {
     background-color: var(--bg-color);
     border: 1px solid var(--accent-color);
     border-radius: 20px;
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     vertical-align: middle;
     cursor: pointer;
 }
@@ -629,7 +629,7 @@ input[type="checkbox"] + label:before {
     bottom: 2px;
     background-color: var(--text-color);
     border-radius: 50%;
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 input[type="checkbox"]:checked + label {
@@ -702,12 +702,12 @@ a span {
 }
 
 a span:hover {
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     color: var(--accent-color);
 }
 
 span.delete:hover {
-    transition: all .3s cubic-bezier(.05,0,0,1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     color: var(--error-bg) !important;
 }
 
@@ -834,12 +834,12 @@ span.delete:hover {
 
     .sidebar.closed {
         background-color: var(--bg-color-box);
-        transition: all .3s cubic-bezier(.05,0,0,1);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
     .sidebar + .main-content {
         position: absolute;
-        transition: all .3s cubic-bezier(.05,0,0,1);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         transform: translateX(0);
         overflow: hidden;
         width: 100vw;
@@ -849,7 +849,7 @@ span.delete:hover {
     .sidebar.closed + .main-content {
         transform: translateX(80px);
         width: 80vw;
-        transition: all .3s cubic-bezier(.05,0,0,1);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
     .flash-messages {
