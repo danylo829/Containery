@@ -46,6 +46,15 @@ class User(UserMixin, db.Model):
             PersonalSettings.set_setting(user.id, key, config['default'])
 
     @classmethod
+    def update_role(cls, id, new_role):
+        user = cls.query.filter_by(id=id).first()
+        if not user:
+            return f"User not found"
+        user.role = new_role
+        db.session.commit()
+            
+
+    @classmethod
     def delete_user(cls, user_id):
         user = cls.query.get(user_id)
         if user and user_id != 1:

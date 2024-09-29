@@ -25,6 +25,14 @@ class ChangeUserPasswordForm(FlaskForm):
                                          validators=[DataRequired(), EqualTo('new_password', message='Passwords must match.')])
     submit = SubmitField('Change Password', name='submit_user_password')
 
+class ChangeUserRoleForm(FlaskForm):
+    role = SelectField(
+        'Role', 
+        choices=[(role.name, role.value) for role in Role],
+        default=Role.READER.value,
+        validators=[DataRequired()])
+    submit = SubmitField('Change Role', name='change_role')
+
 class AddUserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(max=24, min=1)])
     password = PasswordField('Password', validators=[DataRequired()])

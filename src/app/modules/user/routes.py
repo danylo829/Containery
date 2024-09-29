@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import login_required, current_user
 
-from .forms import PersonalSettingsForm, ChangeOwnPasswordForm, ChangeUserPasswordForm, AddUserForm
+from .forms import *
 from app.models import PersonalSettings, User, Role
 from app.decorators import role
 
@@ -56,11 +56,28 @@ def view_profile(id):
     user = User.query.get_or_404(id)
 
     password_form = ChangeUserPasswordForm()
+    role_form = ChangeUserRoleForm(role=user.role)
 
     if password_form.submit.data and password_form.validate_on_submit():
         User.update_password(user.username, password_form.new_password.data)
         flash('Pssword changed successfully!', 'success')
         return redirect(url_for('user.view_profile', id=id))
+
+    if role_form.submit.data and role_form.validate_on_submit():
+        selected_role = role_form.role.data
+        if selected_role not in Role.__members__:
+            flash('No such role', 'info')
+            return redirect(url_for('user.view_profile', id=id))
+        
+        result = User.update_role(user.id, Role[selected_role].value)
+        if result:
+            flash(result, 'error')
+            return redirect(url_for('user.view_profile', id=id))
+
+        flash('Role changed successfully!', 'success')
+        return redirect(url_for('user.view_profile', id=id))
+
+    role_form.role.value = user.role
     
     breadcrumbs = [
         {"name": "Dashboard", "url": url_for('main.dashboard.index')},
@@ -74,6 +91,7 @@ def view_profile(id):
                            breadcrumbs=breadcrumbs, 
                            page_title=page_title,
                            password_form=password_form,
+                           role_form=role_form,
                            user=user)
 
 

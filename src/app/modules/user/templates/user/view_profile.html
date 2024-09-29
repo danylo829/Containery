@@ -70,7 +70,26 @@
                 {{ password_form.submit(class="btn btn-primary") }}
             </div>
         </form>
+
+        <h3>Change user's role</h3>
+        <form method="POST" action="{{ url_for('user.view_profile', id=user.id) }}">
+            {{ role_form.csrf_token(id = 'role_csrf') }}
+            
+            <div class="table-box">
+                <table>
+                    <tr>
+                        <td><strong>Role</strong></td>
+                        <td>
+                            {{ role_form.role() }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
         
+            <div class="submit-box">
+                {{ role_form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
     </div>
 {% endif %}
 
