@@ -8,7 +8,7 @@
 <div class="content-box">
     <div class="search-box">
         <input type="text" id="search" placeholder="Search">
-        <button class="icon-button" id="refresh-page-btn"><span class="material-icons">restart_alt</span></button>
+        <a id="refresh-page-btn"><span class="material-icons">restart_alt</span></a>
     </div>
     <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
         <table id="image-table">
