@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import login_required, current_user
 
 from .forms import *
-from app.models import PersonalSettings, User, Role
+from app.models import PersonalSettings, User
 from app.decorators import role
 
 user = Blueprint('user', __name__, url_prefix='/user', template_folder='templates', static_folder='static')
