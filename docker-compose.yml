@@ -9,8 +9,8 @@ services:
       - ./src:/containery
       - containery_data:/app_data
       - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - FLASK_ENV=development
+    env_file:
+      - ./.env
 
 volumes:
   containery_data:
