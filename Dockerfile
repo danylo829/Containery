@@ -10,4 +10,4 @@ EXPOSE 5000
 
 ENV PYTHONDONTWRITEBYTECODE=1
 
-ENTRYPOINT ["gunicorn", "--worker-class", "eventlet", "-w", "1", "--reload", "-b", "0.0.0.0:5000", "wsgi:app"]
+ENTRYPOINT ["gunicorn"]
