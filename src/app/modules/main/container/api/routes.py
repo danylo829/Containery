@@ -26,13 +26,13 @@ def start(id):
     return str(response), status_code
 
 @api.route('/<id>/stop', methods=['POST'])
-@role([Role.READER], allow=False)
+@role([Role.ADMIN], allow=True)
 def stop(id):
     response, status_code = docker.stop_container(id)
     return str(response), status_code
 
 @api.route('/<id>/delete', methods=['DELETE'])
-@role([Role.READER], allow=False)
+@role([Role.ADMIN], allow=True)
 def delete(id):
     response, status_code = docker.delete_container(id)
     return str(response), status_code
