@@ -36,7 +36,7 @@ document.querySelectorAll('.restart-btn').forEach(button => {
             },
         })
         .then(response => handleResponse(response, 'restarted'))
-        .catch(error => handleError());
+        .catch(error => handleError(error));
     });
 });
 
@@ -101,8 +101,8 @@ function handleResponse(response, action) {
     }
 }
 
-function handleError() {
-    localStorage.setItem('flash_message', 'An error occurred.');
+function handleError(error) {
+    localStorage.setItem('flash_message', `An error occurred: ${error}`);
     localStorage.setItem('flash_type', 'error');
     window.location.reload();
 }
