@@ -8,6 +8,8 @@ class Docker:
     def __init__(self):
         self.clients = {}  # Store client connections
 
+    # GENERAL
+
     def perform_request(self, path, method='GET', payload=None):
         encoded_socket_path = GlobalSettings.get_setting("docker_socket").replace('/', '%2F')
         url = f'http+unix://{encoded_socket_path}{path}'
@@ -25,6 +27,8 @@ class Docker:
         except Exception as e:
             return str(e), 500
     
+    # EXEC
+
     def create_exec(self, endpoint, payload):
         """Create an exec instance and return its ID."""
         response, status_code = self.perform_request(endpoint, method='POST', payload=payload)
@@ -101,8 +105,12 @@ class Docker:
         else:
             return 'No active session found.\r\n'
     
+    # SYSTEM
+
     def info(self):
         return self.perform_request('/info')
+
+    # CONTAINER
 
     def get_containers(self):
         return self.perform_request('/containers/json?all=true')
@@ -162,14 +170,20 @@ class Docker:
     def delete_container(self, container_id):
         return self.perform_request(f'/containers/{container_id}', method='DELETE')
 
+    # IMAGE
+
     def get_images(self):
         return self.perform_request('/images/json')
 
     def inspect_image(self, image_id):
         return self.perform_request(f'/images/{image_id}/json')
 
+    # VOLUME
+
     def get_volumes(self):
         return self.perform_request('/volumes')
+
+    # NETWORK
 
     def get_networks(self):
         return self.perform_request('/networks')
