@@ -4,7 +4,7 @@ from flask_login import login_required
 from app.models import Role
 from app.decorators import role
 from app.utils.docker import Docker
-from app.utils.common import format_docker_timestamp
+from app.utils.common import format_docker_timestamp, format_unix_timestamp
 
 image = Blueprint('image', __name__, template_folder='templates', static_folder='static')
 
@@ -71,6 +71,7 @@ def get_list():
     for image in images:
         row = {
             'id': image['Id'],
+            'created': format_unix_timestamp(image['Created']),
             'repo_tags': ', '.join(image['RepoTags']) if image.get('RepoTags') else 'N/A',
             'size': round(image['Size'] / 1024 / 1024, 2)
         }

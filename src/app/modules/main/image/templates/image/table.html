@@ -15,6 +15,7 @@
             <thead>
                 <tr>
                     <th data-sort="repo_tags">Repo</th>
+                    <th data-sort="repo_tags">Created</th>
                     <th data-sort="size">Size (MB)</th>
                 </tr>
             </thead>
@@ -22,6 +23,7 @@
                 {% for row in rows %}
                 <tr>
                     <td><a href="{{ url_for('main.image.info', id=row.id) }}"">{{ row.repo_tags }}</a></td>
+                    <td>{{ row.created }}</td>
                     <td>{{ row.size }}</td>
                 </tr>
                 {% endfor %}
