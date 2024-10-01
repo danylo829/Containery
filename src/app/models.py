@@ -121,6 +121,3 @@ class PersonalSettings(db.Model):
             db.session.add(setting)
         
         db.session.commit()
-
-def init_db():
-    db.create_all()

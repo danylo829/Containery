@@ -1,14 +1,15 @@
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager
 from flask_socketio import SocketIO
-from .models import db, init_db, User, Role, PersonalSettings, GlobalSettings
+from .models import db, User, Role, PersonalSettings, GlobalSettings
+from flask_migrate import Migrate
 
 import app.utils.common as utils
-
 from werkzeug.debug import DebuggedApplication
 
 socketio = SocketIO()
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
@@ -22,6 +23,7 @@ def create_app():
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
+
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
@@ -31,8 +33,7 @@ def create_app():
         return dict(PersonalSettings=PersonalSettings, GlobalSettings=GlobalSettings, Role=Role, utils=utils)
 
     db.init_app(app)
-    with app.app_context():
-        init_db()
+    migrate.init_app(app, db)
 
     from .index import index
     from .modules.main import main
