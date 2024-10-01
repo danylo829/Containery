@@ -1,0 +1,92 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+    {% if network %}
+        <!-- General Info Block -->
+        <div class="content-card">
+            <div class="title">
+                <h2>{{ network.Name }}</h2>
+                <div class="actions">
+                    <div>
+                        <a href="#"><span class="material-icons icon-button delete">delete</span></a> <!-- Delete -->
+                    </div>
+                </div>
+            </div>
+            
+            <p><strong>Created At:</strong> {{ network.Created }}</p>
+            <p><strong>Scope:</strong> {{ network.Scope }}</p>
+            <p><strong>Driver:</strong> {{ network.Driver }}</p>
+            <p><strong>Enable IPv6:</strong> {{ network.EnableIPv6 }}</p>
+            <p><strong>Internal:</strong> {{ network.Internal }}</p>
+            <p><strong>Attachable:</strong> {{ network.Attachable }}</p>
+            <p><strong>Ingress:</strong> {{ network.Ingress }}</p>
+
+            <!-- Network Configuration -->
+            <h3>Network Configuration</h3>
+            {% if network.IPAM %}
+                {% for config in network.IPAM %}
+                    <p><strong>Subnet:</strong> {{ config[0] }}</p>
+                    <p><strong>Gateway:</strong> {{ config[1] }}</p>
+                {% endfor %}
+            {% else %}
+                <p>No network configuration found.</p>
+            {% endif %}
+
+        </div>
+
+        <!-- Containers Block -->
+        <div class="content-card">
+            <h2>Containers</h2>
+            {% if network.Containers %}
+                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Container</th>
+                                <th>IPv4 Address</th>
+                                <th>MAC Address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for container_id, container_info in network.Containers.items() %}
+                            <tr>
+                                <td><strong>{{ container_info.Name }}</strong></td>
+                                <td>{{ container_info.IPv4Address }}</td>
+                                <td>{{ container_info.MacAddress }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>No containers found in this network.</p>
+            {% endif %}
+        </div>
+
+
+        <!-- Labels Block -->
+        <div class="content-card">
+            <h2>Labels</h2>
+            {% if network.Labels %}
+                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                    <table>
+                        <tbody>
+                            {% for key, value in network.Labels.items() %}
+                            <tr>
+                                <td><strong>{{ key }}</strong></td>
+                                <td>{{ value }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>No labels found.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

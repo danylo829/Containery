@@ -174,3 +174,6 @@ class Docker:
     def get_networks(self):
         return self.perform_request('/networks')
 
+    def inspect_network(self, network_id):
+        return self.perform_request(f'/networks/{network_id}')
+

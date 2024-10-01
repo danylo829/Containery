@@ -23,7 +23,7 @@
             <tbody id="network-list">
                 {% for row in rows %}
                 <tr>
-                    <td>{{ row.name }}</td>
+                    <td><a href="{{ url_for('main.network.info', id=row.id) }}">{{ row.name }}</a></td>
                     <td>{{ row.driver }}</td>
                     <td>{{ row.subnet }}</td>
                     <td>{{ row.gateway }}</td>
