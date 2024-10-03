@@ -460,6 +460,7 @@ a:hover {
 
 .dashboard-button span {
     margin-top: 10px;
+    color: var(--text-color) !important;
 }
 
 .dashboard-button .material-icons {
