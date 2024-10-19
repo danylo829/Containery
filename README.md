@@ -1,7 +1,5 @@
 # Containery
 
-**Powerful, fast, and lightweight container management web application**
-
 ## Overview
 Containery is a container management web application that offers a powerful, fast, and lightweight interface to manage Docker containers. Whether you are an individual developer or managing a fleet of containers in production, Containery simplifies the process by providing an intuitive UI with essential container management capabilities.
 
@@ -9,8 +7,7 @@ Containery is a container management web application that offers a powerful, fas
 - **Docker Management**: Manage containers, images, networks, and volumes within a unified interface.
 - **Terminal and Logs**: View container logs and interact with container terminals directly in the UI.
 - **Responsive Web Interface**: Access and manage Docker resources from any device.
-- **User Management**: Authentication, user profiles, and roles.
-- **System Dashboard**: Comprehensive overview of running containers and system performance.
+- **User Management**: Authentication, user profiles, and roles. Ensure that each member has the right level of access to perform their tasks efficiently.
 
 ## Deployment
 
@@ -61,7 +58,7 @@ server {
 If you're using NGINX as a reverse proxy, **remove the `ports` section** from the `docker-compose.yml` file for the app service.
 
 ### Environment Variables
-Create a `.env` file in the root of your project (next to `docker-compose.yml`) with the following content:
+Create a `.env` file next to `docker-compose.yml` with the following content:
 
 ```plaintext
 SECRET_KEY=12345678
@@ -74,7 +71,7 @@ This `.env` file contains environment variables used by the application:
 - **CSRF_SECRET_KEY**: Used to secure against Cross-Site Request Forgery (CSRF).
 - **DEBUG**: Set to `True` during development. Set to `False` in production to disable debugging.
 
-Make sure to customize these values, especially the `SECRET_KEY` and `CSRF_SECRET_KEY`, for your own deployment.
+Make sure to customize `SECRET_KEY` and `CSRF_SECRET_KEY` values.
 
 ### License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
