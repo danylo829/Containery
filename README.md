@@ -73,5 +73,5 @@ This `.env` file contains environment variables used by the application:
 
 Make sure to customize `SECRET_KEY` and `CSRF_SECRET_KEY` values.
 
-### License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
