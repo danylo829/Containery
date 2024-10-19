@@ -7,10 +7,10 @@ services:
       - "5000:5000"
     volumes:
       - ./src:/containery
-      # - containery_data:/app_data
+      - containery_data:/app_data
       - /var/run/docker.sock:/var/run/docker.sock
     env_file:
       - ./.env
 
-# volumes:
-#   containery_data:
+volumes:
+  containery_data:
