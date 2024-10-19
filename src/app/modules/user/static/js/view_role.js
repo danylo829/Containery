@@ -1,36 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const deleteButtons = document.querySelectorAll('.delete-role-btn');
+    const deleteButton = document.getElementById('delete-role-btn');
+    const roleId = deleteButton.getAttribute('data-role-id');
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const confirmationModal = document.getElementById('confirmationModal');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
     const cancelBtn = document.getElementById('cancelBtn');
     const modalQuestion = document.getElementById('modalQuestion');
 
-    let currentRoleId; // Variable to hold the role ID of the current deletion. Dont used much, made for future
-
-    function openModal(roleId, roleName) {
-        currentRoleId = roleId;
-        modalQuestion.textContent = `Are you sure you want to delete the role: ${roleName}?`;
-        confirmDeleteBtn.textContent = `Delete ${roleName}`;
+    function openModal() {
+        modalQuestion.textContent = `Are you sure you want to delete this role?`;
+        confirmDeleteBtn.textContent = `Delete`;
         confirmationModal.style.display = 'block';
     }
 
     function closeModal() {
         confirmationModal.style.display = 'none';
-        currentRoleId = null;
     }
     
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const roleId = this.getAttribute('data-role-id');
-            const roleName = this.getAttribute('data-role-name');
-            openModal(roleId, roleName);
-        });
+    deleteButton.addEventListener('click', function () {
+        openModal();
     });
 
     confirmDeleteBtn.addEventListener('click', function () {
         const formData = new FormData();
-        formData.append('role_id', currentRoleId);
+        formData.append('role_id', roleId);
 
         fetch('/user/role/delete', {
             method: 'POST',
