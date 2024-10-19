@@ -8,6 +8,9 @@ from app.utils.docker import Docker
 from app.utils.common import format_docker_timestamp
 from app.models import GlobalSettings
 
+from app.models import Permissions
+from app.decorators import permission
+
 from app import socketio
 
 container = Blueprint('container', __name__, template_folder='templates', static_folder='static')
@@ -82,6 +85,7 @@ def before_request():
     pass
 
 @container.route('/list', methods=['GET'])
+@permission(Permissions.CONTAINER_VIEW_LIST)
 def get_list():
     response, status_code = docker.get_containers()
     containers = []
@@ -114,6 +118,7 @@ def get_list():
     return render_template('container/table.html', rows=rows, breadcrumbs=breadcrumbs, page_title=page_title)
 
 @container.route('/<id>', methods=['GET'])
+@permission(Permissions.CONTAINER_INFO)
 def info(id): 
     response, status_code = container_info(id)
     container = []
@@ -133,6 +138,7 @@ def info(id):
 
 
 @container.route('/<id>/logs', methods=['GET'])
+@permission(Permissions.CONTAINER_INFO)
 def logs(id):
     response, status_code = docker.get_logs(id)
     logs = []
@@ -155,6 +161,7 @@ def logs(id):
 
 
 @container.route('/<id>/processes', methods=['GET'])
+@permission(Permissions.CONTAINER_INFO)
 def processes(id):
     response, status_code = docker.get_processes(id)
     processes = []
@@ -181,6 +188,7 @@ def processes(id):
     return render_template('container/processes.html', processes=processes, breadcrumbs=breadcrumbs, page_title=page_title)
 
 @container.route('/<id>/terminal', methods=['GET'])
+@permission(Permissions.CONTAINER_EXEC)
 def console(id):
     breadcrumbs = [
         {"name": "Dashboard", "url": url_for('main.dashboard.index')},

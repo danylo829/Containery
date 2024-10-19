@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, SubmitField, SelectField, PasswordField, StringField
+from wtforms import BooleanField, SubmitField, SelectField, PasswordField, StringField, FieldList, FormField, HiddenField
 from wtforms.validators import DataRequired, EqualTo, Length
 from app.models import Role
 
@@ -25,20 +25,43 @@ class ChangeUserPasswordForm(FlaskForm):
                                          validators=[DataRequired(), EqualTo('new_password', message='Passwords must match.')])
     submit = SubmitField('Change Password', name='submit_user_password')
 
-class ChangeUserRoleForm(FlaskForm):
+class AddUserRoleForm(FlaskForm):
     role = SelectField(
         'Role', 
-        choices=[(role.name, role.value) for role in Role],
-        default=Role.READER.value,
-        validators=[DataRequired()])
-    submit = SubmitField('Change Role', name='change_role')
+        choices=[],
+        validators=[DataRequired()]
+    )
+    submit = SubmitField('Add', name='Add_role')
+
+    def set_role_choices(self, roles):
+        if roles:
+            self.role.choices = [(role.id, role.name) for role in roles]
+        else:
+            self.role.choices = [('', 'No available roles')]
+            self.submit.render_kw = {'disabled': 'disabled'}
 
 class AddUserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(max=24, min=1)])
     password = PasswordField('Password', validators=[DataRequired()])
     role = SelectField(
         'Role', 
-        choices=[(role.name, role.value) for role in Role],
-        default=Role.READER.value,
+        choices=[],
         validators=[DataRequired()])
     submit = SubmitField('Create User', name='create_user')
+
+    def set_role_choices(self, roles):
+        self.role.choices = [(role.id, role.name) for role in roles]
+
+class PermissionForm(FlaskForm):
+    enabled = BooleanField('Enabled')
+    permission_value = HiddenField()
+
+class AddRoleForm(FlaskForm):
+    role_name = StringField('Role Name')
+    permissions = FieldList(FormField(PermissionForm), label='Permissions')
+    submit = SubmitField('Add')
+
+class EditRoleForm(FlaskForm):
+    role_name = StringField('Role Name')
+    permissions = FieldList(FormField(PermissionForm), label='Permissions')
+    submit = SubmitField('Save')

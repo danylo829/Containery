@@ -1,8 +1,8 @@
 from flask import Blueprint, request, redirect, flash, url_for
 from flask_login import login_required
 from app.utils.docker import Docker
-from app.models import Role
-from app.decorators import role
+from app.models import Permissions
+from app.decorators import permission
 
 api = Blueprint('container', __name__)
 
@@ -14,25 +14,25 @@ def before_request():
     pass
 
 @api.route('/<id>/restart', methods=['POST'])
-@role([Role.READER], allow=False)
+@permission(Permissions.CONTAINER_RESTART)
 def restart(id):
     respone, status_code = docker.restart_container(id)
     return str(respone), status_code
 
 @api.route('/<id>/start', methods=['POST'])
-@role([Role.READER], allow=False)
+@permission(Permissions.CONTAINER_START)
 def start(id):
     response, status_code = docker.start_container(id)
     return str(response), status_code
 
 @api.route('/<id>/stop', methods=['POST'])
-@role([Role.ADMIN], allow=True)
+@permission(Permissions.CONTAINER_STOP)
 def stop(id):
     response, status_code = docker.stop_container(id)
     return str(response), status_code
 
 @api.route('/<id>/delete', methods=['DELETE'])
-@role([Role.ADMIN], allow=True)
+@permission(Permissions.CONTAINER_DELETE)
 def delete(id):
     response, status_code = docker.delete_container(id)
     return str(response), status_code

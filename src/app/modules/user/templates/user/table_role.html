@@ -1,0 +1,39 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Search">
+        <div class="table-actions">
+            {% if current_user.has_permission(Permissions.ROLE_ADD) %}
+                <a href="{{ url_for('user.add_role') }}"><span class="material-icons">add</span></a>
+            {% endif %}        
+            <a id="refresh-page-btn"><span class="material-icons">restart_alt</span></a>
+        </div>
+    </div>
+    <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+        <table id="roles-table">
+            <thead>
+                <tr>
+                    <th data-sort="roles">Role</th>
+                    <th data-sort="users">Users</th>
+                    <th data-sort="created_at">Created at</th>
+                </tr>
+            </thead>
+            <tbody id="roles-list">
+                {% for role in roles %}
+                    <tr>
+                        <td><a href="{{ url_for('user.view_role', id=role.id) }}">{{ role.name }}</a></td>
+                        <td>{{ role.get_user_count() }}</td>
+                        <td>{{ utils.format_unix_timestamp(role.created_at) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+    </div>
+</div>
+{% endblock %}

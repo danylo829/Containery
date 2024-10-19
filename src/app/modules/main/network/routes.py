@@ -4,6 +4,9 @@ from flask_login import login_required
 from app.utils.docker import Docker
 from app.utils.common import format_docker_timestamp
 
+from app.decorators import permission
+from app.models import Permissions
+
 import json
 
 network = Blueprint('network', __name__, template_folder='templates', static_folder='static')
@@ -55,6 +58,7 @@ def before_request():
     pass
 
 @network.route('/list', methods=['GET'])
+@permission(Permissions.NETWORK_VIEW_LIST)
 def get_list():
     response, status_code = docker.get_networks()
     networks = []
@@ -85,6 +89,7 @@ def get_list():
     return render_template('network/table.html', rows=rows, breadcrumbs=breadcrumbs, page_title=page_title)
 
 @network.route('/network/<id>', methods=['GET'])
+@permission(Permissions.NETWORK_INFO)
 def info(id):
     response, status_code = network_info(id)
     network = []

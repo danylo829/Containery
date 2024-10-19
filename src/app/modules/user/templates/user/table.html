@@ -9,7 +9,12 @@
     <div class="search-box">
         <input type="text" id="search" placeholder="Search">
          <div class="table-actions">
-            <a href="{{ url_for('user.add') }}"><span class="material-icons">person_add</span></a>
+            {% if current_user.has_permission(Permissions.USER_ADD) %}
+                <a href="{{ url_for('user.add') }}"><span class="material-icons">person_add</span></a>
+            {% endif %}
+            {% if current_user.has_permission(Permissions.ROLE_VIEW_LIST) %}
+                <a href="{{ url_for('user.get_role_list') }}"><span class="material-icons" title="Roles">badge</span></a>
+            {% endif %}
             <a id="refresh-page-btn"><span class="material-icons">restart_alt</span></a>
          </div>
     </div>
@@ -18,7 +23,7 @@
             <thead>
                 <tr>
                     <th data-sort="username">Username</th>
-                    <th data-sort="role">Role</th>
+                    <th data-sort="role">Roles</th>
                     <th data-sort="created_at">Created At</th>
                 </tr>
             </thead>
@@ -26,7 +31,7 @@
                 {% for user in users %}
                 <tr>
                     <td><a href="{{ url_for('user.view_profile', id=user.id) }}">{{ user.username }}</a></td>
-                    <td>{{ user.role }}</td>
+                    <td>{{ user.get_roles_str() }}</td>
                     <td>{{ utils.format_unix_timestamp(user.created_at) }}</td>
                 </tr>
                 {% endfor %}

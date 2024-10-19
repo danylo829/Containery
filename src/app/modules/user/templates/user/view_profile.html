@@ -1,14 +1,15 @@
 {% extends "main.html" %}
 
 {% block custom_header %}
+    <link rel="stylesheet" href="{{ url_for('user.static', filename='styles/user.css') }}">
+    <script src="{{ url_for('user.static', filename='js/view_profile.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
 <div class="content-card">
     <div class="title">
         <div class="user-details">
-            <h2>{{ user.username }}</h2>
-            <span class="role-badge">{{ user.role }}</span>
+            <h1>{{ user.username }}</h1>
         </div>
         <div class="actions">
             <div>
@@ -16,16 +17,31 @@
                     <input id="csrf_token_delete_set" name="csrf_token" type="hidden" value="{{ csrf_token() }}">
                     <button type="submit" style="display:none;"></button>
                 
-                    <a href="#" onclick="document.getElementById('delete-form-{{ user.id }}').submit();">
+                    <a onclick="document.getElementById('delete-form-{{ user.id }}').submit();">
                         <span class="material-icons icon-button delete">delete</span>
                     </a>
                 </form>
             </div>
         </div>
     </div>
-    <div class="user-info">
-        <p><strong>Created At:</strong> {{ utils.format_unix_timestamp(user.created_at) }}</p>
+    <h3>Roles</h3>
+    <div class="role-list" data-user-id="{{ user.id }}">
+        {% for role in user.get_roles() %}
+            <div class="role-item" id="role-item-{{ role.id }}">
+                <span class="role-badge">{{ role.name }}</span>
+                <a class="delete-role" data-role-id="{{ role.id }}">
+                    <span class="material-icons delete">cancel</span>
+                </a>
+            </div>
+        {% endfor %}
     </div>
+    <form class="add-role" method="POST" action="{{ url_for('user.view_profile', id=user.id) }}">
+        {{ role_form.hidden_tag() }}
+
+        {{ role_form.role(class="form-control", id="role-select") }}
+
+        {{ role_form.submit(class="btn btn-primary", id="add-role-btn") }}
+    </form> 
     {% if current_user.id == user.id %}
         <p><a href="{{ url_for('user.profile') }}">Edit Your Profile</a></p>
     {% endif %}
@@ -68,26 +84,6 @@
         
             <div class="submit-box">
                 {{ password_form.submit(class="btn btn-primary") }}
-            </div>
-        </form>
-
-        <h3>Change user's role</h3>
-        <form method="POST" action="{{ url_for('user.view_profile', id=user.id) }}">
-            {{ role_form.csrf_token(id = 'role_csrf') }}
-            
-            <div class="table-box">
-                <table>
-                    <tr>
-                        <td><strong>Role</strong></td>
-                        <td>
-                            {{ role_form.role() }}
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        
-            <div class="submit-box">
-                {{ role_form.submit(class="btn btn-primary") }}
             </div>
         </form>
     </div>

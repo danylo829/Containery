@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, url_for, jsonify, flash
 from flask_login import login_required
 
-from app.models import Role
-from app.decorators import role
+from app.models import Permissions
+from app.decorators import permission
 from app.utils.docker import Docker
 from app.utils.common import format_docker_timestamp, format_unix_timestamp
 
@@ -59,6 +59,7 @@ def before_request():
     pass
 
 @image.route('/list', methods=['GET'])
+@permission(Permissions.IMAGE_VIEW_LIST)
 def get_list():
     response, status_code = docker.get_images()
     images = []
@@ -88,6 +89,7 @@ def get_list():
     return render_template('image/table.html', rows=rows, breadcrumbs=breadcrumbs, page_title=page_title)
 
 @image.route('/<id>', methods=['GET'])
+@permission(Permissions.IMAGE_INFO)
 def info(id):
     response, status_code = image_info(id)
     image = []

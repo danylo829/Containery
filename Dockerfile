@@ -4,7 +4,9 @@ WORKDIR /containery
 
 COPY requirements.txt ./
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && \
+    apt update && \
+    apt install sqlite3
 
 EXPOSE 5000
 

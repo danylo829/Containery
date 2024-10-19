@@ -4,8 +4,9 @@ const tables = {
     'image-table':      [0],        // name
     'volume-table':     [0],        // name
     'user-table':       [0],        // username
+    'roles-table':      [0],         // name
     'network-table':    [0, 2],     // name, subnet
-    'process-table':    [0, 1, 7]   // UID, PID, CMD 
+    'process-table':    [0, 1, 7]  // UID, PID, CMD
 };
 
 document.addEventListener('DOMContentLoaded', function() {

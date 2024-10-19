@@ -15,7 +15,7 @@ document.querySelectorAll('.start-btn').forEach(button => {
             },
         })
         .then(response => handleResponse(response, 'started'))
-        .catch(error => handleError());
+        .catch(error => handleError(error));
     });
 });
 
@@ -57,7 +57,7 @@ document.querySelectorAll('.stop-btn').forEach(button => {
             },
         })
         .then(response => handleResponse(response, 'stopped'))
-        .catch(error => handleError());
+        .catch(error => handleError(error));
     });
 });
 
@@ -78,7 +78,7 @@ document.querySelectorAll('.delete-btn').forEach(button => {
             },
         })
         .then(response => handleResponse(response, 'deleted'))
-        .catch(error => handleError());
+        .catch(error => handleError(error));
     });
 });
 

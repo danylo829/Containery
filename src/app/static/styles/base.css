@@ -139,6 +139,13 @@ ul {
     overflow-x: auto;
 }
 
+.content-box .info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .content-box.small {
     max-width: fit-content;
     margin-inline: auto;
@@ -149,11 +156,6 @@ ul {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-.content-box form input[type='submit'] {
-    max-width: min-content;
-    min-width: 5vw;
 }
 
 .content-box form .table-box {
@@ -294,6 +296,7 @@ thead th:last-child {
 form th, 
 form td {
     border-bottom: none;
+    word-wrap: break-word;
 }
 
 th, td {
@@ -328,7 +331,6 @@ th {
     white-space: nowrap; /* Prevent wrapping */
     overflow: hidden; /* Hide the overflow text */
     text-overflow: ellipsis; /* Show ellipsis if text overflows */
-    max-width: 100px; /* Set a max-width for the header */
 }
 
 td {
@@ -362,6 +364,11 @@ td {
 .table-box.constrained th {
     max-width: none; /* Remove max-width constraint if using the constrained class */
     word-wrap: unset;
+}
+
+.table-box.role {
+    overflow-x: auto;
+    width: 100%;
 }
 
 .sidebar.closed {
@@ -601,12 +608,19 @@ hr {
     color: var(--error-text);
 }
 
-/* Hide the default checkbox */
+input[type="text"][disabled] {
+    border: 1px solid grey;
+    cursor: not-allowed;
+}
+
+input[type="submit"][disabled] {
+    border: 1px solid grey;
+    cursor: not-allowed;
+    background-color: grey;
+}
+
 input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    width: unset;
+    display: none;
 }
 
 input[type="checkbox"] + label {
@@ -643,6 +657,26 @@ input[type="checkbox"]:checked + label:before {
     background-color: var(--bg-color);
 }
 
+input[type="checkbox"][disabled] + label {
+    background-color: #ccc;
+    color: #999;
+    cursor: not-allowed;
+    border: none;
+}
+
+input[type="checkbox"][disabled]:checked + label {
+    background-color: #bbb;
+}
+
+input[type="checkbox"][disabled]:checked + label:before {
+    background-color: #999;
+    transform: translateX(20px);
+}
+
+input[type="checkbox"][disabled] + label:before {
+    background-color: #ddd;
+}
+
 input[type="submit"] {
     background: var(--accent-color);
     color: white;
@@ -655,30 +689,41 @@ select {
     cursor: pointer;
     position: relative;
     display: inline-block;
+    padding-right: 2.5em; /* Space for the custom arrows */
+    background-image:
+        /* Down arrow */
+        linear-gradient(45deg, transparent 50%, gray 50%),
+        linear-gradient(135deg, gray 50%, transparent 50%),
+        /* Up arrow */
+        linear-gradient(135deg, transparent 50%, gray 50%),
+        linear-gradient(45deg, gray 50%, transparent 50%),
+        /* Right border */
+        linear-gradient(to right, #ccc, #ccc);
+    background-position:
+        /* Down arrow */
+        calc(100% - 18px) calc(50% + 4px),
+        calc(100% - 13px) calc(50% + 4px),
+        /* Up arrow */
+        calc(100% - 18px) calc(50% - 4px),
+        calc(100% - 13px) calc(50% - 4px),
+        /* Right border */
+        calc(100% - 2.5em) 0.5em;
+    background-size:
+        5px 5px,
+        5px 5px,
+        5px 5px,
+        5px 5px,
+        1px 1.5em;
+    background-repeat: no-repeat;
 }
 
 select:disabled {
     border: 1px solid var(--bg-color);
-}
-
-select:focus {
-    border-color: var(--accent-color-darken);
-    background-color: var(--bg-color-box);
+    cursor: not-allowed;
 }
 
 select:hover {
     background-color: var(--bg-color-box);
-}
-
-select::after {
-    content: '▼';
-    font-size: 0.8rem;
-    color: var(--text-color);
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    pointer-events: none;
 }
 
 select option {
@@ -792,6 +837,10 @@ span.delete:hover {
 
 .error-text {
     font-size: x-large;
+}
+
+#role_name {
+    max-width: fit-content;
 }
 
 @keyframes slideUp {

@@ -1,0 +1,30 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <table>
+            <tr>
+                <td><b>{{ form.role_name.label }}</b></td>
+                <td>{{ form.role_name(size=20) }}</td>
+            </tr>
+            {% for permission_form, permission in zip(form.permissions, Permissions) %}
+                <tr>
+                    <td>{{ permission.name }}</td>
+                    <td>
+                        <input id="{{ permission.name }}" name="{{ permission_form.enabled.name }}" type="checkbox" value="y" {% if permission_form.enabled.data %}checked{% endif %}>
+                        <label for="{{ permission.name }}"></label>
+                        {{ permission_form.permission_value(value=permission.value) }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {{ form.submit() }}
+    </form>      
+</div>
+{% endblock %}

@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, request
+from flask import Blueprint, render_template, flash, redirect, url_for, request, jsonify
 from flask_login import login_required, current_user
 
 from .forms import *
-from app.models import PersonalSettings, User
-from app.decorators import role
+from app.models import PersonalSettings, User, Role, Permissions
+from app.decorators import permission
 
 user = Blueprint('user', __name__, url_prefix='/user', template_folder='templates', static_folder='static')
 
@@ -13,7 +13,7 @@ def before_request():
     pass
 
 @user.route('/profile', methods=['GET', 'POST'])
-def profile():
+def profile():    
     settings_form = PersonalSettingsForm()
     password_form = ChangeOwnPasswordForm()
 
@@ -51,7 +51,7 @@ def profile():
                            password_form=password_form)
 
 @user.route('', methods=['GET', 'POST'])
-@role([Role.ADMIN], allow=True)
+@permission(Permissions.USER_VIEW_PROFILE)
 def view_profile():
     user_id = request.args.get('id', type=int)
     user = User.query.get(user_id)
@@ -62,28 +62,33 @@ def view_profile():
         return render_template('error.html', message=message, code=code), code
 
     password_form = ChangeUserPasswordForm()
-    role_form = ChangeUserRoleForm(role=user.role)
+    role_form = AddUserRoleForm()
+
+    all_roles = Role.get_roles()
+    user_roles = user.get_roles()
+    available_roles = [role for role in all_roles if role not in user_roles]
+    role_form.set_role_choices(available_roles)
+
+    if (password_form.submit.data or role_form.submit.data) and not current_user.has_permission(Permissions.USER_EDIT):
+        flash('You cannot edit users', 'error')
+        return redirect(url_for('user.view_profile', id=user_id))
 
     if password_form.submit.data and password_form.validate_on_submit():
-        User.update_password(user.username, password_form.new_password.data)
+        user.update_password(password_form.new_password.data)
         flash('Password changed successfully!', 'success')
         return redirect(url_for('user.view_profile', id=user_id))
 
     if role_form.submit.data and role_form.validate_on_submit():
-        selected_role = role_form.role.data
-        if selected_role not in Role.__members__:
-            flash('No such role', 'info')
-            return redirect(url_for('user.view_profile', id=user_id))
+        role = Role.get_role(int(role_form.role.data))
         
-        result = User.update_role(user.id, Role[selected_role].value)
-        if result:
-            flash(result, 'error')
-            return redirect(url_for('user.view_profile', id=user_id))
+        try:
+            user.assign_role(role)
+            flash(f"Role '{role.name}' assigned successfully.", 'success')
+        except (ValueError, LookupError) as e:
+            flash(str(e), 'error')
 
-        flash('Role changed successfully!', 'success')
         return redirect(url_for('user.view_profile', id=user_id))
 
-    role_form.role.value = user.role
     
     breadcrumbs = [
         {"name": "Dashboard", "url": url_for('main.dashboard.index')},
@@ -100,26 +105,52 @@ def view_profile():
                            role_form=role_form,
                            user=user)
 
+@user.route('/remove_role', methods=['POST'])
+@permission(Permissions.ROLE_EDIT)
+def remove_role():
+    user_id = request.form.get('user_id')
+    role_id = request.form.get('role_id')
+
+    try:
+        user = User.query.get(user_id)
+        role = Role.get_role(int(role_id))
+
+        user.remove_role(role)
+
+        return jsonify({'success': True}), 200
+    
+    except PermissionError as pe:
+        return jsonify({'message': str(pe)}), 403
+
+    except ValueError as ve:
+        return jsonify({'message': str(ve)}), 400
+
+    except LookupError as le:
+        return jsonify({'message': str(le)}), 404
+
+    except RuntimeError as re:
+        return jsonify({'message': 'Failed to remove role.'}), 500
+
+
 
 @user.route('/add', methods=['GET', 'POST'])
-@role([Role.ADMIN], allow=True)
+@permission(Permissions.USER_ADD)
 def add():
     add_user_form = AddUserForm()
+    add_user_form.set_role_choices(Role.get_roles())
 
     if add_user_form.submit.data and add_user_form.validate_on_submit():
-        selected_role = add_user_form.role.data
-        role = ''
-        if selected_role in Role.__members__:
-            role = Role[selected_role].value
-        else:
-            flash('Invalid role selected.', 'error')
+        role_id = int(add_user_form.role.data)
+
+        user = User.create_user(add_user_form.username.data, add_user_form.password.data)
+
+        if not isinstance(user, User):
+            flash(user, 'error')
             return redirect(url_for('user.add'))
 
-        result = User.create_user(add_user_form.username.data, add_user_form.password.data, role)
-
+        result = user.assign_role(Role.get_role(role_id))
         if result:
-            flash(result, 'error')
-            return redirect(url_for('user.add'))
+            flash(result)
 
         flash('User added successfully!', 'success')
         return redirect(url_for('user.get_list'))
@@ -138,7 +169,7 @@ def add():
                            add_user_form=add_user_form)
 
 @user.route('/delete/<int:user_id>', methods=['POST'])
-@role([Role.ADMIN], allow=True)
+@permission(Permissions.USER_DELETE)
 def delete(user_id):
     result = User.delete_user(user_id)
     
@@ -151,7 +182,7 @@ def delete(user_id):
 
 
 @user.route('/list', methods=['GET'])
-@role([Role.ADMIN], allow=True)
+@permission(Permissions.USER_VIEW_LIST)
 def get_list():
     users = User.query.all()
 
@@ -159,10 +190,186 @@ def get_list():
         {"name": "Dashboard", "url": url_for('main.dashboard.index')},
         {"name": "Users", "url": None},
     ]
-    page_title = 'User info'
+    page_title = 'Users info'
     endpoint = "user_info"
     
     return render_template('user/table.html', 
                            breadcrumbs=breadcrumbs, 
                            page_title=page_title, 
                            users=users)
+
+@user.route('/role/list', methods=['GET'])
+@permission(Permissions.ROLE_VIEW_LIST)
+def get_role_list():
+    roles = Role.get_roles()
+    breadcrumbs = [
+        {"name": "Dashboard", "url": url_for('main.dashboard.index')},
+        {"name": "Users", "url": url_for('user.get_list')},
+        {"name": "Roles", "url": None},
+    ]
+    page_title = 'Roles'
+    endpoint = "user_info"
+    
+    return render_template('user/table_role.html', 
+                           breadcrumbs=breadcrumbs, 
+                           page_title=page_title, 
+                           roles=roles)
+
+@user.route('/role', methods=['GET', 'POST'])
+@permission(Permissions.ROLE_VIEW)
+def view_role():
+    form = EditRoleForm()
+
+    role_id = request.args.get('id', type=int)
+
+    try:
+        role = Role.get_role(id=role_id)
+    except ValueError as ve:
+        flash(str(ve), 'error')
+        return redirect(url_for('user.get_role_list'))
+    except LookupError as le:
+        flash(str(le), 'error')
+        return redirect(url_for('user.get_role_list'))
+
+    if not form.permissions.entries:
+        for permission in Permissions:
+            is_enabled = permission.value in role.get_permissions_values()
+            form.permissions.append_entry({
+                'enabled': is_enabled,
+                'permission_value': permission.value
+            })
+
+    if form.validate_on_submit():
+        if not current_user.has_permission(Permissions.ROLE_EDIT):
+            flash('You don\'t have permission to edit roles', 'error')
+            return redirect(url_for('user.view_role', id=role_id))
+
+        name = form.role_name.data
+        selected_permissions = []
+        for entry in form.permissions.data:
+            if entry['enabled']:
+                selected_permissions.append(Permissions(int(entry['permission_value'])))
+
+        if not name or not name.strip():
+            flash("Role name cannot be empty.", 'error')
+            return redirect(url_for('user.view_role', id=role_id))
+
+        if len(name) > 20:
+            flash('Role name must be 20 characters or less', 'error')
+            return redirect(url_for('user.view_role', id=role_id))
+
+        try:
+            role.rename(name=name)
+            flash(f"Role '{role.name}' updated successfully.", 'success')
+
+            for permission in Permissions:
+                if permission.value in selected_permissions and permission.value not in role.get_permissions_values():
+                    try:
+                        role.add_permission(permission=permission)
+                    except ValueError as e:
+                        flash(str(e), 'error')
+
+                elif permission.value not in selected_permissions and permission.value in role.get_permissions_values():
+                    try:
+                        role.remove_permission(permission=permission)
+                    except ValueError as e:
+                        flash(str(e), 'error')
+
+        except ValueError as ve:
+            flash(str(ve), 'error')
+        except PermissionError:
+            flash("You are not allowed to rename this role.", 'error')
+        except Exception as e:
+            flash(f"An unexpected error occurred: {str(e)}", 'error')
+        
+        return redirect(url_for('user.view_role', id=role_id))
+
+    breadcrumbs = [
+        {"name": "Dashboard", "url": url_for('main.dashboard.index')},
+        {"name": "Users", "url": url_for('user.get_list')},
+        {"name": "Roles", "url": url_for('user.get_role_list')},
+        {"name": role.name, "url": None},
+    ]
+    
+    page_title = "View Role"
+    
+    return render_template('user/view_role.html', 
+                           breadcrumbs=breadcrumbs, 
+                           page_title=page_title,
+                           form=form,
+                           zip=zip,
+                           role=role)
+
+@user.route('/role/add', methods=['GET', 'POST'])
+@permission(Permissions.ROLE_ADD)
+def add_role():
+    form = AddRoleForm()
+
+    if not form.permissions.entries:
+        for permission in Permissions:
+            form.permissions.append_entry({
+                'enabled': False,
+                'permission_value': permission.value
+            })
+
+    if form.validate_on_submit():
+        name = form.role_name.data.strip()
+        selected_permissions = [
+            Permissions(int(entry['permission_value'])) 
+            for entry in form.permissions.data if entry['enabled']
+        ]
+
+        try:
+            role = Role.create_role(name)
+            flash(f"Role '{name}' created successfully", 'success')
+
+            for permission in selected_permissions:
+                try:
+                    role.add_permission(permission=permission)
+                except ValueError as e:
+                    flash(str(e), 'error')
+
+            return redirect(url_for('user.get_role_list'))
+
+        except ValueError as ve:
+            flash(str(ve), 'error')
+        except Exception as e:
+            flash(f"An unexpected error occurred: {str(e)}", 'error')
+
+    breadcrumbs = [
+        {"name": "Dashboard", "url": url_for('main.dashboard.index')},
+        {"name": "Users", "url": url_for('user.get_list')},
+        {"name": "Roles", "url": url_for('user.get_role_list')},
+        {"name": "Add", "url": None},
+    ]
+    
+    page_title = "Add role"
+
+    return render_template('user/add_role.html',
+                           breadcrumbs=breadcrumbs,
+                           page_title=page_title,
+                           form=form,
+                           zip=zip)
+
+@user.route('/role/delete', methods=['POST'])
+@permission(Permissions.ROLE_EDIT)
+def delete_role():
+    role_id = request.form.get('role_id')
+
+    try:
+        Role.delete_role(int(role_id))
+
+        return jsonify({'success': True}), 200
+
+    except PermissionError as pe:
+        return jsonify({'message': str(pe)}), 403
+
+    except ValueError as ve:
+        return jsonify({'message': str(ve)}), 400
+
+    except LookupError as le:
+        return jsonify({'message': str(le)}), 404
+
+    except RuntimeError as re:
+        return jsonify({'message': 'Failed to delete role.'}), 500
+

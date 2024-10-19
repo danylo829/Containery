@@ -1,0 +1,28 @@
+.role-list {
+    max-height: 20rem;
+    overflow-y: auto;
+}
+
+.role-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-role {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+#role-edit-top-bar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#view-role {
+    table-layout: fixed;
+}

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/common.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/colors/' + PersonalSettings.get_setting(current_user.id, 'theme').lower() + '.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/modal.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
@@ -27,14 +28,15 @@
                     <li><a href="{{ url_for('main.image.get_list') }}"><span class="material-icons nav-icon">image</span><span class="nav-text">Images</span></a></li>
                     <li><a href="{{ url_for('main.network.get_list') }}"><span class="material-icons nav-icon">network_check</span><span class="nav-text">Networks</span></a></li>
                     <li><a href="{{ url_for('main.volume.get_list') }}"><span class="material-icons nav-icon">storage</span><span class="nav-text">Volumes</span></a></li>
-                </ul>
-                {% if current_user.role == Role.ADMIN.value %}
                     <hr>
-                    <ul>
+                    {% if current_user.has_permission(Permissions.USER_VIEW_LIST) %}
                         <li><a href="{{ url_for('user.get_list') }}"><span class="material-icons nav-icon">group</span><span class="nav-text">Users</span></a></li>
+                    {% endif %}
+                    
+                    {% if current_user.has_permission(Permissions.GLOBAL_SETTINGS_VIEW) %}
                         <li><a href="#"><span class="material-icons nav-icon">settings</span><span class="nav-text">Settings</span></a></li>
-                    </ul> 
-                {% endif %}
+                    {% endif %}
+                </ul>
             </nav>
         </aside>
         <div class="main-content">
@@ -67,6 +69,16 @@
                 {% block content %}
                 {% endblock %}
             </div>
+        </div>
+    </div>
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="material-icons icon-button delete close">close</span>
+            <h2 id="modalTitle">Confirmation</h2>
+            <p id="modalQuestion">Are you sure you want to perform this action?</p>
+            <button id="cancelBtn" class="btn">Cancel</button>
+            <button id="confirmDeleteBtn" class="btn">Confirm</button>
         </div>
     </div>
     {% with messages = get_flashed_messages(with_categories=true) %}

@@ -2,7 +2,7 @@ from flask import Flask
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
 from flask_socketio import SocketIO
-from .models import db, User, Role, PersonalSettings, GlobalSettings
+from .models import db, User, Permissions, PersonalSettings, GlobalSettings
 from flask_migrate import Migrate
 
 import app.utils.common as utils
@@ -30,7 +30,7 @@ def create_app():
 
     @app.context_processor
     def inject():
-        return dict(PersonalSettings=PersonalSettings, GlobalSettings=GlobalSettings, Role=Role, utils=utils)
+        return dict(PersonalSettings=PersonalSettings, GlobalSettings=GlobalSettings, Permissions=Permissions, utils=utils)
 
     db.init_app(app)
     migrate.init_app(app, db)
