@@ -1,7 +1,7 @@
 .modal {
     display: none; 
     position: fixed; 
-    z-index: 1; 
+    z-index: 2; 
     left: 0;
     top: 0;
     width: 100%; 
@@ -45,4 +45,11 @@
 .btn:hover {
     border: solid 1px var(--accent-color);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@media all and (min-width:0px) and (max-width: 650px) {
+    .modal-content {
+        margin: 75% auto;
+        width: 75%;
+    }
 }
