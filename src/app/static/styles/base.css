@@ -11,7 +11,8 @@ body {
 }
 
 .sidebar {
-    width: 250px;
+    width: 15rem;
+    min-width: 15rem;
     background-color: var(--bg-color-box);
     box-shadow: 0 0 10px 6px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -372,6 +373,7 @@ td {
 
 .sidebar.closed {
     width: 66px;
+    min-width: 66px;
 }
 
 .sidebar.closed .nav-text {
