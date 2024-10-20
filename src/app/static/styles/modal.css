@@ -47,6 +47,11 @@
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+.btn.delete:hover {
+    border: solid 1px var(--error-bg);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
 @media all and (min-width:0px) and (max-width: 650px) {
     .modal-content {
         margin: 75% auto;
