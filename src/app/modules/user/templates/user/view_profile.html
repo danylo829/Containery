@@ -33,7 +33,7 @@
 
         {{ role_form.role(class="form-control", id="role-select") }}
 
-        {{ role_form.submit(class="btn btn-primary", id="add-role-btn") }}
+        {{ role_form.submit(class="btn-primary", id="add-role-btn") }}
     </form> 
     {% if current_user.id == user.id %}
         <p><a href="{{ url_for('user.profile') }}">Edit Your Profile</a></p>
