@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/colors/' + PersonalSettings.get_setting(current_user.id, 'theme').lower() + '.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/modal.css') }}">
+    <link rel="preload" href="{{ url_for('static', filename='styles/material-icons.woff2') }}" as="font" type="font/woff2" crossorigin="anonymous">
 
     <style>
         @font-face {
