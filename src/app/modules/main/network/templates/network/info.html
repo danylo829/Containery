@@ -54,7 +54,7 @@
                         <tbody>
                             {% for container_id, container_info in network.Containers.items() %}
                             <tr>
-                                <td><strong>{{ container_info.Name }}</strong></td>
+                                <td><strong><a href="{{ url_for('main.container.info', id=container_id) }}">{{ container_info.Name }}</a></strong></td>
                                 <td>{{ container_info.IPv4Address }}</td>
                                 <td>{{ container_info.MacAddress }}</td>
                             </tr>
