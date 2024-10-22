@@ -12,16 +12,9 @@
             <h1>{{ user.username }}</h1>
         </div>
         <div class="actions">
-            <div>
-                <form method="POST" action="{{ url_for('user.delete', user_id=user.id) }}" id="delete-form-{{ user.id }}">
-                    <input id="csrf_token_delete_set" name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-                    <button type="submit" style="display:none;"></button>
-                
-                    <a onclick="document.getElementById('delete-form-{{ user.id }}').submit();">
-                        <span class="material-symbols-outlined icon-button delete">delete</span>
-                    </a>
-                </form>
-            </div>
+            <a id="delete-btn" data-id="{{ user.id }}">
+                <span class="material-symbols-outlined icon-button delete">delete</span>
+            </a>
         </div>
     </div>
     <h3>Roles</h3>

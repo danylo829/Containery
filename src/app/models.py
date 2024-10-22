@@ -271,14 +271,24 @@ class User(UserMixin, db.Model):
             raise RuntimeError(f"Failed to remove role: {str(e)}")
 
     @classmethod
-    def delete_user(cls, id):
-        if id != 1:
-            user = cls.query.filter_by(id=id).first()
-            if user:
-                db.session.delete(user)
-                db.session.commit()
-            return True
-        return False
+    def delete_user(cls, id):    
+        if not isinstance(id, int) or id <= 0:
+            raise ValueError("Invalid user ID provided.")
+
+        if id == 1:
+            raise PermissionError("The admin user cannot be deleted.")
+
+        user = cls.query.filter_by(id=id).first()
+
+        if not user:
+            raise LookupError(f"User with ID '{id}' not found.")
+
+        try:
+            db.session.delete(user)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise RuntimeError(f"Failed to delete user: {str(e)}")
 
 class GlobalSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)

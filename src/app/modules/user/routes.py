@@ -168,17 +168,27 @@ def add():
                            page_title=page_title,
                            add_user_form=add_user_form)
 
-@user.route('/delete/<int:user_id>', methods=['POST'])
+@user.route('/delete', methods=['DELETE'])
 @permission(Permissions.USER_DELETE)
-def delete(user_id):
-    result = User.delete_user(user_id)
-    
-    if result:
-        flash('User deleted successfully!', 'success')
-    else:
-        flash('User deletion failed.', 'error')
-    
-    return redirect(url_for('user.get_list'))
+def delete():
+    user_id = request.form.get('user_id')
+
+    try:
+        result = User.delete_user(int(user_id))
+
+        return jsonify({'success': True}), 200
+
+    except PermissionError as pe:
+        return jsonify({'message': str(pe)}), 403
+
+    except ValueError as ve:
+        return jsonify({'message': str(ve)}), 400
+
+    except LookupError as le:
+        return jsonify({'message': str(le)}), 404
+
+    except RuntimeError as re:
+        return jsonify({'message': 'Failed to delete role.'}), 500
 
 
 @user.route('/list', methods=['GET'])
