@@ -209,7 +209,7 @@ ul {
 
 .table-actions {
     display: inline-flex;
-    gap: 1rem;
+    gap: 2rem;
 }
 
 .search-box input {
@@ -945,5 +945,9 @@ span.delete:hover {
 
     a {
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    .table-actions {
+        gap: unset;
     }
 }
