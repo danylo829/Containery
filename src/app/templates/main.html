@@ -10,7 +10,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/colors/' + PersonalSettings.get_setting(current_user.id, 'theme').lower() + '.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/modal.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <style>
+        @font-face {
+            font-family: 'Material Symbols Outlined';
+            font-style: normal;
+            src: url("{{ url_for('static', filename='styles/material-icons.woff2') }}") format('woff');
+        }
+    </style>
 
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
     {% block custom_header %}
@@ -20,22 +27,22 @@
     <div class="container">
         <aside class="sidebar{{ ' closed' if session.get('sidebar_state', 'open') == 'closed' else '' }}">
             <div class="sidebar-header">
-                <button id="menu-toggle" class="material-icons">chevron_left</button>
+                <button id="menu-toggle" class="material-symbols-outlined">chevron_left</button>
                 <a href="{{ url_for('main.dashboard.index') }}"><h2 class="sidebar-title">Containery</h2></a>
             </div>
             <nav class="nav-menu">
                 <ul>
-                    <li><a href="{{ url_for('main.container.get_list') }}"><span class="material-icons nav-icon">view_list</span><span class="nav-text">Containers</span></a></li>
-                    <li><a href="{{ url_for('main.image.get_list') }}"><span class="material-icons nav-icon">image</span><span class="nav-text">Images</span></a></li>
-                    <li><a href="{{ url_for('main.network.get_list') }}"><span class="material-icons nav-icon">network_check</span><span class="nav-text">Networks</span></a></li>
-                    <li><a href="{{ url_for('main.volume.get_list') }}"><span class="material-icons nav-icon">storage</span><span class="nav-text">Volumes</span></a></li>
+                    <li><a href="{{ url_for('main.container.get_list') }}"><span class="material-symbols-outlined nav-icon">view_list</span><span class="nav-text">Containers</span></a></li>
+                    <li><a href="{{ url_for('main.image.get_list') }}"><span class="material-symbols-outlined nav-icon">image</span><span class="nav-text">Images</span></a></li>
+                    <li><a href="{{ url_for('main.network.get_list') }}"><span class="material-symbols-outlined nav-icon">network_check</span><span class="nav-text">Networks</span></a></li>
+                    <li><a href="{{ url_for('main.volume.get_list') }}"><span class="material-symbols-outlined nav-icon">storage</span><span class="nav-text">Volumes</span></a></li>
                     <hr>
                     {% if current_user.has_permission(Permissions.USER_VIEW_LIST) %}
-                        <li><a href="{{ url_for('user.get_list') }}"><span class="material-icons nav-icon">group</span><span class="nav-text">Users</span></a></li>
+                        <li><a href="{{ url_for('user.get_list') }}"><span class="material-symbols-outlined nav-icon">group</span><span class="nav-text">Users</span></a></li>
                     {% endif %}
                     
                     {% if current_user.has_permission(Permissions.GLOBAL_SETTINGS_VIEW) %}
-                        <li><a href="#"><span class="material-icons nav-icon">settings</span><span class="nav-text">Settings</span></a></li>
+                        <li><a href="#"><span class="material-symbols-outlined nav-icon">settings</span><span class="nav-text">Settings</span></a></li>
                     {% endif %}
                 </ul>
             </nav>
@@ -52,14 +59,14 @@
                             {% endif %}
                         {% endfor %}
                     </nav>
-                    <h2>{{ page_title }} <span class="loading-spinner"><span class="material-icons">autorenew</span></span></h2>
+                    <h2>{{ page_title }} <span class="loading-spinner"><span class="material-symbols-outlined">autorenew</span></span></h2>
                 </div>
                 <div class="user-section">
-                    <span class="material-icons user-icon">person</span>
+                    <span class="material-symbols-outlined user-icon">person</span>
                     <div class="user-panel" id="userPanel">
                         <a href="{{ url_for('user.profile') }}">{{ current_user.username }}</a>
                         <a href="{{ url_for('auth.logout') }}">
-                            <span class="material-icons">
+                            <span class="material-symbols-outlined">
                                 logout
                             </span>
                         </a>
@@ -75,7 +82,7 @@
     <!-- Confirmation Modal -->
     <div id="confirmationModal" class="modal">
         <div class="modal-content">
-            <span class="material-icons icon-button delete close">close</span>
+            <span class="material-symbols-outlined icon-button delete close">close</span>
             <h2 id="modalTitle">Confirmation</h2>
             <p id="modalQuestion">Are you sure you want to perform this action?</p>
             <button id="cancelBtn" class="btn">Cancel</button>

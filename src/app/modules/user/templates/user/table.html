@@ -10,12 +10,12 @@
         <input type="text" id="search" placeholder="Search">
          <div class="table-actions">
             {% if current_user.has_permission(Permissions.USER_ADD) %}
-                <a href="{{ url_for('user.add') }}"><span class="material-icons">person_add</span></a>
+                <a href="{{ url_for('user.add') }}"><span class="material-symbols-outlined">person_add</span></a>
             {% endif %}
             {% if current_user.has_permission(Permissions.ROLE_VIEW_LIST) %}
-                <a href="{{ url_for('user.get_role_list') }}"><span class="material-icons" title="Roles">badge</span></a>
+                <a href="{{ url_for('user.get_role_list') }}"><span class="material-symbols-outlined" title="Roles">badge</span></a>
             {% endif %}
-            <a id="refresh-page-btn"><span class="material-icons">restart_alt</span></a>
+            <a id="refresh-page-btn"><span class="material-symbols-outlined">restart_alt</span></a>
          </div>
     </div>
     <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">

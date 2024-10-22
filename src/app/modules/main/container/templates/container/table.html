@@ -9,7 +9,7 @@
 <div class="content-box">
     <div class="search-box">
         <input type="text" id="search" placeholder="Search">
-        <a id="refresh-page-btn"><span class="material-icons">restart_alt</span></a>
+        <a id="refresh-page-btn"><span class="material-symbols-outlined">restart_alt</span></a>
     </div>
     <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
         <table id="container-table">
@@ -28,9 +28,9 @@
                     <td><span>{{ row.status }}</span></td>
                     <td><a href="{{ url_for('main.image.info', id=row.imageID) }}">{{ row.image }}</a></td>
                     <td>
-                        <a class="restart-btn" data-id="{{ row.id }}"><span class="material-icons">refresh</span></a>
-                        <a href="{{ url_for('main.container.logs', id=row.id) }}"><span class="material-icons">troubleshoot</span></a>
-                        <a href="{{ url_for('main.container.console', id=row.id) }}"><span class="material-icons">terminal</span></a>
+                        <a class="restart-btn" data-id="{{ row.id }}"><span class="material-symbols-outlined">refresh</span></a>
+                        <a href="{{ url_for('main.container.logs', id=row.id) }}"><span class="material-symbols-outlined">troubleshoot</span></a>
+                        <a href="{{ url_for('main.container.console', id=row.id) }}"><span class="material-symbols-outlined">terminal</span></a>
                     </td>
                 </tr>
                 {% endfor %}

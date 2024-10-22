@@ -16,7 +16,7 @@
         <div id="role-edit-top-bar">
             <h2>Edit</h2>
             <a id="delete-role-btn" data-role-id="{{ role.id }}" data-role-name="{{ role.name }}">
-                <span class="material-icons icon-button delete">delete</span>
+                <span class="material-symbols-outlined icon-button delete">delete</span>
             </a>  
         </div>
         <form method="POST" action="{{ url_for('user.view_role', id=role.id) }}">

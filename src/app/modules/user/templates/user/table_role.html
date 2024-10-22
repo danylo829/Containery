@@ -10,9 +10,9 @@
         <input type="text" id="search" placeholder="Search">
         <div class="table-actions">
             {% if current_user.has_permission(Permissions.ROLE_ADD) %}
-                <a href="{{ url_for('user.add_role') }}"><span class="material-icons">add</span></a>
+                <a href="{{ url_for('user.add_role') }}"><span class="material-symbols-outlined">add</span></a>
             {% endif %}        
-            <a id="refresh-page-btn"><span class="material-icons">restart_alt</span></a>
+            <a id="refresh-page-btn"><span class="material-symbols-outlined">restart_alt</span></a>
         </div>
     </div>
     <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">

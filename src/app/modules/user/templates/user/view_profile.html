@@ -18,7 +18,7 @@
                     <button type="submit" style="display:none;"></button>
                 
                     <a onclick="document.getElementById('delete-form-{{ user.id }}').submit();">
-                        <span class="material-icons icon-button delete">delete</span>
+                        <span class="material-symbols-outlined icon-button delete">delete</span>
                     </a>
                 </form>
             </div>
@@ -30,7 +30,7 @@
             <div class="role-item" id="role-item-{{ role.id }}">
                 <span class="role-badge">{{ role.name }}</span>
                 <a class="delete-role" data-role-id="{{ role.id }}">
-                    <span class="material-icons delete">cancel</span>
+                    <span class="material-symbols-outlined delete">do_not_disturb_on</span>
                 </a>
             </div>
         {% endfor %}

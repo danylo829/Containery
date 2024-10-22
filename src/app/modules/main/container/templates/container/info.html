@@ -15,28 +15,28 @@
                     <div>
                         <!-- Start Container -->
                         <a class="start-btn" data-id="{{ container.general_info.id }}">
-                            <span class="material-icons icon-button">play_arrow</span>
+                            <span class="material-symbols-outlined icon-button">play_arrow</span>
                         </a>
 
                         <!-- Stop Container -->
                         <a class="stop-btn" data-id="{{ container.general_info.id }}">
-                            <span class="material-icons icon-button">stop</span>
+                            <span class="material-symbols-outlined icon-button">stop</span>
                         </a>
 
                         <!-- Restart Container -->
                         <a class="restart-btn" data-id="{{ container.general_info.id }}">
-                            <span class="material-icons icon-button">refresh</span>
+                            <span class="material-symbols-outlined icon-button">refresh</span>
                         </a>
 
                         <!-- Delete/Kill Container -->
                         <a class="delete-btn" data-id="{{ container.general_info.id }}">
-                            <span class="material-icons icon-button delete">delete</span>
+                            <span class="material-symbols-outlined icon-button delete">delete</span>
                         </a>
                     </div>
                     <div>
-                        <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-icons icon-button">troubleshoot</span></a> <!-- Logs -->
-                        <a href="{{ url_for('main.container.processes', id=container.general_info.id) }}"><span class="material-icons icon-button">list_alt</span></a> <!-- Processes -->
-                        <a href="{{ url_for('main.container.console', id=container.general_info.id) }}"><span class="material-icons icon-button">terminal</span></a> <!-- Terminal -->
+                        <a href="{{ url_for('main.container.logs', id=container.general_info.id) }}"><span class="material-symbols-outlined icon-button">troubleshoot</span></a> <!-- Logs -->
+                        <a href="{{ url_for('main.container.processes', id=container.general_info.id) }}"><span class="material-symbols-outlined icon-button">list_alt</span></a> <!-- Processes -->
+                        <a href="{{ url_for('main.container.console', id=container.general_info.id) }}"><span class="material-symbols-outlined icon-button">terminal</span></a> <!-- Terminal -->
                     </div>
                 </div>
             </div>
