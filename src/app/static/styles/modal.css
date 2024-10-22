@@ -33,11 +33,10 @@
 .btn {
     margin: 5px;
     padding: 10px 20px;
-    border: none;
     cursor: pointer;
     background-color: var(--bg-color);
     color: var(--text-color);
-    border: solid 1px var(--bg-color);
+    border: solid 1px grey;
     border-radius: 10px;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
