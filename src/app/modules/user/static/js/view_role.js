@@ -28,7 +28,8 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch('/user/role/delete', {
             method: 'POST',
             headers: {
-                'X-CSRFToken': csrfToken
+                'X-CSRFToken': csrfToken,
+                'Accept': 'application/json'
             },
             body: formData
         })

@@ -88,7 +88,8 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch('/user/remove_role', {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': csrfToken
+                    'X-CSRFToken': csrfToken,
+                    'Accept': 'application/json'
                 },
                 body: formData
             })
