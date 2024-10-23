@@ -1,43 +1,53 @@
 .modal {
-    display: none; 
-    position: fixed; 
-    z-index: 2; 
+    display: none;
+    position: fixed;
+    z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgb(0,0,0); 
-    background-color: rgba(0,0,0,0.4); 
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.6); /* Keeps background dark */
+    transition: background-color 0.4s ease-in-out;
+}
+
+.modal.show {
+    display: block;
 }
 
 .modal-content {
     background-color: var(--bg-color-box);
     margin: 15% auto;
     padding: 1rem;
-    width: 25%;
+    width: 30%;
     border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: slide-down 0.3s ease-out;
 }
 
-.close {
-    float: right;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+@keyframes slide-down {
+    0% { transform: translateY(-50px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
 }
 
-.close:hover,
-.close:focus {
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+#modalQuestion {
+    font-size: large;
+    text-align: center;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .btn {
-    margin: 5px;
     padding: 10px 20px;
     cursor: pointer;
+    border-radius: 50em;
     background-color: var(--bg-color);
     color: var(--text-color);
     border: solid 1px grey;
-    border-radius: 10px;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
@@ -51,9 +61,10 @@
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-@media all and (min-width:0px) and (max-width: 650px) {
+@media all and (max-width: 650px) {
     .modal-content {
-        margin: 75% auto;
-        width: 75%;
+        margin: 40% auto;
+        width: 80%;
+        padding: 1.5rem;
     }
 }

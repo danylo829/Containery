@@ -83,11 +83,11 @@
     <!-- Confirmation Modal -->
     <div id="confirmationModal" class="modal">
         <div class="modal-content">
-            <span class="material-symbols-outlined icon-button delete close">close</span>
-            <h2 id="modalTitle">Confirmation</h2>
             <p id="modalQuestion">Are you sure you want to perform this action?</p>
-            <button id="cancelBtn" class="btn">Cancel</button>
-            <button id="confirmDeleteBtn" class="btn delete">Confirm</button>
+            <div class="button-group">
+                <button id="cancelBtn" class="btn cancel">Cancel</button>
+                <button id="confirmDeleteBtn" class="btn delete">Confirm</button>
+            </div>
         </div>
     </div>
     {% with messages = get_flashed_messages(with_categories=true) %}
