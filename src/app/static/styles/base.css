@@ -912,8 +912,8 @@ span.delete:hover {
     }
     
     .sidebar.closed + .main-content {
-        transform: translateX(80px);
-        width: 80vw;
+        transform: translateX(15vw);
+        width: 85vw;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
