@@ -19,6 +19,7 @@ def image_info(id):
         image_details = response.json()
 
     general_info = {
+        "id": id,
         "architecture": image_details["Architecture"],
         "docker_version": image_details["DockerVersion"],
         "os": image_details["Os"],
@@ -106,3 +107,9 @@ def info(id):
     page_title = 'Image Details'
     
     return render_template('image/info.html', image=image, breadcrumbs=breadcrumbs, page_title=page_title)
+
+@image.route('/<id>/delete', methods=['DELETE'])
+@permission(Permissions.IMAGE_INFO)
+def delete(id):
+    response, status_code = docker.delete_image(id)
+    return str(response), status_code

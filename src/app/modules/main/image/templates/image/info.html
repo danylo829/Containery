@@ -2,6 +2,7 @@
 
 {% block custom_header %}
     <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/image/info.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -12,7 +13,9 @@
                 <h2>{{ image.repo_tags[0] }}</h2>
                 <div class="actions">
                     <div>
-                        <a href="#"><span class="material-symbols-outlined icon-button delete">delete</span></a> <!-- Delete -->
+                        <a class="delete-btn" data-id="{{ image.general_info.id }}">
+                            <span class="material-symbols-outlined icon-button delete">delete</span>
+                        </a>
                     </div>
                 </div>
             </div>

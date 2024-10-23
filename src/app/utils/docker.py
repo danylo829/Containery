@@ -178,6 +178,9 @@ class Docker:
     def inspect_image(self, image_id):
         return self.perform_request(f'/images/{image_id}/json')
 
+    def delete_image(self, image_id):
+        return self.perform_request(f'/images/{image_id}', method='DELETE')
+
     # VOLUME
 
     def get_volumes(self):
