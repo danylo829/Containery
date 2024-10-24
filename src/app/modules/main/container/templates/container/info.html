@@ -134,7 +134,7 @@
                         <tbody id="container-list">
                             {% for network in container.network_info %}
                             <tr>
-                                <td>{{ network.network_name }}</td>
+                                <td><a href="{{ url_for('main.network.info', id=network.id) }}">{{ network.network_name }}</a></td>
                                 <td>{{ network.self_ip if network.self_ip else '-' }}</td>
                                 <td>
                                     {% if network.exposed_ports %}

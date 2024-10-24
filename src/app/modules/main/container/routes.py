@@ -48,15 +48,6 @@ def container_info (id):
 
     volumes = [mount["Source"] for mount in container_details.get("Mounts", [])]
 
-    network_info = [
-        {
-            "network_name": network,
-            "ip_address": details.get("IPAddress", ""),
-            "exposed_ports": container_details["NetworkSettings"]["Ports"]
-        }
-        for network, details in container_details["NetworkSettings"]["Networks"].items()
-    ]
-
     container_info = {
         'general_info': general_info,
         'image': image,
@@ -67,6 +58,7 @@ def container_info (id):
             'container_path': mount['Destination']
         } for mount in container_details['Mounts']],
         'network_info': [{
+            'id': network['NetworkID'],
             'network_name': net,
             'self_ip': network['IPAddress'],
             'exposed_ports': container_details['NetworkSettings']['Ports']
