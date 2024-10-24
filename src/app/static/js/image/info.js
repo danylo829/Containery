@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function openModal(id) {
         imageId = id;
-        modalQuestion.textContent = `Are you sure you want to delete this container?`;
+        modalQuestion.textContent = `Are you sure you want to delete this image?`;
         confirmDeleteBtn.textContent = `Delete`;
         confirmationModal.style.display = 'block';
     }

@@ -19,7 +19,7 @@
     background-color: var(--bg-color-box);
     margin: 15% auto;
     padding: 1rem;
-    width: 30%;
+    width: min-content;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     animation: slide-down 0.3s ease-out;
@@ -33,11 +33,12 @@
 #modalQuestion {
     font-size: large;
     text-align: center;
+    width: max-content;
 }
 
 .button-group {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
 }
 
