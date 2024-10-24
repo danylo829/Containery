@@ -106,3 +106,9 @@ def info(id):
     page_title = 'Network Details'
     
     return render_template('network/info.html', network=network, breadcrumbs=breadcrumbs, page_title=page_title)
+
+@network.route('/<id>/delete', methods=['DELETE'])
+@permission(Permissions.NETWORK_DELETE)
+def delete(id):
+    response, status_code = docker.delete_network(id)
+    return str(response), status_code

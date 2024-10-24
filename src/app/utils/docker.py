@@ -194,3 +194,6 @@ class Docker:
     def inspect_network(self, network_id):
         return self.perform_request(f'/networks/{network_id}')
 
+    def delete_network(self, image_id):
+        return self.perform_request(f'/networks/{image_id}', method='DELETE')
+
