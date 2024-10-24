@@ -34,21 +34,16 @@ def network_info(id):
         'Ingress': network_details["Ingress"],
         'Containers': network_details.get("Containers", {}),
         'Labels': network_details.get("Labels", {}),
-        'IPAM': [],  # Initialize IPAM as a list to hold configurations
+        'IPAM': [],
     }
     
     subnets_gateways = []
     if 'IPAM' in network_details and network_details['IPAM']['Config']:
-        for config in network_details['IPAM']['Config']:  # Loop through each config
+        for config in network_details['IPAM']['Config']:
             subnet = config.get('Subnet')
             gateway = config.get('Gateway')
             subnets_gateways.append((subnet, gateway))
     network['IPAM'] = subnets_gateways
-
-    print(json.dumps(network, indent=4))  # Add this for debugging
-
-
-    
 
     return network, 200
 
