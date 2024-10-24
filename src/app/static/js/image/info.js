@@ -65,8 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     cancelBtn.addEventListener('click', closeModal);
 
-    confirmationModal.querySelector('.close').addEventListener('click', closeModal);
-
     window.addEventListener('click', function (event) {
         if (event.target === confirmationModal) {
             closeModal();
