@@ -88,7 +88,7 @@ def get_list():
     endpoint = "network"
     return render_template('network/table.html', rows=rows, breadcrumbs=breadcrumbs, page_title=page_title)
 
-@network.route('/network/<id>', methods=['GET'])
+@network.route('/<id>', methods=['GET'])
 @permission(Permissions.NETWORK_INFO)
 def info(id):
     response, status_code = network_info(id)
