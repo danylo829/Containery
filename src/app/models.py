@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from enum import IntEnum
+from enum import IntEnum, Enum
 from hashlib import sha256
 from time import time
 
@@ -292,27 +292,35 @@ class User(UserMixin, db.Model):
 
 class GlobalSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    setting_key = db.Column(db.String(150), unique=True, nullable=False)
-    setting_value = db.Column(db.String(150), nullable=False)
+    key = db.Column(db.String(150), unique=True, nullable=False)
+    value = db.Column(db.String(150), nullable=False)
 
     defaults = {
-        'docker_socket': {
-            'default': '/var/run/docker.sock'
-        }
+        'docker_socket': '/var/run/docker.sock',
+        'theme_color': '#2196F3',
+        'session_timeout': 1800,
+        'dashboard_refresh_interval': 5,
+        'max_login_attempts': 5,
+        'failed_login_cooldown': 300,
+        'password_min_length': 8,
+        'auto_logout': True,
+        'admin_notification_email': '',
+        'log_retention_days': 30,
+        'audit_log_enabled': True,
     }
 
     @classmethod
     def get_setting(cls, key):
-        setting = cls.query.filter_by(setting_key=key).first()
-        return setting.setting_value if setting else None
+        setting = cls.query.filter_by(key=key).first()
+        return setting.value if setting else cls.defaults.get(key)
 
     @classmethod
     def set_setting(cls, key, value):
-        setting = cls.query.filter_by(setting_key=key).first()
+        setting = cls.query.filter_by(key=key).first()
         if setting:
-            setting.setting_value = value
+            setting.value = value
         else:
-            setting = cls(setting_key=key, setting_value=value)
+            setting = cls(key=key, value=value)
             db.session.add(setting)
 
         db.session.commit()
@@ -320,8 +328,8 @@ class GlobalSettings(db.Model):
 class PersonalSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    setting_key = db.Column(db.String(150), nullable=False)
-    setting_value = db.Column(db.String(150), nullable=False)
+    key = db.Column(db.String(150), nullable=False)
+    value = db.Column(db.String(150), nullable=False)
 
     defaults = {
         'constrain_tables_view': {
@@ -335,16 +343,16 @@ class PersonalSettings(db.Model):
 
     @classmethod
     def get_setting(cls, user_id, key):
-        setting = cls.query.filter_by(user_id=user_id, setting_key=key).first()
-        return setting.setting_value if setting else None
+        setting = cls.query.filter_by(user_id=user_id, key=key).first()
+        return setting.value if setting else None
 
     @classmethod
     def set_setting(cls, user_id, key, value):
-        setting = cls.query.filter_by(user_id=user_id, setting_key=key).first()
+        setting = cls.query.filter_by(user_id=user_id, key=key).first()
         if setting:
-            setting.setting_value = value
+            setting.value = value
         else:
-            setting = cls(user_id=user_id, setting_key=key, setting_value=value)
+            setting = cls(user_id=user_id, key=key, value=value)
             db.session.add(setting)
         
         db.session.commit()

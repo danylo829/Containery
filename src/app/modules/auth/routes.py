@@ -49,9 +49,6 @@ def install():
             user = User.create_user(username=username, password=password)
             user.assign_role(admin_role)
 
-            for key, config in GlobalSettings.defaults.items():
-                GlobalSettings.set_setting(key, config['default'])
-
             flash("Admin user created successfully.", 'success')
             return redirect(url_for('index.root'))
 
