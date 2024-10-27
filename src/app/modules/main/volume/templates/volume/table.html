@@ -21,7 +21,7 @@
             <tbody id="volume-list">
                 {% for row in rows %}
                 <tr>
-                    <td>{{ row.name }}</td>
+                    <td><a href="{{ url_for('main.volume.info', name=row.name) }}">{{ row.name }}</a></td>
                     <td>{{ row.mountpoint }}</td>
                 </tr>
                 {% endfor %}

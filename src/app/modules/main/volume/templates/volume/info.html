@@ -1,0 +1,51 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/volume/info.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+    {% if volume %}
+        <!-- General Info Block -->
+        <div class="content-card">
+            <div class="title">
+                <h2>{{ volume['Name'] }}</h2>
+                <div class="actions">
+                    <div>
+                        <a class="delete-btn" data-id="{{ volume['Name'] }}">
+                            <span class="material-symbols-outlined icon-button delete">delete</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <p><strong>Driver:</strong> {{ volume['Driver'] }}</p>
+            <p><strong>Created At:</strong> {{ format_docker_timestamp(volume['CreatedAt']) }}</p>
+            <p><strong>Mountpoint:</strong> {{ volume['Mountpoint'] }}</p>
+            <p><strong>Scope:</strong> {{ volume['Scope'] }}</p>
+        </div>
+
+        <!-- Labels Block -->
+        <div class="content-card">
+            <h2>Labels</h2>
+            {% if volume['Labels'] and volume['Labels']|length > 0 %}
+                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                    <table>
+                        <tbody>
+                            {% for key, value in volume['Labels'].items() %}
+                            <tr>
+                                <td><strong>{{ key }}</strong></td>
+                                <td>{{ value }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>No labels found.</p>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>No volume information available.</p>
+    {% endif %}
+{% endblock %}

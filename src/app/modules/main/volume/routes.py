@@ -2,11 +2,12 @@ from flask import Blueprint, render_template, url_for, jsonify, flash
 from flask_login import login_required
 
 from app.utils.docker import Docker
+from app.utils.common import format_docker_timestamp
 
 from app.decorators import permission
 from app.models import Permissions
 
-volume = Blueprint('volume', __name__, template_folder='templates', static_folder='app/modules/main/volume/static')
+volume = Blueprint('volume', __name__, template_folder='templates')
 
 docker = Docker()
 
@@ -42,3 +43,22 @@ def get_list():
     page_title = "Volumes List"
     endpoint = "volume"
     return render_template('volume/table.html', rows=rows, breadcrumbs=breadcrumbs, page_title=page_title)
+
+@volume.route('/<name>', methods=['GET'])
+@permission(Permissions.VOLUME_INFO)
+def info(name):
+    response, status_code = docker.inspect_volume(name)
+    volume = []
+    if status_code not in range(200, 300):
+        return render_template('error.html', message=response.text, code=status_code), status_code
+    else:
+        volume = response.json()
+
+    breadcrumbs = [
+        {"name": "Dashboard", "url": url_for('main.dashboard.index')},
+        {"name": "Volumes", "url": url_for('main.volume.get_list')},
+        {"name": volume['Name'], "url": None},
+    ]
+    page_title = 'Volume Details'
+    
+    return render_template('volume/info.html', volume=volume, breadcrumbs=breadcrumbs, page_title=page_title, format_docker_timestamp=format_docker_timestamp)

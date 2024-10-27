@@ -186,6 +186,9 @@ class Docker:
     def get_volumes(self):
         return self.perform_request('/volumes')
 
+    def inspect_volume(self, network_id):
+        return self.perform_request(f'/volumes/{network_id}')
+
     # NETWORK
 
     def get_networks(self):

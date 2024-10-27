@@ -185,6 +185,7 @@ ul {
     flex: 1 1 calc(33.333% - 2rem);
     min-width: 300px;
     box-sizing: border-box;
+    word-wrap: break-word;
 }
 
 .content-card.dashboard {
@@ -194,6 +195,14 @@ ul {
 .breadcrumbs {
     font-size: 0.9rem;
     overflow-wrap: anywhere;
+}
+
+.breadcrumbs span:last-child {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
 }
 
 .breadcrumbs a:hover {
@@ -926,10 +935,6 @@ span.delete:hover {
         border: none;
     }
 
-    .content-card {
-        padding-inline: 1rem;
-    }
-
     .actions div {
         gap: unset;
     }
@@ -949,5 +954,9 @@ span.delete:hover {
 
     .table-actions {
         gap: unset;
+    }
+
+    .breadcrumbs span:last-child {
+        max-width: 100px;
     }
 }
