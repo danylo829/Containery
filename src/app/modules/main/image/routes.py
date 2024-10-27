@@ -65,7 +65,8 @@ def get_list():
     response, status_code = docker.get_images()
     images = []
     if status_code not in range(200, 300):
-        return render_template('error.html', message=response.text, code=status_code), status_code
+        message = response.text if hasattr(response, 'text') else str(response)
+        return render_template('error.html', message=message, code=status_code), status_code
     else:
         images = response.json()
 
@@ -95,7 +96,8 @@ def info(id):
     response, status_code = image_info(id)
     image = []
     if status_code not in range(200, 300):
-        return render_template('error.html', message=response.text, code=status_code), status_code
+        message = response.text if hasattr(response, 'text') else str(response)
+        return render_template('error.html', message=message, code=status_code), status_code
     else:
         image = response
 

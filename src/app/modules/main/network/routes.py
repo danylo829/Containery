@@ -58,7 +58,8 @@ def get_list():
     response, status_code = docker.get_networks()
     networks = []
     if status_code not in range(200, 300):
-        return render_template('error.html', message=response.text, code=status_code), status_code
+        message = response.text if hasattr(response, 'text') else str(response)
+        return render_template('error.html', message=message, code=status_code), status_code
     else:
         networks = response.json()
 
@@ -89,7 +90,8 @@ def info(id):
     response, status_code = network_info(id)
     network = []
     if status_code not in range(200, 300):
-        return render_template('error.html', message=response.text, code=status_code), status_code
+        message = response.text if hasattr(response, 'text') else str(response)
+        return render_template('error.html', message=message, code=status_code), status_code
     else:
         network = response
 

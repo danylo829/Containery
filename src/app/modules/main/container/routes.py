@@ -69,7 +69,7 @@ def container_info (id):
 
 def container_name (id):
     response, status_code = container_info(id)
-    return response['general_info']['name'] if status_code in range(200, 300) else "Unknown Container"  # Fallback name
+    return response['general_info']['name'] if status_code in range(200, 300) else "Unknown Container"
 
 @container.before_request
 @login_required
@@ -82,7 +82,9 @@ def get_list():
     response, status_code = docker.get_containers()
     containers = []
     if status_code not in range(200, 300):
-        return render_template('error.html', message=response.text, code=status_code), status_code
+        message = response.text if hasattr(response, 'text') else str(response)
+        return render_template('error.html', message=message, code=status_code), status_code
+
     else:
         containers = response.json()
 
@@ -115,7 +117,8 @@ def info(id):
     response, status_code = container_info(id)
     container = []
     if status_code not in range(200, 300):
-        return render_template('error.html', message=response.text, code=status_code), status_code
+        message = response.text if hasattr(response, 'text') else str(response)
+        return render_template('error.html', message=message, code=status_code), status_code
     else:
         container = response
 
@@ -135,7 +138,8 @@ def logs(id):
     response, status_code = docker.get_logs(id)
     logs = []
     if status_code not in range(200, 300):
-        return render_template('error.html', message=response.text, code=status_code), status_code
+        message = response.text if hasattr(response, 'text') else str(response)
+        return render_template('error.html', message=message, code=status_code), status_code
     else:
         logs = response
 
@@ -165,7 +169,8 @@ def processes(id):
             flash(f'Container {name} is not running', 'error')
         # Default error message
         else:
-            return render_template('error.html', message=response.text, code=status_code), status_code
+            message = response.text if hasattr(response, 'text') else str(response)
+        return render_template('error.html', message=message, code=status_code), status_code
     else:
         processes = response.json()
 
