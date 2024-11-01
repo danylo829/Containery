@@ -1,0 +1,97 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/settings.css') }}">
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <h1>Global Settings</h1>
+<form method="POST" action="{{ url_for('settings.get_list') }}">
+    {{ form.hidden_tag() }}
+
+    <div class="settings-category">
+        <h2>General</h2>
+        <table>
+            <tr>
+                <td class="setting-label">{{ form.docker_socket.label }}</td>
+                <td>
+                    <div class="cell-wrapper">
+                        {{ form.docker_socket(class="setting-input") }}
+                        <button type="button" class="reset-button" onclick="resetSetting('docker_socket')">
+                            <span class="material-symbols-outlined">history</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="setting-label">{{ form.theme_color.label }}</td>
+                <td>
+                    <div class="cell-wrapper">
+                        {{ form.theme_color(class="setting-input") }}
+                        <button type="button" class="reset-button" onclick="resetSetting('theme_color')">
+                            <span class="material-symbols-outlined">history</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="setting-label">{{ form.dashboard_refresh_interval.label }}</td>
+                <td>
+                    <div class="cell-wrapper">
+                        {{ form.dashboard_refresh_interval(class="setting-input") }}
+                        <button type="button" class="reset-button" onclick="resetSetting('dashboard_refresh_interval')">
+                            <span class="material-symbols-outlined">history</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="setting-label">{{ form.log_retention_days.label }}</td>
+                <td>
+                    <div class="cell-wrapper">
+                        {{ form.log_retention_days(class="setting-input") }}
+                        <button type="button" class="reset-button" onclick="resetSetting('log_retention_days')">
+                            <span class="material-symbols-outlined">history</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="settings-category">
+        <h2>Session and Security</h2>
+        <table>
+            <tr>
+                <td class="setting-label">{{ form.session_timeout.label }}</td>
+                <td>
+                    <div class="cell-wrapper">
+                        {{ form.session_timeout(class="setting-input") }}
+                        <button type="button" class="reset-button" onclick="resetSetting('session_timeout')">
+                            <span class="material-symbols-outlined">history</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="setting-label">{{ form.password_min_length.label }}</td>
+                <td>
+                    <div class="cell-wrapper">
+                        {{ form.password_min_length(class="setting-input") }}
+                        <button type="button" class="reset-button" onclick="resetSetting('password_min_length')">
+                            <span class="material-symbols-outlined">history</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        {{ form.submit(class="save-button") }}
+    </div>
+</form>
+</div>
+{% endblock %}

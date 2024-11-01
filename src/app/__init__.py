@@ -39,11 +39,13 @@ def create_app():
     from .modules.main import main
     from .modules.auth.routes import auth
     from .modules.user.routes import user
+    from .modules.settings.routes import settings
     
     app.register_blueprint(index)
     app.register_blueprint(main)
     app.register_blueprint(auth)
     app.register_blueprint(user)
+    app.register_blueprint(settings)
 
     if app.debug:
         app.wsgi_app = DebuggedApplication(app.wsgi_app, evalex=True, pin_security=False)

@@ -165,16 +165,7 @@ ul {
     margin-inline: auto;
 }
 
-.content-box form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
 
-.content-box form .table-box {
-    min-width: 30rem;
-}
 
 .content-card {
     background-color: var(--bg-color-box);
@@ -229,6 +220,7 @@ input,
 select {
     width: 100%;
     padding: 10px;
+    height: 5vh;
     border: 1px solid var(--accent-color);
     border-radius: 10px;
     box-sizing: border-box;
@@ -238,6 +230,32 @@ select {
     font-size: 1rem;
     outline: none;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type="color"] {
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    padding: 8px;
+    width: 100%;
+    cursor: pointer;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 6px;
+}
+
+input[type="color"]::-webkit-color-swatch {
+    border-radius: 4px;
+    border: none;
 }
 
 .form-validate-error {
@@ -582,10 +600,6 @@ hr {
 .user-panel.open {
     width: 150px; /* Expand to desired width when open */
     box-shadow: 0 0 10px 6px rgba(0, 0, 0, 0.1);
-}
-
-.material-symbols-outlined {
-    color: var(--text-color);
 }
 
 .flash-messages {

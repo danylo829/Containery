@@ -95,9 +95,13 @@ input[type="submit"]:hover {
     background: var(--accent-color-darken);
 }
 
-span {
-    color: red;
-    font-size: 14px;
+.validation-error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1vh;
+    border-radius: 10px;
+    background-color: var(--error-bg);
 }
 
 @media (max-width: 600px) {

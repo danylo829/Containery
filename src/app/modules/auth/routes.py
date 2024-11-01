@@ -14,7 +14,7 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        username = form.username.data
+        username = str(form.username.data).strip()
         password = form.password.data
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
@@ -30,11 +30,16 @@ def install():
     if User.query.first():
         return redirect(url_for('index.root'))
 
-    form = AdminSetupForm()
+    password_min_length = int(GlobalSettings.get_setting('password_min_length'))
+
+    form = AdminSetupForm(min_length=password_min_length)
     
     if form.validate_on_submit():
-        username = form.username.data
+        username = str(form.username.data).strip()
         password = form.password.data
+
+        if len(password) < password_min_length:
+            return redirect(url_for('auth.install'))
 
         try:
             admin_role = Role.create_role('admin')

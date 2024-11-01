@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 let updateInterval;
-const intervalSeconds = 5;
 
 function updateUsage() {
     fetch('/dashboard/usage')

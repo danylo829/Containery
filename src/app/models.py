@@ -298,32 +298,62 @@ class GlobalSettings(db.Model):
     defaults = {
         'docker_socket': '/var/run/docker.sock',
         'theme_color': '#2196F3',
-        'session_timeout': 1800,
         'dashboard_refresh_interval': 5,
-        'max_login_attempts': 5,
-        'failed_login_cooldown': 300,
-        'password_min_length': 8,
-        'auto_logout': True,
-        'admin_notification_email': '',
         'log_retention_days': 30,
-        'audit_log_enabled': True,
+        'session_timeout': 1800,
+        'password_min_length': 8,
     }
 
     @classmethod
     def get_setting(cls, key):
-        setting = cls.query.filter_by(key=key).first()
-        return setting.value if setting else cls.defaults.get(key)
+        if key not in cls.defaults:
+            raise KeyError(f"The setting '{key}' is not defined in defaults.")
+
+        try:
+            setting = cls.query.filter_by(key=key).first()
+            return setting.value if setting else cls.defaults[key]
+        except Exception as e:
+            raise RuntimeError(f"Database error while retrieving setting '{key}': {str(e)}")
 
     @classmethod
     def set_setting(cls, key, value):
-        setting = cls.query.filter_by(key=key).first()
-        if setting:
-            setting.value = value
-        else:
-            setting = cls(key=key, value=value)
-            db.session.add(setting)
+        if key not in cls.defaults:
+            raise KeyError(f"The setting '{key}' is not defined in defaults.")
 
-        db.session.commit()
+        if key == 'dashboard_refresh_interval' or key == 'log_retention_days' or key == 'session_timeout':
+            try:
+                value = int(value)
+                if value <= 0:
+                    raise ValueError(f"The value for '{key}' must be a positive integer.")
+            except ValueError:
+                raise ValueError(f"The value for '{key}' must be an integer.")
+
+        try:
+            setting = cls.query.filter_by(key=key).first()
+            if setting:
+                setting.value = str(value)
+            else:
+                setting = cls(key=key, value=str(value))
+                db.session.add(setting)
+
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise RuntimeError(f"Database error while setting '{key}': {str(e)}")
+
+    @classmethod
+    def delete_setting(cls, key):
+        if key not in cls.defaults:
+            raise KeyError(f"The setting '{key}' is not defined in defaults.")
+        
+        try:
+            setting = cls.query.filter_by(key=key).first()
+            if setting:
+                db.session.delete(setting)
+                db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise RuntimeError(f"Database error while deleting setting '{key}': {str(e)}")
 
 class PersonalSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)

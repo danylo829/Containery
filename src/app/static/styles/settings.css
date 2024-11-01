@@ -1,0 +1,32 @@
+table {
+    table-layout: fixed;
+}
+
+.cell-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+}
+
+.reset-button {
+    display: flex;
+    align-items: center;
+    width: min-content;
+    padding: 1rem;
+    height: 5vh;
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    box-sizing: border-box;
+    background: var(--accent-color);
+    color: white;
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.reset-button:hover {
+    background-color: var(--accent-color-darken);
+    cursor: pointer;
+}

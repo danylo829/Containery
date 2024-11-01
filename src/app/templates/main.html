@@ -18,6 +18,10 @@
             font-style: normal;
             src: url("{{ url_for('static', filename='styles/material-icons.woff2') }}") format('woff');
         }
+
+        body {
+            --accent-color: {{ GlobalSettings.get_setting('theme_color') | safe }};
+        }
     </style>
 
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
@@ -43,7 +47,7 @@
                     {% endif %}
                     
                     {% if current_user.has_permission(Permissions.GLOBAL_SETTINGS_VIEW) %}
-                        <li><a href="#"><span class="material-symbols-outlined nav-icon">settings</span><span class="nav-text">Settings</span></a></li>
+                        <li><a href="{{ url_for('settings.get_list') }}"><span class="material-symbols-outlined nav-icon">settings</span><span class="nav-text">Settings</span></a></li>
                     {% endif %}
                 </ul>
             </nav>
