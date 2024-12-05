@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="content-box small">
+<div class="content-box">
     <form method="POST" action="{{ url_for('user.add') }}">
         {{ add_user_form.csrf_token() }}
         

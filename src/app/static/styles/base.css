@@ -160,13 +160,6 @@ ul {
     justify-content: center;
 }
 
-.content-box.small {
-    max-width: fit-content;
-    margin-inline: auto;
-}
-
-
-
 .content-card {
     background-color: var(--bg-color-box);
     border-radius: 10px;

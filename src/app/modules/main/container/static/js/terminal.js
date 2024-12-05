@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const contenBox = document.querySelector('.content-box.small');
+    const contenBox = document.querySelector('.content-box');
     const form = document.getElementById('start-form');
     const terminalWrapper = document.getElementById('terminal-wrapper');
     const container = document.getElementById('terminal-container');
@@ -67,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.style.display = 'none';
         terminalWrapper.style.display = 'block';
-        contenBox.classList.remove("small");
 
         xterm.open(container);
 
