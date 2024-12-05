@@ -13,16 +13,34 @@ class PersonalSettingsForm(FlaskForm):
     submit = SubmitField('Save Changes', name='submit_settings')
 
 class ChangeOwnPasswordForm(FlaskForm):
+    def __init__(self, min_password_length=8, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Adjust the minimum password length dynamically
+        self.new_password.validators.append(
+            Length(min=min_password_length, message=f"Password must be at least {min_password_length} characters long.")
+        )
+
     current_password = PasswordField('Current Password', validators=[DataRequired()])
-    new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=8)])
-    confirm_new_password = PasswordField('Confirm New Password', 
-                                         validators=[DataRequired(), EqualTo('new_password', message='Passwords must match.')])
+    new_password = PasswordField('New Password', validators=[DataRequired()])
+    confirm_new_password = PasswordField(
+        'Confirm New Password',
+        validators=[DataRequired(), EqualTo('new_password', message='Passwords must match.')]
+    )
     submit = SubmitField('Change Password', name='submit_password')
 
 class ChangeUserPasswordForm(FlaskForm):
-    new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=8)])
-    confirm_new_password = PasswordField('Confirm New Password', 
-                                         validators=[DataRequired(), EqualTo('new_password', message='Passwords must match.')])
+    def __init__(self, min_password_length=8, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.new_password.validators.append(
+            Length(min=min_password_length, message=f"Password must be at least {min_password_length} characters long.")
+        )
+
+    new_password = PasswordField('New Password', validators=[DataRequired()])
+    confirm_new_password = PasswordField(
+        'Confirm New Password',
+        validators=[DataRequired(), EqualTo('new_password', message='Passwords must match.')]
+    )
+    submit = SubmitField('Change Password', name='submit_user_password')
     submit = SubmitField('Change Password', name='submit_user_password')
 
 class AddUserRoleForm(FlaskForm):
@@ -41,12 +59,19 @@ class AddUserRoleForm(FlaskForm):
             self.submit.render_kw = {'disabled': 'disabled'}
 
 class AddUserForm(FlaskForm):
+    def __init__(self, min_password_length=8, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.password.validators.append(
+            Length(min=min_password_length, message=f"Password must be at least {min_password_length} characters long.")
+        )
+
     username = StringField('Username', validators=[DataRequired(), Length(max=24, min=1)])
     password = PasswordField('Password', validators=[DataRequired()])
     role = SelectField(
-        'Role', 
+        'Role',
         choices=[],
-        validators=[DataRequired()])
+        validators=[DataRequired()]
+    )
     submit = SubmitField('Create User', name='create_user')
 
     def set_role_choices(self, roles):

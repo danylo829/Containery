@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request,
 from flask_login import login_required, current_user
 
 from .forms import *
-from app.models import PersonalSettings, User, Role, Permissions
+from app.models import PersonalSettings, GlobalSettings, User, Role, Permissions
 from app.decorators import permission
 
 user = Blueprint('user', __name__, url_prefix='/user', template_folder='templates', static_folder='static')
@@ -13,9 +13,11 @@ def before_request():
     pass
 
 @user.route('/profile', methods=['GET', 'POST'])
-def profile():    
+def profile():
+    min_password_length = int(GlobalSettings.get_setting('password_min_length'))
+
     settings_form = PersonalSettingsForm()
-    password_form = ChangeOwnPasswordForm()
+    password_form = ChangeOwnPasswordForm(min_password_length=min_password_length)
 
     if settings_form.submit.data and settings_form.validate_on_submit():
         PersonalSettings.set_setting(current_user.id, 'constrain_tables_view', 'true' if settings_form.constrain_tables_view.data else 'false')
@@ -61,7 +63,9 @@ def view_profile():
         code = 404
         return render_template('error.html', message=message, code=code), code
 
-    password_form = ChangeUserPasswordForm()
+    min_password_length = int(GlobalSettings.get_setting('password_min_length'))
+
+    password_form = ChangeUserPasswordForm(min_password_length=min_password_length)
     role_form = AddUserRoleForm()
 
     all_roles = Role.get_roles()
@@ -74,6 +78,9 @@ def view_profile():
         return redirect(url_for('user.view_profile', id=user_id))
 
     if password_form.submit.data and password_form.validate_on_submit():
+        if len(password_form.new_password.data) < password_min_length:
+            return redirect(url_for('user.view_profile'))
+            
         user.update_password(password_form.new_password.data)
         flash('Password changed successfully!', 'success')
         return redirect(url_for('user.view_profile', id=user_id))
@@ -136,11 +143,16 @@ def remove_role():
 @user.route('/add', methods=['GET', 'POST'])
 @permission(Permissions.USER_ADD)
 def add():
-    add_user_form = AddUserForm()
+    min_password_length = int(GlobalSettings.get_setting('password_min_length'))
+
+    add_user_form = AddUserForm(min_password_length=min_password_length)
     add_user_form.set_role_choices(Role.get_roles())
 
     if add_user_form.submit.data and add_user_form.validate_on_submit():
         role_id = int(add_user_form.role.data)
+
+        if len(add_user_form.password.data) < password_min_length:
+            return redirect(url_for('user.add'))
 
         user = User.create_user(add_user_form.username.data, add_user_form.password.data)
 

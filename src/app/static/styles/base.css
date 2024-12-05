@@ -265,6 +265,7 @@ input[type="color"]::-webkit-color-swatch {
     display: flex;
     justify-content: center;
     border-radius: 10px;
+    margin-bottom: 10px;
 }
 
 .content-line {
