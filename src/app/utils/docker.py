@@ -1,12 +1,13 @@
 import json
 import socket
 import select
+from threading import Thread
 import requests_unixsocket
 from app.models import GlobalSettings
 
 class Docker:
     def __init__(self):
-        self.clients = {}  # Store client connections
+        self.exec_sessions = {}
 
     # GENERAL
 
@@ -37,73 +38,110 @@ class Docker:
             return exec_instance_json.get("Id")
         return None
 
-    def start_exec_session(self, exec_id, sid, socketio, docker_socket, timeout=3600, console_size=[44, 150]):
-        exec_start_endpoint = f"/exec/{exec_id}/start"
-        start_payload = {"Detach": False, "Tty": True, "ConsoleSize": console_size}
+    def start_exec_session(self, exec_id, sid, socketio, docker_socket, console_size=None):
+        """Start an exec session and handle IO"""
+        try:
+            sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+            sock.connect(docker_socket)
+            
+            start_payload = {
+                "Detach": False,
+                "Tty": True
+            }
+            if console_size:
+                start_payload["ConsoleSize"] = console_size
 
-        client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        client.connect(docker_socket)
+            http_request = (
+                f"POST /exec/{exec_id}/start HTTP/1.1\r\n"
+                f"Host: localhost\r\n"
+                f"Content-Type: application/json\r\n"
+                f"Content-Length: {len(json.dumps(start_payload))}\r\n"
+                f"\r\n"
+                f"{json.dumps(start_payload)}"
+            )
 
-        # Perform request to start the exec session
-        # Construct the request manually
-        request_line = f"POST {exec_start_endpoint} HTTP/1.1\r\n"
-        request_body = json.dumps(start_payload)  # Ensure proper JSON encoding
-        headers = f"Host: docker\r\nContent-Type: application/json\r\nContent-Length: {len(request_body)}\r\n"
-        empty_line = "\r\n"
+            sock.send(http_request.encode('utf-8'))
 
-        request = request_line + headers + empty_line + request_body
+            self.exec_sessions[sid] = {
+                'socket': sock,
+                'exec_id': exec_id
+            }
 
-        # Send the request through the client, ensuring it's encoded to bytes
-        client.send(request.encode('utf-8'))
+            # Start reading output in a separate thread
+            def read_output():
+                try:
+                    # Read the HTTP response headers
+                    response_data = b""
+                    while b"\r\n\r\n" not in response_data:
+                        chunk = sock.recv(1024)
+                        if not chunk:
+                            break
+                        response_data += chunk
 
-        # Store client for the session
-        self.clients[sid] = client
+                    # Split headers and start of body
+                    headers, body = response_data.split(b"\r\n\r\n", 1)
+                    
+                    # If we have any body data from the split, send it
+                    if body:
+                        socketio.emit('output', {'data': body.decode('utf-8', errors='replace')}, to=sid)
 
-        received_first_response = False
-        timeout_counter = 0  # Keep track of no data periods
-        while True:
-            read_ready, _, _ = select.select([client], [], [], 1.0)  # Wait for 1 second
-            if client in read_ready:
-                output = client.recv(4096)
-                if not output:
-                    socketio.emit('output', {'data': '\nConnection closed by Docker.\r\n'}, to=sid)
-                    break
+                    # Continue reading the stream
+                    buffer = b""
+                    while True:
+                        if sid not in self.exec_sessions:
+                            break
 
-                # Remove headers from output at first response
-                if not received_first_response:
-                    raw_data = output.decode('utf-8', errors='ignore')
-                    header_end = raw_data.find("\r\n\r\n")
-                    if header_end != -1:
-                        output = raw_data[header_end + 4:]
-                        received_first_response = True
-                    else:
-                        continue
+                        chunk = sock.recv(1024)
+                        if not chunk:
+                            break
 
-                if not isinstance(output, str):
-                    output = output.decode('utf-8')
+                        buffer += chunk
+                        
+                        # Try to process as much of the buffer as possible
+                        while buffer:
+                            try:
+                                # Try to decode the buffer
+                                data = buffer.decode('utf-8', errors='replace')
+                                socketio.emit('output', {'data': data}, to=sid)
+                                buffer = b""
+                            except UnicodeDecodeError:
+                                # If we can't decode, we might have a partial character
+                                # Keep the last byte in the buffer and try again
+                                buffer = buffer[-1:]
+                                data = buffer[:-1].decode('utf-8', errors='replace')
+                                if data:
+                                    socketio.emit('output', {'data': data}, to=sid)
 
-                socketio.emit('output', {'data': output}, to=sid)
-                socketio.sleep(0.1)
-                timeout_counter = 0 
-            else:
-                timeout_counter += 1
-                if timeout_counter > timeout:
-                    client.send('\u0003'.encode('utf-8'))   # Send CTRL-C in case there is process running
-                    socketio.sleep(3)                       # Allow time for the process to respond in case there is process running
-                    client.send('\u0004'.encode('utf-8'))   # Send CTRL-D
-                    socketio.emit('output', {'data': '\r\nSession timeout due to inactivity.\r\n'}, to=sid)
+                except Exception as e:
+                    socketio.emit('output', {'data': f"Error: {str(e)}"}, to=sid)
+                finally:
+                    self.cleanup_session(sid)
 
-        # Close the session
-        client.shutdown(socket.SHUT_WR)
-        client.close()
-        del self.clients[sid]
+            Thread(target=read_output, daemon=True).start()
+
+        except Exception as e:
+            socketio.emit('output', {'data': f"Error starting exec session: {str(e)}"}, to=sid)
+            self.cleanup_session(sid)
 
     def handle_command(self, command, sid):
-        client = self.clients.get(sid)
-        if client:
-            client.send(command.encode('utf-8'))
-        else:
-            return 'No active session found.\r\n'
+        """Handle input from client"""
+        try:
+            if sid in self.exec_sessions:
+                sock = self.exec_sessions[sid]['socket']
+                sock.send(command.encode())
+            else:
+                return "No active session\n"
+        except Exception as e:
+            return f"Error sending command: {str(e)}"
+
+    def cleanup_session(self, sid):
+        """Clean up session resources"""
+        if sid in self.exec_sessions:
+            try:
+                self.exec_sessions[sid]['socket'].close()
+            except:
+                pass
+            del self.exec_sessions[sid]
     
     # SYSTEM
 
