@@ -13,11 +13,11 @@ class PersonalSettingsForm(FlaskForm):
     submit = SubmitField('Save Changes', name='submit_settings')
 
 class ChangeOwnPasswordForm(FlaskForm):
-    def __init__(self, min_password_length=8, *args, **kwargs):
+    def __init__(self, password_min_length=8, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Adjust the minimum password length dynamically
         self.new_password.validators.append(
-            Length(min=min_password_length, message=f"Password must be at least {min_password_length} characters long.")
+            Length(min=password_min_length, message=f"Password must be at least {password_min_length} characters long.")
         )
 
     current_password = PasswordField('Current Password', validators=[DataRequired()])
@@ -29,10 +29,10 @@ class ChangeOwnPasswordForm(FlaskForm):
     submit = SubmitField('Change Password', name='submit_password')
 
 class ChangeUserPasswordForm(FlaskForm):
-    def __init__(self, min_password_length=8, *args, **kwargs):
+    def __init__(self, password_min_length=8, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.new_password.validators.append(
-            Length(min=min_password_length, message=f"Password must be at least {min_password_length} characters long.")
+            Length(min=password_min_length, message=f"Password must be at least {password_min_length} characters long.")
         )
 
     new_password = PasswordField('New Password', validators=[DataRequired()])
@@ -59,10 +59,10 @@ class AddUserRoleForm(FlaskForm):
             self.submit.render_kw = {'disabled': 'disabled'}
 
 class AddUserForm(FlaskForm):
-    def __init__(self, min_password_length=8, *args, **kwargs):
+    def __init__(self, password_min_length=8, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.password.validators.append(
-            Length(min=min_password_length, message=f"Password must be at least {min_password_length} characters long.")
+            Length(min=password_min_length, message=f"Password must be at least {password_min_length} characters long.")
         )
 
     username = StringField('Username', validators=[DataRequired(), Length(max=24, min=1)])
