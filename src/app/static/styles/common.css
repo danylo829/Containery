@@ -3,11 +3,6 @@
     height: 10px;
 }
 
-*::-webkit-scrollbar-track, 
-*::-webkit-scrollbar-corner {
-    background-color: var(--bg-color);
-}
-
 *::-webkit-scrollbar-track:vertical {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;

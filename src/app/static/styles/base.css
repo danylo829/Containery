@@ -341,6 +341,10 @@ th, td {
     white-space: nowrap; /* Prevent wrapping */
 }
 
+table.add-role td {
+    border-bottom: 1px solid var(--accent-color);
+}
+
 th {
     cursor: pointer;
 }
@@ -378,27 +382,20 @@ td {
 }
 
 .table-box {
-    max-height: 100%;
-    overflow-y: auto;
+    max-height: 70vh;
+    overflow-y: scroll;
+    padding-inline: 1rem;
 }
 
-/* Constrain table to container width */
-.table-box.constrained {
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-}
-
-.table-box.constrained table {
-    table-layout: fixed; /* Ensures columns are equally spaced within the container */
-}
-
-.table-box.constrained th, .table-box.constrained td {
-    white-space: normal; /* Allow wrapping if needed to fit content */
-    word-wrap: break-word;
-}
-
-.table-box.constrained th {
-    max-width: none; /* Remove max-width constraint if using the constrained class */
-    word-wrap: unset;
+.add-role-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: var(--accent-color);
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    color: white;
 }
 
 .table-box.role {
