@@ -150,6 +150,7 @@ def add():
         role_id = int(add_user_form.role.data)
 
         if len(add_user_form.password.data) < password_min_length:
+            flash(f'Minimal password length is {password_min_length} characters', 'error')
             return redirect(url_for('user.add'))
 
         user = User.create_user(add_user_form.username.data, add_user_form.password.data)
