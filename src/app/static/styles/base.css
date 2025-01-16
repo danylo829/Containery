@@ -384,7 +384,7 @@ td {
 .table-box {
     max-height: 70vh;
     overflow-y: scroll;
-    padding-inline: 1rem;
+    padding-right: 1rem;
 }
 
 .add-role-title {

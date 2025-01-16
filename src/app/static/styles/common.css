@@ -3,7 +3,7 @@
     height: 10px;
 }
 
-*::-webkit-scrollbar-track:vertical {
+/* *::-webkit-scrollbar-track:vertical {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -12,10 +12,23 @@
 *::-webkit-scrollbar-track:horizontal {
     border-bottom-left-radius: 10px;
     border-top-left-radius: 10px;
+} */
+
+*::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-track, 
+*::-webkit-scrollbar-corner {
+    background-color: var(--bg-color);
 }
 
 *::-webkit-scrollbar-thumb {
     border-radius: 8px;
     background-color: var(--accent-color);
+}
+
+*::-webkit-scrollbar-corner {
+    background: transparent; /* Or match your background color */
 }
 
