@@ -362,9 +362,6 @@ class PersonalSettings(db.Model):
     value = db.Column(db.String(150), nullable=False)
 
     defaults = {
-        'constrain_tables_view': {
-            'default': False,
-        },
         'theme': {
             'options': ['light', 'dark', 'dark_mixed', 'system'],
             'default': 'system',

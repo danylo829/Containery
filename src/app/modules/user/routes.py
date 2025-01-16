@@ -20,7 +20,6 @@ def profile():
     password_form = ChangeOwnPasswordForm(password_min_length=password_min_length)
 
     if settings_form.submit.data and settings_form.validate_on_submit():
-        PersonalSettings.set_setting(current_user.id, 'constrain_tables_view', 'true' if settings_form.constrain_tables_view.data else 'false')
         PersonalSettings.set_setting(current_user.id, 'theme', settings_form.theme.data)
         
         flash('Settings updated successfully!', 'success')
@@ -35,7 +34,6 @@ def profile():
         return redirect(url_for('user.profile'))
     
     # Set form data based on current settings
-    settings_form.constrain_tables_view.data = PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true'
     settings_form.theme.data = PersonalSettings.get_setting(current_user.id, 'theme')
     
     breadcrumbs = [

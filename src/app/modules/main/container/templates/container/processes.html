@@ -10,7 +10,7 @@
         <input type="text" id="search" placeholder="Search">
         <a id="refresh-page-btn"><span class="material-symbols-outlined">restart_alt</span></a>
     </div>
-    <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+    <div class="table-box">
         <table id="process-table">
             <thead>
                 <tr>

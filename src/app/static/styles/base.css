@@ -391,7 +391,9 @@ td {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-inline: 1rem;
     background-color: var(--accent-color);
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;

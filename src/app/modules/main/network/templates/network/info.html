@@ -45,7 +45,7 @@
         <div class="content-card">
             <h2>Containers</h2>
             {% if network.Containers %}
-                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                <div class="table-box">
                     <table>
                         <thead>
                             <tr>
@@ -75,7 +75,7 @@
         <div class="content-card">
             <h2>Labels</h2>
             {% if network.Labels %}
-                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                <div class="table-box">
                     <table>
                         <tbody>
                             {% for key, value in network.Labels.items() %}

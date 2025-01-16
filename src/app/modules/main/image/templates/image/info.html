@@ -44,7 +44,7 @@
         <div class="content-card">
             <h2>Environment Variables</h2>
             {% if image.env_vars %}
-                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                <div class="table-box">
                     <table>
                         <tbody>
                             {% for env in image.env_vars %}
@@ -65,7 +65,7 @@
         <div class="content-card">
             <h2>Labels</h2>
             {% if image.labels %}
-                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                <div class="table-box">
                     <table>
                         <tbody>
                             {% for key, value in image.labels.items() %}

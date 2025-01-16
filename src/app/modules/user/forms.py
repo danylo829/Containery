@@ -4,7 +4,6 @@ from wtforms.validators import DataRequired, EqualTo, Length
 from app.models import Role
 
 class PersonalSettingsForm(FlaskForm):
-    constrain_tables_view = BooleanField('Constrain tables view')
     theme = SelectField(
         'Theme',
         choices=[('light', 'Light'), ('dark', 'Dark'), ('dark_mixed', 'Dark Mixed'), ('system', 'System')],

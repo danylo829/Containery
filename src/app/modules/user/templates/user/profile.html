@@ -22,7 +22,7 @@
     <form method="POST" action="{{ url_for('user.profile') }}">
         {{ password_form.csrf_token(id = 'password_csrf') }}
 
-        <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+        <div class="table-box">
             <table>
                 <tr>
                     <td><strong>{{ password_form.current_password.label }}</strong></td>
@@ -60,15 +60,8 @@
     <form method="POST" action="{{ url_for('user.profile') }}">
         {{ settings_form.csrf_token(id = 'settings_csrf') }}
         
-        <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+        <div class="table-box">
             <table>
-                <tr>
-                    <td><strong>Constrain tables view</strong></td>
-                    <td>
-                        {{ settings_form.constrain_tables_view() }}
-                        <label for="constrain_tables_view"></label>
-                    </td>
-                </tr>
                 <tr>
                     <td><strong>Theme</strong></td>
                     <td>

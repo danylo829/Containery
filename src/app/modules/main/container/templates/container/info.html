@@ -54,7 +54,7 @@
         <div class="content-card">
             <h2>Environment Variables</h2>
             {% if container.env_vars %}
-                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                <div class="table-box">
                     <table>
                         <tbody>
                             {% for env in container.env_vars %}
@@ -74,7 +74,7 @@
         <div class="content-card">
             <h2>Labels</h2>
             {% if container.labels %}
-                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                <div class="table-box">
                     <table>
                         <tbody>
                             {% for key, value in container.labels.items() %}
@@ -95,7 +95,7 @@
         <div class="content-card">
             <h2>Volumes</h2>
             {% if container.volumes %}
-                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                <div class="table-box">
                     <table>
                         <thead>
                             <tr>
@@ -122,7 +122,7 @@
         <div class="content-card">
             <h2>Network Info</h2>
             {% if container.network_info %}
-                <div class="table-box {{ 'constrained' if PersonalSettings.get_setting(current_user.id, 'constrain_tables_view') == 'true' else '' }}">
+                <div class="table-box">
                     <table id="container-table">
                         <thead>
                             <tr>
