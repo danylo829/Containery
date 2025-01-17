@@ -143,6 +143,10 @@ ul {
     align-items: flex-start;
 }
 
+.content:has(.content-card.dashboard) {
+    align-items: unset;
+}
+
 .content-box {
     background-color: var(--bg-color-box);
     border-radius: 10px;
