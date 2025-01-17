@@ -20,7 +20,7 @@
 
 *::-webkit-scrollbar-track, 
 *::-webkit-scrollbar-corner {
-    background-color: var(--bg-color);
+    background-color: var(--bg-color-darker);
 }
 
 *::-webkit-scrollbar-thumb {
@@ -29,6 +29,6 @@
 }
 
 *::-webkit-scrollbar-corner {
-    background: transparent; /* Or match your background color */
+    background: transparent;
 }
 

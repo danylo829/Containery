@@ -311,7 +311,7 @@ table {
     width: -webkit-fill-available; /* Remove the fixed width */
     border-collapse: collapse;
     margin: 0 auto; /* Center the table */
-    table-layout: auto;
+    table-layout: fixed;
 }
 
 thead {
@@ -343,6 +343,14 @@ th, td {
 
 table.add-role td {
     border-bottom: 1px solid var(--accent-color);
+}
+
+table.add-role {
+    table-layout: auto;
+}
+
+table.add-role tr td:last-child {
+    text-align: right;
 }
 
 th {
@@ -379,12 +387,23 @@ td {
 
 .content-card > .table-box {
     max-height: 40vh;
+    overflow-x: hidden;
 }
 
 .table-box {
     max-height: 70vh;
     overflow-y: scroll;
     padding-right: 1rem;
+}
+
+.table-box th, .table-box td {
+    white-space: normal; /* Allow wrapping if needed to fit content */
+    word-wrap: break-word;
+}
+
+.table-box th {
+    max-width: none; /* Remove max-width constraint if using the constrained class */
+    word-wrap: unset;
 }
 
 .add-role-title {
