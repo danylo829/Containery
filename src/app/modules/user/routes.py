@@ -357,6 +357,17 @@ def add_role():
         except Exception as e:
             flash(f"An unexpected error occurred: {str(e)}", 'error')
 
+    category_order = ['CONTAINER', 'IMAGE', 'NETWORK', 'VOLUME', 'USER', 'ROLE', 'GLOBAL']
+
+    categories = {}
+    for permission_form, permission in zip(form.permissions, Permissions):
+        category = permission.name.split('_')[0]
+        if category not in categories:
+            categories[category] = []
+        categories[category].append((permission_form, permission))
+
+    ordered_categories = {cat: categories[cat] for cat in category_order if cat in categories}
+
     breadcrumbs = [
         {"name": "Dashboard", "url": url_for('main.dashboard.index')},
         {"name": "Users", "url": url_for('user.get_list')},
@@ -370,6 +381,7 @@ def add_role():
                            breadcrumbs=breadcrumbs,
                            page_title=page_title,
                            form=form,
+                           categories=ordered_categories,  # Pass ordered categories
                            zip=zip)
 
 @user.route('/role/delete', methods=['POST'])

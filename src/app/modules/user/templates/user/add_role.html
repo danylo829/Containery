@@ -1,32 +1,58 @@
 {% extends "main.html" %}
 
 {% block custom_header %}
-    <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/user/add_role.js') }}" defer></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/user/add_role.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="content-box">
-    <form method="POST">
-        <div class="add-role-title">
-            <b>{{ form.role_name.label }}</b>
-            {{ form.role_name(size=20) }}
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    
+    <div class="role-name-section">
+      {{ form.role_name(
+          size=20,
+          placeholder="Role name",
+          autocomplete="off",
+          required=true
+      ) }}
+      {{ form.submit(class_="submit-button") }}
+    </div>
+    
+    <div class="permissions-grid">
+      {% for category, permissions in categories.items() %}
+        <div class="permission-category">
+          <div class="toggle-header">
+            <h3>{{ category|title }}</h3>
+            <input 
+              type="checkbox" 
+              id="toggle-{{ category }}" 
+              class="toggle-category" 
+              data-category="{{ category }}"
+            >
+            <label for="toggle-{{ category }}"></label>
+          </div>
+          {% for permission_form, permission in permissions|sort(attribute='1.name') %}
+            <div class="permission-item">
+              <span>{{ permission.name.split(category + '_')[1]|replace('_', ' ')|title }}</span>
+              <input 
+                id="{{ permission.name }}"
+                name="{{ permission_form.enabled.name }}"
+                type="checkbox"
+                class="category-checkbox"
+                data-category="{{ category }}"
+                value="y"
+                {% if permission_form.enabled.data %}checked{% endif %}
+              >
+              <label for="{{ permission.name }}"></label>
+              {{ permission_form.permission_value(value=permission.value) }}
+            </div>
+          {% endfor %}
         </div>
-        {{ form.hidden_tag() }}
-        <div class="table-box">
-            <table class="add-role">
-                {% for permission_form, permission in zip(form.permissions, Permissions) %}
-                    <tr>
-                        <td>{{ permission.name }}</td>
-                        <td>
-                            <input id="{{ permission.name }}" name="{{ permission_form.enabled.name }}" type="checkbox" value="y" {% if permission_form.enabled.data %}checked{% endif %}>
-                            <label for="{{ permission.name }}"></label>
-                            {{ permission_form.permission_value(value=permission.value) }}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-        {{ form.submit() }}
-    </form>      
+      {% endfor %}
+    </div>                  
+  </form>
 </div>
 {% endblock %}

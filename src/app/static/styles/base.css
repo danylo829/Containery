@@ -389,9 +389,10 @@ td {
     word-wrap: normal; /* Default word-wrap behavior */
 }
 
-.content-card > .table-box {
+.content-card .table-box {
     max-height: 40vh;
     overflow-x: hidden;
+    margin-bottom: 1rem;
 }
 
 .table-box {
@@ -890,10 +891,6 @@ span.delete:hover {
 
 .error-text {
     font-size: x-large;
-}
-
-#role_name {
-    max-width: fit-content;
 }
 
 @keyframes slideUp {

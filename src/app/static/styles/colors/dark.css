@@ -1,5 +1,6 @@
 body {
     --bg-color: #121212;
+    --bg-color-darker: #121212;
     --bg-color-box: #282828;
     --bg-color-transparent: rgba(0, 0, 0, 0.4);
     --text-color: #f5f5f5;
