@@ -476,10 +476,11 @@ a:hover {
 
 .stat-table {
     border-collapse: collapse;
+    table-layout: unset;
 }
 
 .stat-table td {
-    width: 50%; /* Each column takes up half the space */
+    width: 50%;
 }
 
 .progress-bar {
