@@ -135,7 +135,7 @@ ul {
 }
 
 .content {
-    padding: 1rem;
+    padding-inline: 1rem;
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -152,7 +152,6 @@ ul {
     border-radius: 10px;
     padding: 1rem;
     box-shadow: 0 0 10px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem;
     flex: 1 1 calc(33.333% - 2rem);
     overflow-x: auto;
 }
@@ -396,7 +395,7 @@ td {
 }
 
 .table-box {
-    max-height: 70vh;
+    max-height: 80vh;
     overflow-y: scroll;
     padding-right: 1rem;
 }
