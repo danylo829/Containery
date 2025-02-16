@@ -297,7 +297,6 @@ class GlobalSettings(db.Model):
 
     defaults = {
         'docker_socket': '/var/run/docker.sock',
-        'theme_color': '#0077ff',
         'dashboard_refresh_interval': 5,
         'log_retention_days': 30,
         'session_timeout': 1800,

@@ -18,10 +18,6 @@
             font-style: normal;
             src: url("{{ url_for('static', filename='styles/material-icons.woff2') }}") format('woff');
         }
-
-        body {
-            --accent-color: {{ GlobalSettings.get_setting('theme_color') | safe }};
-        }
     </style>
 
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
