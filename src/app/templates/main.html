@@ -28,8 +28,14 @@
     <div class="container">
         <aside class="sidebar{{ ' closed' if session.get('sidebar_state', 'open') == 'closed' else '' }}">
             <div class="sidebar-header">
-                <button id="menu-toggle" class="material-symbols-outlined">chevron_left</button>
-                <a href="{{ url_for('main.dashboard.index') }}"><h2 class="sidebar-title">Containery</h2></a>
+                <button id="menu-toggle" class="menu-toggle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="7" width="18" height="2" fill="currentColor"/>
+                        <rect x="3" y="14" width="18" height="2" fill="currentColor"/>
+                        <rect x="3" y="21" width="18" height="2" fill="currentColor"/>
+                    </svg>
+                </button>
+                <a href="{{ url_for('main.dashboard.index') }}" class="sidebar-title"><h2>Containery</h2></a>
             </div>
             <nav class="nav-menu">
                 <ul>
