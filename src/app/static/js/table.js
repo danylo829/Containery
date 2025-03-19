@@ -1,11 +1,11 @@
 // Mapping of table IDs to the columns used for searching
 const tables = {
-    'container-table':  [0],        // name
-    'image-table':      [0],        // name
-    'volume-table':     [0],        // name
-    'user-table':       [0],        // username
-    'roles-table':      [0],         // name
-    'network-table':    [0, 2],     // name, subnet
+    'container-table':  [0],       // name
+    'image-table':      [0],       // name
+    'volume-table':     [0],       // name
+    'user-table':       [0],       // username
+    'roles-table':      [0],       // name
+    'network-table':    [0, 2],    // name, subnet
     'process-table':    [0, 1, 7]  // UID, PID, CMD
 };
 
@@ -67,7 +67,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const lastSearchValue = localStorage.getItem(`lastSearchValue_${currentTable}`);
             if (lastSearchValue) {
                 searchField.value = lastSearchValue;
-                search(lastSearchValue, currentTable);
+                setTimeout(() => {
+                    search(lastSearchValue, currentTable);
+                }, 300);
             }
         }
         
