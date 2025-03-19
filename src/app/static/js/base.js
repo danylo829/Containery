@@ -19,13 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
             body.style.overflow = 'hidden';
         }
 
-        fetch('/toggle_sidebar', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken
-            },
-        });
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/toggle-sidebar', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('X-CSRFToken', csrfToken);
+        xhr.send();
     });
 
     const flashMessage = localStorage.getItem('flash_message');

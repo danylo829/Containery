@@ -9,11 +9,11 @@ def root():
         return redirect(url_for('auth.login'))
     return redirect(url_for('auth.install'))
 
-@index.route('/toggle_sidebar', methods=['POST'])
+@index.route('/toggle-sidebar', methods=['POST'])
 def toggle_sidebar():
     if session.get('sidebar_state') == 'closed':
         session['sidebar_state'] = 'open'
     else:
         session['sidebar_state'] = 'closed'
     
-    return '', 204
+    return {'sidebar_state': session['sidebar_state']}, 200
