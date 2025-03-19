@@ -566,7 +566,6 @@ a:hover {
 
 .page-title {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     gap: 1rem;
     margin-top: 0.5rem;
