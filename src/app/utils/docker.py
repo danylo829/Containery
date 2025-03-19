@@ -130,7 +130,7 @@ class Docker:
                 sock = self.exec_sessions[sid]['socket']
                 sock.send(command.encode())
             else:
-                return "No active session\n"
+                return "No active session\r\n"
         except Exception as e:
             return f"Error sending command: {str(e)}"
 

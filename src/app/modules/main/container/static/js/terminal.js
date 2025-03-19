@@ -52,17 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', (event) => {
         event.preventDefault();
-        
-        window.onbeforeunload = function(e) {
-            e.preventDefault();
-        };
 
         resizeObserver.observe(container);
 
-        const user = document.getElementById('user').value;
+        const user = document.getElementById('user-field').value;
         const containerId = submitBtn.getAttribute('data-container-id');
 
-        // Use custom command if present, otherwise use selected command
         const command = commandInput.value.length > 0 ? commandInput.value : commandSelect.value;
 
         form.style.display = 'none';
