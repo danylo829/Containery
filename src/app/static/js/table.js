@@ -9,60 +9,74 @@ const tables = {
     'process-table':    [0, 1, 7]  // UID, PID, CMD
 };
 
+function search(searchValue, currentTable) {
+    if (currentTable !== null) {
+        const rows = document.querySelectorAll(`#${currentTable} tbody tr`);
+        let visibleRowCount = 0;
+
+        rows.forEach(row => {
+            const columnsToSearch = tables[currentTable];
+            let match = false;
+
+            columnsToSearch.forEach(colIndex => {
+                const cellValue = row.cells[colIndex].textContent.toLowerCase();
+                if (cellValue.includes(searchValue)) {
+                    match = true;
+                }
+            });
+
+            if (match) {
+                row.style.display = '';
+                visibleRowCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        // Handle the no rows found case
+        let noRowsMessage = document.getElementById('no-rows-message');
+        if (visibleRowCount === 0) {
+            if (!noRowsMessage) {
+                noRowsMessage = document.createElement('tr');
+                noRowsMessage.id = 'no-rows-message';
+                noRowsMessage.innerHTML = `<p>No matching records found</p>`;
+                document.querySelector(`.content-box`).appendChild(noRowsMessage);
+            }
+            noRowsMessage.style.display = '';
+        } else if (noRowsMessage) {
+            noRowsMessage.style.display = 'none';
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const searchField = document.getElementById('search');
 
     if (searchField != null) {
+        let currentTable = null;
+
+        for (const tableId in tables) {
+            const tableElement = document.getElementById(tableId);
+            if (tableElement !== null) {
+                currentTable = tableId;
+                break;
+            }
+        }
+
+        if (currentTable !== null) {
+            const lastSearchValue = localStorage.getItem(`lastSearchValue_${currentTable}`);
+            if (lastSearchValue) {
+                searchField.value = lastSearchValue;
+                search(lastSearchValue, currentTable);
+            }
+        }
+        
         searchField.addEventListener('input', function() {
             const searchValue = this.value.toLowerCase();
-            let currentTable = null;
             
-            // Detect which table is currently loaded
-            for (const tableId in tables) {
-                const tableElement = document.getElementById(tableId);
-                if (tableElement !== null) {
-                    currentTable = tableId;
-                    break;
-                }
-            }
+            search(searchValue, currentTable);
 
-            if (currentTable !== null) {
-                const rows = document.querySelectorAll(`#${currentTable} tbody tr`);
-                let visibleRowCount = 0;
-
-                rows.forEach(row => {
-                    const columnsToSearch = tables[currentTable];
-                    let match = false;
-
-                    columnsToSearch.forEach(colIndex => {
-                        const cellValue = row.cells[colIndex].textContent.toLowerCase();
-                        if (cellValue.includes(searchValue)) {
-                            match = true;
-                        }
-                    });
-
-                    if (match) {
-                        row.style.display = '';
-                        visibleRowCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-
-                // Handle the no rows found case
-                let noRowsMessage = document.getElementById('no-rows-message');
-                if (visibleRowCount === 0) {
-                    if (!noRowsMessage) {
-                        noRowsMessage = document.createElement('tr');
-                        noRowsMessage.id = 'no-rows-message';
-                        noRowsMessage.innerHTML = `<p>No matching records found</p>`;
-                        document.querySelector(`.content-box`).appendChild(noRowsMessage);
-                    }
-                    noRowsMessage.style.display = '';
-                } else if (noRowsMessage) {
-                    noRowsMessage.style.display = 'none';
-                }
-            }
+            localStorage.setItem(`lastSearchValue_${currentTable}`, searchValue);
         });
     }
 
