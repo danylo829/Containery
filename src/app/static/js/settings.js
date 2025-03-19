@@ -1,8 +1,7 @@
 function resetSetting(fieldName) {
     const csrfToken = document.querySelector('input[name="csrf_token"]').value;
     const spinner = document.querySelector('.loading-spinner');
-    spinner.style.display = 'flex';
-    spinner.style.animation = 'spin 1s linear infinite';
+    spinner.classList.remove('hidden');
 
     const formData = new FormData();
     formData.append('csrf_token', csrfToken);
@@ -15,7 +14,7 @@ function resetSetting(fieldName) {
     .then(response => handleResetResponse(response))
     .catch(error => handleResetError(error))
     .finally(() => {
-        spinner.style.display = 'none';
+        spinner.classList.add('hidden');
     });
 }
 

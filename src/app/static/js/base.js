@@ -2,7 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     spinner = document.querySelector('.loading-spinner');
-    spinner.style.display = 'none';
+    setTimeout(function() {
+        spinner.classList.add('hidden');
+    }, 300);
 
     document.querySelector('#user-icon').addEventListener('click', function() {
         document.querySelector('.user-panel').classList.toggle('open');

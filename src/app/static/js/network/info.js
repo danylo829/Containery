@@ -27,8 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     confirmDeleteBtn.addEventListener('click', function () {
         const spinner = document.querySelector('.loading-spinner');
-        spinner.style.display = 'flex';
-        spinner.style.animation = 'spin 1s linear infinite';
+        spinner.classList.remove('hidden');
 
         fetch(`/network/${networkId}/delete`, {
             method: 'DELETE',

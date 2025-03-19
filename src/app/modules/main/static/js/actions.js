@@ -30,8 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const containerId = this.getAttribute('data-id');
     
             const spinner = document.querySelector('.loading-spinner');
-            spinner.style.display = 'flex';
-            spinner.style.animation = 'spin 1s linear infinite';
+            spinner.classList.remove('hidden');
     
             fetch(`/container/api/${containerId}/start`, {
                 method: 'POST',
@@ -50,8 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const containerId = this.getAttribute('data-id');
     
             const spinner = document.querySelector('.loading-spinner');
-            spinner.style.display = 'flex';
-            spinner.style.animation = 'spin 1s linear infinite';
+            spinner.classList.remove('hidden');
     
             fetch(`/container/api/${containerId}/restart`, {
                 method: 'POST',
@@ -70,8 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const containerId = this.getAttribute('data-id');
     
             const spinner = document.querySelector('.loading-spinner');
-            spinner.style.display = 'flex';
-            spinner.style.animation = 'spin 1s linear infinite';
+            spinner.classList.remove('hidden');
     
             fetch(`/container/api/${containerId}/stop`, {
                 method: 'POST',

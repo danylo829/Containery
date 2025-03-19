@@ -549,6 +549,11 @@ a:hover {
     color: var(--accent-color);
 }
 
+.loading-spinner.hidden *{
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
 /* Info page */
 
 .title {

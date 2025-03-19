@@ -18,7 +18,7 @@
 }
 
 /* Spinner */
-.spinner-icon {
+.loading-spinner {
     animation: spin 1s linear infinite;
 }
 
@@ -195,7 +195,6 @@
 }
 
 /* DND */
-
 #dnd-icon:hover line {
     transform: rotate(180deg);
 }

@@ -1,10 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const spinner = document.querySelector('.loading-spinner');
-    if (spinner) {
-        spinner.remove();
-    }
-});
-
 let updateInterval;
 
 function updateUsage() {
