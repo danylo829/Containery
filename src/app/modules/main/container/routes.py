@@ -71,10 +71,10 @@ def container_name (id):
     response, status_code = container_info(id)
     return response['general_info']['name'] if status_code in range(200, 300) else "Unknown Container"
 
-@container.before_request
-@login_required
-def before_request():
-    pass
+@container.context_processor
+def inject_variables():
+    active_page = str(request.blueprint).split('.')[-1]
+    return dict(active_page=active_page)
 
 @container.route('/list', methods=['GET'])
 @permission(Permissions.CONTAINER_VIEW_LIST)
@@ -166,7 +166,7 @@ def processes(id):
         if status_code == 409:
             id = response.json()['message'].split(' ')[1]
             name = container_name(id)
-            flash(f'Container {name} is not running', 'error')
+            message = f'Container {name} is not running'
         # Default error message
         else:
             message = response.text if hasattr(response, 'text') else str(response)

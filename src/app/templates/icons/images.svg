@@ -1,0 +1,7 @@
+<svg class="icons" id="images-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2">
+    <rect id="frame" x="1" y="1" width="22" height="22" rx="2" ry="2"/>
+
+    <polyline id="mountains" points="1,16 8,10 16,16 20,12 24,16"/>
+    
+    <circle id="sun" cx="8" cy="6" r="2" fill="currentColor" stroke="none"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg class="icons" id="networks-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M2 8c5.5-5 14.5-5 20 0"/>
+    <path d="M5 12c3.5-3 10.5-3 14 0"/>
+    <path d="M8 16c2-2 6-2 8 0"/>
+    <circle cx="12" cy="20" r="1" />
+</svg>

@@ -58,25 +58,25 @@
     <div class="buttons">
         <div class="button-container">
             <a href="{{ url_for('main.container.get_list') }}" class="dashboard-button">
-                <span class="material-symbols-outlined">view_list</span>
+                {% include 'icons/containers.svg' %}  
                 <span>Containers</span>
             </a>
         </div>
         <div class="button-container">
             <a href="{{ url_for('main.image.get_list') }}"" class="dashboard-button">
-                <span class="material-symbols-outlined">image</span>
+                {% include 'icons/images.svg' %}  
                 <span>Images</span>
             </a>
         </div>
         <div class="button-container">
             <a href="{{ url_for('main.volume.get_list') }}" class="dashboard-button">
-                <span class="material-symbols-outlined">storage</span>
+                {% include 'icons/volumes.svg' %}  
                 <span>Volumes</span>
             </a>
         </div>
         <div class="button-container">
             <a href="{{ url_for('main.network.get_list') }}" class="dashboard-button">
-                <span class="material-symbols-outlined">network_check</span>
+                {% include 'icons/networks.svg' %}  
                 <span>Networks</span>
             </a>
         </div>

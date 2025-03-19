@@ -19,9 +19,13 @@
                 <td>
                     <div class="cell-wrapper">
                         {{ form.docker_socket(class="setting-input") }}
-                        <button type="button" class="reset-button" onclick="resetSetting('docker_socket')">
-                            <span class="material-symbols-outlined">history</span>
-                        </button>
+                        <div class="actions">
+                            <div>
+                                <a class="settings-revert-icon" onclick="resetSetting('docker_socket')">
+                                    {% include 'icons/revert.svg' %}
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -30,9 +34,13 @@
                 <td>
                     <div class="cell-wrapper">
                         {{ form.dashboard_refresh_interval(class="setting-input") }}
-                        <button type="button" class="reset-button" onclick="resetSetting('dashboard_refresh_interval')">
-                            <span class="material-symbols-outlined">history</span>
-                        </button>
+                        <div class="actions">
+                            <div>
+                                <a class="settings-revert-icon" onclick="resetSetting('dashboard_refresh_interval')">
+                                    {% include 'icons/revert.svg' %}
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -41,9 +49,13 @@
                 <td>
                     <div class="cell-wrapper">
                         {{ form.log_retention_days(class="setting-input") }}
-                        <button type="button" class="reset-button" onclick="resetSetting('log_retention_days')">
-                            <span class="material-symbols-outlined">history</span>
-                        </button>
+                        <div class="actions">
+                            <div>
+                                <a class="settings-revert-icon" onclick="resetSetting('log_retention_days')">
+                                    {% include 'icons/revert.svg' %}
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -58,9 +70,13 @@
                 <td>
                     <div class="cell-wrapper">
                         {{ form.session_timeout(class="setting-input") }}
-                        <button type="button" class="reset-button" onclick="resetSetting('session_timeout')">
-                            <span class="material-symbols-outlined">history</span>
-                        </button>
+                        <div class="actions">
+                            <div>
+                                <a class="settings-revert-icon" onclick="resetSetting('session_timeout')">
+                                    {% include 'icons/revert.svg' %}
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -69,9 +85,13 @@
                 <td>
                     <div class="cell-wrapper">
                         {{ form.password_min_length(class="setting-input") }}
-                        <button type="button" class="reset-button" onclick="resetSetting('password_min_length')">
-                            <span class="material-symbols-outlined">history</span>
-                        </button>
+                        <div class="actions">
+                            <div>
+                                <a class="settings-revert-icon" onclick="resetSetting('password_min_length')">
+                                    {% include 'icons/revert.svg' %}
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>

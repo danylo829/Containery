@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, jsonify
+from flask import Blueprint, render_template, url_for, jsonify, request
 from flask_login import login_required
 
 from app.utils.docker import Docker
@@ -47,10 +47,11 @@ def network_info(id):
 
     return network, 200
 
-@network.before_request
-@login_required
-def before_request():
-    pass
+@network.context_processor
+def inject_variables():
+    active_page = str(request.blueprint).split('.')[-1]
+    return dict(active_page=active_page)
+
 
 @network.route('/list', methods=['GET'])
 @permission(Permissions.NETWORK_VIEW_LIST)

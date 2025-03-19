@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     spinner = document.querySelector('.loading-spinner');
     spinner.style.display = 'none';
 
-    document.querySelector('.user-icon').addEventListener('click', function() {
+    document.querySelector('#user-icon').addEventListener('click', function() {
         document.querySelector('.user-panel').classList.toggle('open');
     });  
 

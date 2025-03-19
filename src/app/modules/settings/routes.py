@@ -13,6 +13,11 @@ settings = Blueprint('settings', __name__, url_prefix='/settings', template_fold
 def before_request():
     pass
 
+@settings.context_processor
+def inject_variables():
+    active_page = str(request.blueprint).split('.')[-1]
+    return dict(active_page=active_page)
+
 @settings.route('', methods=['GET', 'POST'])
 @permission(Permissions.GLOBAL_SETTINGS_VIEW)
 def get_list():

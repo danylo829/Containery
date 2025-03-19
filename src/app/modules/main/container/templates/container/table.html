@@ -9,7 +9,13 @@
 <div class="content-box">
     <div class="search-box">
         <input type="text" id="search" placeholder="Search">
-        <a id="refresh-page-btn"><span class="material-symbols-outlined">restart_alt</span></a>
+        <div class="actions">
+            <div>
+                <a id="refresh-page-btn">
+                    {% include 'icons/restart.svg' %}  
+                </a>
+            </div>
+        </div>
     </div>
     <div class="table-box">
         <table id="container-table">
@@ -28,9 +34,19 @@
                     <td><span>{{ row.status }}</span></td>
                     <td><a href="{{ url_for('main.image.info', id=row.imageID) }}">{{ row.image }}</a></td>
                     <td>
-                        <a class="restart-btn" data-id="{{ row.id }}"><span class="material-symbols-outlined">refresh</span></a>
-                        <a href="{{ url_for('main.container.logs', id=row.id) }}"><span class="material-symbols-outlined">troubleshoot</span></a>
-                        <a href="{{ url_for('main.container.console', id=row.id) }}"><span class="material-symbols-outlined">terminal</span></a>
+                        <div class="actions">
+                            <div>
+                                <a class="processes-btn" href="{{ url_for('main.container.processes', id=row.id) }}">
+                                    {% include 'icons/processes.svg' %}
+                                </a>
+                                <a class="logs-btn" href="{{ url_for('main.container.logs', id=row.id) }}">
+                                    {% include 'icons/logs.svg' %}
+                                </a>
+                                <a class="terminal-btn" href="{{ url_for('main.container.console', id=row.id) }}">
+                                    {% include 'icons/terminal.svg' %}
+                                </a>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}

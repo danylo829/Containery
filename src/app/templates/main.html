@@ -10,15 +10,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/colors/' + PersonalSettings.get_setting(current_user.id, 'theme').lower() + '.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/modal.css') }}">
-    <link rel="preload" href="{{ url_for('static', filename='styles/material-icons.woff2') }}" as="font" type="font/woff2" crossorigin="anonymous">
-
-    <style>
-        @font-face {
-            font-family: 'Material Symbols Outlined';
-            font-style: normal;
-            src: url("{{ url_for('static', filename='styles/material-icons.woff2') }}") format('woff');
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/icons.css') }}">
 
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
     {% block custom_header %}
@@ -29,27 +21,53 @@
         <aside class="sidebar{{ ' closed' if session.get('sidebar_state', 'open') == 'closed' else '' }}">
             <div class="sidebar-header">
                 <button id="menu-toggle" class="menu-toggle">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="3" y="7" width="18" height="2" fill="currentColor"/>
-                        <rect x="3" y="14" width="18" height="2" fill="currentColor"/>
-                        <rect x="3" y="21" width="18" height="2" fill="currentColor"/>
-                    </svg>
+                    {% include 'icons/burger.svg' %}  
                 </button>
                 <a href="{{ url_for('main.dashboard.index') }}" class="sidebar-title"><h2>Containery</h2></a>
             </div>
             <nav class="nav-menu">
                 <ul>
-                    <li><a href="{{ url_for('main.container.get_list') }}"><span class="material-symbols-outlined nav-icon">view_list</span><span class="nav-text">Containers</span></a></li>
-                    <li><a href="{{ url_for('main.image.get_list') }}"><span class="material-symbols-outlined nav-icon">image</span><span class="nav-text">Images</span></a></li>
-                    <li><a href="{{ url_for('main.network.get_list') }}"><span class="material-symbols-outlined nav-icon">network_check</span><span class="nav-text">Networks</span></a></li>
-                    <li><a href="{{ url_for('main.volume.get_list') }}"><span class="material-symbols-outlined nav-icon">storage</span><span class="nav-text">Volumes</span></a></li>
+                    <li class="{% if active_page == 'container' %}active {% else %}inactive {% endif %}">
+                        <a href="{{ url_for('main.container.get_list') }}">
+                            {% include 'icons/containers.svg' %}                                              
+                            <span class="nav-text">Containers</span>
+                        </a>
+                    </li>
+                    <li class="{% if active_page == 'image' %}active {% else %}inactive {% endif %}">
+                        <a href="{{ url_for('main.image.get_list') }}">
+                            {% include 'icons/images.svg' %}                 
+                            <span class="nav-text">Images</span>
+                        </a>
+                    </li>
+                    <li class="{% if active_page == 'volume' %}active {% else %}inactive {% endif %}">
+                        <a href="{{ url_for('main.volume.get_list') }}">
+                            {% include 'icons/volumes.svg' %}  
+                            <span class="nav-text">Volumes</span>
+                        </a>
+                    </li>
+                    <li class="{% if active_page == 'network' %}active {% else %}inactive {% endif %}">
+                        <a href="{{ url_for('main.network.get_list') }}">
+                            {% include 'icons/networks.svg' %}  
+                            <span class="nav-text">Networks</span>
+                        </a>
+                    </li>
                     <hr>
                     {% if current_user.has_permission(Permissions.USER_VIEW_LIST) %}
-                        <li><a href="{{ url_for('user.get_list') }}"><span class="material-symbols-outlined nav-icon">group</span><span class="nav-text">Users</span></a></li>
+                        <li class="{% if active_page == 'user' %}active {% else %}inactive {% endif %}">
+                            <a href="{{ url_for('user.get_list') }}">
+                                {% include 'icons/users.svg' %}  
+                                <span class="nav-text">Users</span>
+                            </a>
+                        </li>
                     {% endif %}
                     
                     {% if current_user.has_permission(Permissions.GLOBAL_SETTINGS_VIEW) %}
-                        <li><a href="{{ url_for('settings.get_list') }}"><span class="material-symbols-outlined nav-icon">settings</span><span class="nav-text">Settings</span></a></li>
+                        <li class="{% if active_page == 'settings' %}active {% else %}inactive {% endif %}">
+                            <a href="{{ url_for('settings.get_list') }}">
+                                {% include 'icons/settings.svg' %}  
+                                <span class="nav-text">Settings</span>
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             </nav>
@@ -66,16 +84,17 @@
                             {% endif %}
                         {% endfor %}
                     </nav>
-                    <h2>{{ page_title }} <span class="loading-spinner"><span class="material-symbols-outlined">autorenew</span></span></h2>
+                    <div class="page-title">
+                        <h2>{{ page_title }}</h2>
+                        {% include 'icons/spiner.svg' %} 
+                    </div>
                 </div>
                 <div class="user-section">
-                    <span class="material-symbols-outlined user-icon">person</span>
+                    {% include 'icons/user.svg' %}  
                     <div class="user-panel" id="userPanel">
                         <a href="{{ url_for('user.profile') }}">{{ current_user.username }}</a>
-                        <a href="{{ url_for('auth.logout') }}">
-                            <span class="material-symbols-outlined">
-                                logout
-                            </span>
+                        <a id="logout" href="{{ url_for('auth.logout') }}">
+                            {% include 'icons/logout.svg' %}  
                         </a>
                     </div>
                 </div>

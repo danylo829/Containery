@@ -1,0 +1,7 @@
+<svg class="icons" id="logs-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2">
+    <g id="magnifier">
+        <line x1="15" y1="15" x2="22" y2="22"/>
+        <circle cx="10" cy="10" r="7"/>
+        <path id="signal" d="M4 10 h4 l1 -4 l2 8 l1 -4 h4" stroke-width="1"/>
+    </g>
+</svg>

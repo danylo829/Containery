@@ -8,15 +8,23 @@
 <div class="content-box">
     <div class="search-box">
         <input type="text" id="search" placeholder="Search">
-         <div class="table-actions">
-            {% if current_user.has_permission(Permissions.USER_ADD) %}
-                <a href="{{ url_for('user.add') }}"><span class="material-symbols-outlined">person_add</span></a>
-            {% endif %}
-            {% if current_user.has_permission(Permissions.ROLE_VIEW_LIST) %}
-                <a href="{{ url_for('user.get_role_list') }}"><span class="material-symbols-outlined" title="Roles">badge</span></a>
-            {% endif %}
-            <a id="refresh-page-btn"><span class="material-symbols-outlined">restart_alt</span></a>
-         </div>
+        <div class="actions">
+            <div>
+                {% if current_user.has_permission(Permissions.USER_ADD) %}
+                    <a href="{{ url_for('user.add') }}">
+                        {% include 'icons/user_add.svg' %}  
+                    </a>
+                {% endif %}
+                {% if current_user.has_permission(Permissions.ROLE_VIEW_LIST) %}
+                    <a href="{{ url_for('user.get_role_list') }}">
+                        {% include 'icons/roles.svg' %}  
+                    </a>
+                {% endif %}
+                <a id="refresh-page-btn">
+                    {% include 'icons/restart.svg' %}  
+                </a>
+            </div>
+        </div>
     </div>
     <div class="table-box">
         <table id="user-table">

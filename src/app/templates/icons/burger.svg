@@ -1,0 +1,5 @@
+<svg class="icons" id="burger-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" stroke="none">
+    <rect x="2" y="2" width="20" height="2" rx="1" ry="1"/>
+    <rect x="2" y="11" width="20" height="2" rx="1" ry="1"/>
+    <rect x="2" y="20" width="20" height="2" rx="1" ry="1"/>
+</svg>

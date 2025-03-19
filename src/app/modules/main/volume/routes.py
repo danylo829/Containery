@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, jsonify, flash
+from flask import Blueprint, render_template, url_for, jsonify, flash, request
 from flask_login import login_required
 
 from app.utils.docker import Docker
@@ -11,10 +11,10 @@ volume = Blueprint('volume', __name__, template_folder='templates')
 
 docker = Docker()
 
-@volume.before_request
-@login_required
-def before_request():
-    pass
+@volume.context_processor
+def inject_variables():
+    active_page = str(request.blueprint).split('.')[-1]
+    return dict(active_page=active_page)
 
 @volume.route('/list', methods=['GET'])
 @permission(Permissions.VOLUME_VIEW_LIST)

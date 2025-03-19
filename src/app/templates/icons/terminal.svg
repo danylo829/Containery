@@ -1,0 +1,5 @@
+<svg class="icons" id="terminal-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="2" y="4" width="20" height="16" rx="1"/>
+    <polyline points="6,10 10,12 6,14"/>
+    <line x1="12" y1="16" x2="18" y2="16"/>
+</svg>

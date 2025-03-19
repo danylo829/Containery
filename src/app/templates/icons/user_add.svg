@@ -1,0 +1,10 @@
+<svg class="icons" id="user-add-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2">
+    <g id="user-1">
+        <circle cx="9" cy="8" r="3"/>
+        <path d="M3 20c0-3 3-6 6-6s6 3 6 6"/>
+    </g>
+    <g id="plus-sign">
+        <line x1="19" y1="8" x2="19" y2="14"/>
+        <line x1="16" y1="11" x2="22" y2="11"/>
+    </g>
+</svg>

@@ -1,0 +1,8 @@
+<svg class="icons" id="processes-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2">
+    <rect id="frame" x="4" y="2" width="16" height="20" rx="1"/>
+    <g id="text" stroke="none" fill="currentColor">
+        <rect x="8" y="6" width="8" height="2" rx="1" ry="1"/>
+        <rect x="8" y="11" width="8" height="2" rx="1" ry="1"/>
+        <rect x="8" y="16" width="8" height="2" rx="1" ry="1"/>
+    </g>    
+</svg>

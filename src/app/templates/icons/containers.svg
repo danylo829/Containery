@@ -1,0 +1,6 @@
+<svg class="icons" id="containers-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="2" y="2" width="8" height="8" rx="1" ry="1"/>
+    <rect x="14" y="2" width="8" height="8" rx="1" ry="1"/>
+    <rect x="2" y="14" width="8" height="8" rx="1" ry="1"/>
+    <rect x="14" y="14" width="8" height="8" rx="1" ry="1"/>
+</svg>

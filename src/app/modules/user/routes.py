@@ -12,6 +12,11 @@ user = Blueprint('user', __name__, url_prefix='/user', template_folder='template
 def before_request():
     pass
 
+@user.context_processor
+def inject_variables():
+    active_page = str(request.blueprint).split('.')[-1]
+    return dict(active_page=active_page)
+
 @user.route('/profile', methods=['GET', 'POST'])
 def profile():
     password_min_length = int(GlobalSettings.get_setting('password_min_length'))

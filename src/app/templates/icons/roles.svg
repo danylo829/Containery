@@ -1,0 +1,12 @@
+<svg class="icons" id="roles-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="10" y="1" width="4" height="4" rx="1" ry="1" stroke-width="0" fill="currentColor"/>
+    <rect id="frame" x="2" y="4" width="20" height="16" rx="1" ry="1"/>
+    <g id="text" fill="currentColor" stroke="none">
+        <rect x="12" y="8" width="7" height="2" rx="1" ry="1"/>
+        <rect x="12" y="14" width="7" height="2" rx="1" ry="1"/>
+    </g>
+    <g id="person" fill="currentColor" stroke="none">
+        <circle id="head" cx="7" cy="10" r="2"/>
+        <path d="M4.5 16 C5 11, 9 11, 9.5 16" />
+    </g>
+</svg>

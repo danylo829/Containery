@@ -1,0 +1,201 @@
+.icons * {
+    color: var(--text-color);
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: all 0.3s ease;
+}
+
+/* Profile menu */
+
+/* User */
+#user-icon:hover {
+    cursor: pointer;
+}
+
+/* Logout */
+#logout-icon:hover #arrow {
+    transform: translateX(2px);
+}
+
+/* Spinner */
+.spinner-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Nav menu */
+
+/* Burger */
+#menu-toggle:hover #burger-icon rect:nth-child(1) {
+    transform: translateY(-1px);
+}
+
+#menu-toggle:hover #burger-icon rect:nth-child(3) {
+    transform: translateY(1px);
+}
+
+/* Containers */
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #containers-icon rect:nth-child(1) {
+    transform: translate(-1px, -1px);
+}
+
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #containers-icon rect:nth-child(2) {
+    transform: translate(1px, -1px);
+}
+
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #containers-icon rect:nth-child(3) {
+    transform: translate(-1px, 1px);
+}
+
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #containers-icon rect:nth-child(4) {
+    transform: translate(1px, 1px);
+}
+
+/* Images */
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #images-icon #sun {
+    cx: 16;
+    cy: 9;
+}
+
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #images-icon #mountains {
+    transform: translateY(2px);
+}
+
+/* Volumes */
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #volume-icon rect:nth-child(1) {
+    transform: translateY(-1px);
+}
+
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #volume-icon rect:nth-child(2) {
+    height: 6px;
+    transform: translateY(-1px);
+}
+
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #volume-icon rect:nth-child(3) {
+    transform: translateY(1px);
+}
+
+/* Networks */
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #networks-icon path:nth-child(1) {
+    transform: translateY(-2px);
+}
+
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #networks-icon path:nth-child(2) {
+    transform: translateY(-1px);
+}
+
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #networks-icon path:nth-child(3) {
+    transform: translateY(-0.5px);
+}
+
+/* Settings */
+
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #settings-icon path {
+    transform: rotate(45deg);
+}
+
+/* Users */
+
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #users-icon #user-1,
+.actions div a:hover #user-add-icon #user-1 {
+    transform: translateX(-1px);
+}
+
+:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #users-icon #user-2,
+.actions div a:hover #user-add-icon #plus-sign {
+    transform: translateX(1px);
+}
+
+.actions a:not(:hover) svg *,
+#logout-icon:not(:hover) #arrow,
+:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover)) #settings-icon *,
+:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover)) #networks-icon *,
+:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover)) #containers-icon *,
+:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover)) #users-icon * {
+    transition: transform 0.3s cubic-bezier(0.33, 2.2, 0.6, 1);
+}
+
+/* Actions */
+
+.actions a:hover {
+    background-color: var(--bg-color-darker);
+    transition: all 0.3s ease;
+}
+
+.actions a:hover #start-icon *,
+.actions a:hover #stop-icon *,
+.actions a:hover #add-icon * {
+    transform: scale(1.1) !important;
+}
+
+/* Resfresh */
+#restart-icon:hover g,
+.settings-revert-icon:hover #revert-icon g {
+    transform: rotate(30deg);
+}
+
+#revert-icon {
+    width: 100%;
+}
+
+/* Delete */
+#delete-icon:hover {
+    stroke: var(--error-bg);
+}
+#delete-icon:hover #cap {
+    transform: translateY(-2px) translateX(2px) rotate(20deg);
+}
+
+/* Logs */
+#logs-icon #signal {
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+}
+#logs-icon:hover #signal {
+    stroke-dashoffset: 0;
+    transform: rotate(-30deg);
+}
+
+#logs-icon:hover #magnifier {
+    transform: rotate(30deg);
+}
+
+/* Terminal */
+#terminal-icon:hover polyline {
+    transform: translateX(1px);
+}
+
+#terminal-icon:hover line {
+    transform: translateX(-1px);
+}
+
+/* Processes */
+#processes-icon:hover #text rect:nth-child(1) {
+    transform: translateY(-1px);
+}
+
+#processes-icon:hover #text rect:nth-child(3) {
+    transform: translateY(1px);
+}
+
+#roles-icon:hover #text {
+    transform: translateX(-6px);
+}
+
+#roles-icon:hover #text rect {
+    width: 12px;
+}
+
+#roles-icon:hover #person {
+    opacity: 0;
+}
+
+/* DND */
+
+#dnd-icon:hover line {
+    transform: rotate(180deg);
+}
