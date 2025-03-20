@@ -371,18 +371,18 @@ td {
 }
 
 .table-box {
-    max-height: 80vh;
+    max-height: calc(100vh - 200px);
     overflow-y: scroll;
     padding-right: 1rem;
 }
 
 .table-box th, .table-box td {
-    white-space: normal; /* Allow wrapping if needed to fit content */
+    white-space: normal;
     word-wrap: break-word;
 }
 
 .table-box th {
-    max-width: none; /* Remove max-width constraint if using the constrained class */
+    max-width: none;
     word-wrap: unset;
 }
 
