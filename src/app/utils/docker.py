@@ -224,8 +224,11 @@ class Docker:
     def get_volumes(self):
         return self.perform_request('/volumes')
 
-    def inspect_volume(self, network_id):
-        return self.perform_request(f'/volumes/{network_id}')
+    def inspect_volume(self, volume_id):
+        return self.perform_request(f'/volumes/{volume_id}')
+    
+    def delete_volume(self, volume_id):
+        return self.perform_request(f'/volumes/{volume_id}', method='DELETE')
 
     # NETWORK
 
@@ -235,6 +238,6 @@ class Docker:
     def inspect_network(self, network_id):
         return self.perform_request(f'/networks/{network_id}')
 
-    def delete_network(self, image_id):
-        return self.perform_request(f'/networks/{image_id}', method='DELETE')
+    def delete_network(self, network_id):
+        return self.perform_request(f'/networks/{network_id}', method='DELETE')
 

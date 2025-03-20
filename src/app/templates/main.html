@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/modal.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/icons.css') }}">
 
-    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/modal.js') }}" defer></script>
     {% block custom_header %}
     {% endblock %}
 </head>

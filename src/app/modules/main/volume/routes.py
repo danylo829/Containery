@@ -7,9 +7,13 @@ from app.utils.common import format_docker_timestamp
 from app.decorators import permission
 from app.models import Permissions
 
-volume = Blueprint('volume', __name__, template_folder='templates')
+volume = Blueprint('volume', __name__, template_folder='templates', static_folder='static')
 
 docker = Docker()
+
+from .api.routes import api
+
+volume.register_blueprint(api, url_prefix='/api')
 
 @volume.context_processor
 def inject_variables():

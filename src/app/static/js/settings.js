@@ -1,52 +1,17 @@
 function resetSetting(fieldName) {
-    const csrfToken = document.querySelector('input[name="csrf_token"]').value;
-    const spinner = document.querySelector('.loading-spinner');
     spinner.classList.remove('hidden');
     actions.classList.add('disabled');
 
-    const formData = new FormData();
-    formData.append('csrf_token', csrfToken);
-    formData.append('field_name', fieldName);
-
     fetch(`/settings/reset`, {
         method: 'POST',
-        body: formData
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({
+            field_name: fieldName
+        })
     })
-    .then(response => handleResetResponse(response))
-    .catch(error => handleResetError(error))
-    .finally(() => {
-        spinner.classList.add('hidden');
-        setTimeout(function() {
-            spinner.style.animation = 'none';
-        }, 300);
-    });
-}
-
-function handleResetResponse(response) {
-    if (response.ok) {
-        localStorage.setItem('flash_message', 'Setting reset successfully');
-        localStorage.setItem('flash_type', 'success');
-        window.location.reload();
-    } else if (response.status === 403) {
-        localStorage.setItem('flash_message', 'Permission denied');
-        localStorage.setItem('flash_type', 'error');
-        window.location.reload();
-    } else {
-        response.json().then(data => {
-            const errorMessage = data.error || 'Failed to reset setting';
-            localStorage.setItem('flash_message', errorMessage);
-            localStorage.setItem('flash_type', 'error');
-            window.location.reload();
-        }).catch(() => {
-            localStorage.setItem('flash_message', 'An unknown error occurred.');
-            localStorage.setItem('flash_type', 'error');
-            window.location.reload();
-        });
-    }
-}
-
-function handleResetError(error) {
-    localStorage.setItem('flash_message', `An error occurred: ${error}`);
-    localStorage.setItem('flash_type', 'error');
-    window.location.reload();
+    .then(response => handleResponse(response))
+    .catch(error => handleError(error))
 }

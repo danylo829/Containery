@@ -61,7 +61,7 @@ def get_list():
 @settings.route('/reset', methods=['POST'])
 @permission(Permissions.GLOBAL_SETTINGS_EDIT)
 def reset_setting():
-    field_name = request.form.get('field_name')
+    field_name = request.json.get('field_name')
     
     if not field_name:
         return jsonify({'error': "Field name is required."}), 400

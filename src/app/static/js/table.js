@@ -49,54 +49,6 @@ function search(searchValue, currentTable) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const searchField = document.getElementById('search');
-
-    if (searchField != null) {
-        let currentTable = null;
-
-        for (const tableId in tables) {
-            const tableElement = document.getElementById(tableId);
-            if (tableElement !== null) {
-                currentTable = tableId;
-                break;
-            }
-        }
-
-        if (currentTable !== null) {
-            const lastSearchValue = localStorage.getItem(`lastSearchValue_${currentTable}`);
-            if (lastSearchValue) {
-                searchField.value = lastSearchValue;
-                setTimeout(() => {
-                    search(lastSearchValue, currentTable);
-                }, 300);
-            }
-        }
-        
-        searchField.addEventListener('input', function() {
-            const searchValue = this.value.toLowerCase();
-            
-            search(searchValue, currentTable);
-
-            localStorage.setItem(`lastSearchValue_${currentTable}`, searchValue);
-        });
-    }
-
-    for (const tableId in tables) {
-        const tableElement = document.getElementById(tableId);
-        if (tableElement !== null) {
-            sortTable(tableId);
-        }
-    }
-    
-    const resresh_btn = document.getElementById('refresh-page-btn');
-    if (resresh_btn != null) {
-        resresh_btn.addEventListener('click', function() {
-            location.reload();
-        });
-    }
-});
-
 function sortTable(tableId) {
     const table = document.getElementById(tableId);
     const headers = table.querySelectorAll('th[data-sort]');
@@ -140,5 +92,51 @@ function sortTable(tableId) {
             // Re-append rows to the tbody in the new order
             rows.forEach(row => tbody.appendChild(row));
         });
+    });
+}
+
+const searchField = document.getElementById('search');
+
+if (searchField != null) {
+    let currentTable = null;
+
+    for (const tableId in tables) {
+        const tableElement = document.getElementById(tableId);
+        if (tableElement !== null) {
+            currentTable = tableId;
+            break;
+        }
+    }
+
+    if (currentTable !== null) {
+        const lastSearchValue = localStorage.getItem(`lastSearchValue_${currentTable}`);
+        if (lastSearchValue) {
+            searchField.value = lastSearchValue;
+            setTimeout(() => {
+                search(lastSearchValue, currentTable);
+            }, 300);
+        }
+    }
+    
+    searchField.addEventListener('input', function() {
+        const searchValue = this.value.toLowerCase();
+        
+        search(searchValue, currentTable);
+
+        localStorage.setItem(`lastSearchValue_${currentTable}`, searchValue);
+    });
+}
+
+for (const tableId in tables) {
+    const tableElement = document.getElementById(tableId);
+    if (tableElement !== null) {
+        sortTable(tableId);
+    }
+}
+
+const resresh_btn = document.getElementById('refresh-page-btn');
+if (resresh_btn != null) {
+    resresh_btn.addEventListener('click', function() {
+        location.reload();
     });
 }

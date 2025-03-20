@@ -35,14 +35,12 @@ function openModal(url, method, question, returnUrl) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    const confirmationModal = document.getElementById('confirmationModal');
-    const cancelBtn = document.getElementById('cancelBtn');
+const confirmationModal = document.getElementById('confirmationModal');
+const cancelBtn = document.getElementById('cancelBtn');
 
-    cancelBtn.addEventListener('click', closeModal);
-    window.addEventListener('click', function (event) {
-        if (event.target === confirmationModal) {
-            closeModal();
-        }
-    });
+cancelBtn.addEventListener('click', closeModal);
+window.addEventListener('click', function (event) {
+    if (event.target === confirmationModal) {
+        closeModal();
+    }
 });

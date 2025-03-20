@@ -13,6 +13,10 @@ network = Blueprint('network', __name__, template_folder='templates', static_fol
 
 docker = Docker()
 
+from .api.routes import api
+
+network.register_blueprint(api, url_prefix='/api')
+
 def network_info(id):
     response, status_code = docker.inspect_network(id)
     network_details = []

@@ -1,9 +1,9 @@
 {% extends "main.html" %}
 
 {% block custom_header %}
-    <link rel="stylesheet" href="https://unpkg.com/xterm/css/xterm.css" />
-    <script src="https://unpkg.com/xterm/lib/xterm.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/xterm/xterm.css') }}"/>
+    <script src="{{ url_for('static', filename='vendor/xterm/xterm.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='vendor/socket.io/socket.io.min.js') }}"></script>
     <script src="{{ url_for('main.container.static', filename='js/terminal.js') }}" defer></script>
 {% endblock %}
 
