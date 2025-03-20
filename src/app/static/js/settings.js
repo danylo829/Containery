@@ -15,6 +15,9 @@ function resetSetting(fieldName) {
     .catch(error => handleResetError(error))
     .finally(() => {
         spinner.classList.add('hidden');
+        setTimeout(function() {
+            spinner.style.animation = 'none';
+        }, 300);
     });
 }
 
@@ -34,7 +37,6 @@ function handleResetResponse(response) {
             localStorage.setItem('flash_type', 'error');
             window.location.reload();
         }).catch(() => {
-            // Fallback in case parsing fails
             localStorage.setItem('flash_message', 'An unknown error occurred.');
             localStorage.setItem('flash_type', 'error');
             window.location.reload();

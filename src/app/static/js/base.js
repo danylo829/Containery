@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
     spinner = document.querySelector('.loading-spinner');
     setTimeout(function() {
         spinner.classList.add('hidden');
+        setTimeout(function() {
+            spinner.style.animation = 'none';
+        }, 300);
     }, 300);
 
     document.querySelector('#user-icon').addEventListener('click', function() {
