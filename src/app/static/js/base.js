@@ -1,3 +1,29 @@
+function handleResponse(response, returnUrl) {
+    if (response.ok) {
+        localStorage.setItem('flash_message',  'Action performed successfully!');
+        localStorage.setItem('flash_type', 'success');
+        if (returnUrl) {
+            window.location.href = returnUrl;
+            return;
+        }
+    } else if (response.status === 403) {
+        localStorage.setItem('flash_message', 'You do not have permission to perform this action.');
+        localStorage.setItem('flash_type', 'error');
+    } else {
+        console.log(response)
+        localStorage.setItem('flash_message', 'Failed to perform action.');
+        localStorage.setItem('flash_type', 'error');
+    }
+    
+    window.location.reload();
+}
+
+function handleError(error) {
+    localStorage.setItem('flash_message', `An error occurred: ${error}`);
+    localStorage.setItem('flash_type', 'error');
+    window.location.reload();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -35,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const flashType = localStorage.getItem('flash_type');
 
     if (flashMessage) {
-        // Create a flash message container if it doesn't exist
         let flashContainer = document.querySelector('.flash-messages');
         if (!flashContainer) {
             flashContainer = document.createElement('div');
@@ -43,15 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.appendChild(flashContainer);
         }
 
-        // Create the flash message element
         const flashElement = document.createElement('div');
         flashElement.className = `flash-message ${flashType}`;
         flashElement.textContent = flashMessage;
 
-        // Append the flash message to the container
         flashContainer.appendChild(flashElement);
 
-        // Clear the flash message from localStorage
         localStorage.removeItem('flash_message');
         localStorage.removeItem('flash_type');
     }

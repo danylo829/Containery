@@ -8,6 +8,10 @@ from app.utils.common import format_docker_timestamp, format_unix_timestamp
 
 image = Blueprint('image', __name__, template_folder='templates', static_folder='static')
 
+from .api.routes import api
+
+image.register_blueprint(api, url_prefix='/api')
+
 docker = Docker()
 
 def image_info(id):
@@ -109,9 +113,3 @@ def info(id):
     page_title = 'Image Details'
     
     return render_template('image/info.html', image=image, breadcrumbs=breadcrumbs, page_title=page_title)
-
-@image.route('/<id>/delete', methods=['DELETE'])
-@permission(Permissions.IMAGE_INFO)
-def delete(id):
-    response, status_code = docker.delete_image(id)
-    return str(response), status_code

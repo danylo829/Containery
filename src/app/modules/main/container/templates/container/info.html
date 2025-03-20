@@ -2,7 +2,7 @@
 
 {% block custom_header %}
     <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
-    <script src="{{ url_for('main.static', filename='js/actions.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/container/actions.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -27,6 +27,10 @@
                         <a class="restart-btn" data-id="{{ container.general_info.id }}">
                             {% include 'icons/restart.svg' %}  
                         </a>
+                        <!-- Delete/Kill Container -->
+                        <a class="delete-btn" data-id="{{ container.general_info.id }}">
+                            {% include 'icons/delete.svg' %}
+                        </a>
                     </div>
                     <div>
                         <!-- Terminal -->
@@ -40,10 +44,6 @@
                         <!-- Logs -->
                         <a class="logs-btn" href="{{ url_for('main.container.logs', id=container.general_info.id) }}">
                             {% include 'icons/logs.svg' %}
-                        </a>
-                        <!-- Delete/Kill Container -->
-                        <a class="delete-btn" data-id="{{ container.general_info.id }}">
-                            {% include 'icons/delete.svg' %}
                         </a>
                     </div>
                 </div>

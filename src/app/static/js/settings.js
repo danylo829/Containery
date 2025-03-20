@@ -2,6 +2,7 @@ function resetSetting(fieldName) {
     const csrfToken = document.querySelector('input[name="csrf_token"]').value;
     const spinner = document.querySelector('.loading-spinner');
     spinner.classList.remove('hidden');
+            actions.classList.add('disabled');
 
     const formData = new FormData();
     formData.append('csrf_token', csrfToken);

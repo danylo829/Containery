@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/icons.css') }}">
 
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
     {% block custom_header %}
     {% endblock %}
 </head>
@@ -105,13 +106,12 @@
             </div>
         </div>
     </div>
-    <!-- Confirmation Modal -->
     <div id="confirmationModal" class="modal">
         <div class="modal-content">
             <p id="modalQuestion">Are you sure you want to perform this action?</p>
             <div class="button-group">
                 <button id="cancelBtn" class="btn cancel">Cancel</button>
-                <button id="confirmDeleteBtn" class="btn delete">Confirm</button>
+                <button id="confirmBtn" class="btn delete">Confirm</button>
             </div>
         </div>
     </div>

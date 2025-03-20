@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     confirmDeleteBtn.addEventListener('click', function () {
         const spinner = document.querySelector('.loading-spinner');
         spinner.classList.remove('hidden');
+            actions.classList.add('disabled');
 
         fetch(`/network/${networkId}/delete`, {
             method: 'DELETE',
