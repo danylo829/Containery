@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, url_for, jsonify, flash, request
-from flask_login import login_required
+from flask import Blueprint, render_template, url_for, request
 
 from app.models import Permissions
 from app.decorators import permission

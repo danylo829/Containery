@@ -1,8 +1,5 @@
-from flask import Blueprint, render_template, url_for, jsonify, flash, request, current_app
-from flask_socketio import emit, join_room, leave_room
-from flask_login import login_required
-
-import json
+from flask import Blueprint, render_template, url_for, request
+from flask_socketio import emit
 
 from app.utils.docker import Docker
 from app.utils.common import format_docker_timestamp

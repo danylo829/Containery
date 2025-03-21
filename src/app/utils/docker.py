@@ -1,6 +1,5 @@
 import json
 import socket
-import select
 from threading import Thread
 import requests_unixsocket
 from app.models import GlobalSettings
