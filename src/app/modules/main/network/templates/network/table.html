@@ -1,16 +1,19 @@
 {% extends "main.html" %}
 
 {% block custom_header %}
-    <script src="{{ url_for('static', filename='js/table.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
 <div class="content-box">
     <div class="search-box">
         <input type="text" id="search" placeholder="Search">
-        <a id="refresh-page-btn">
-            {% include 'icons/restart.svg' %}  
-        </a>
+        <div class="actions">
+            <div>
+                <a id="refresh-page-btn">
+                    {% include 'icons/restart.svg' %}  
+                </a>
+            </div>
+        </div>
     </div>
     <div class="table-box">
         <table id="network-table">

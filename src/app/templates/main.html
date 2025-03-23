@@ -6,13 +6,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Containery</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='icons/icon.svg') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/common.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/colors.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/modal.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/icons.css') }}">
-    <script src="{{ url_for('static', filename='js/base.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/modal.js') }}" defer></script>
+    {% assets "app_css" %}
+    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+    {% endassets %}
+    {% assets "app_js" %}
+    <script src="{{ ASSET_URL }}" defer></script>
+    {% endassets %}
     {% block custom_header %}
     {% endblock %}
 </head>

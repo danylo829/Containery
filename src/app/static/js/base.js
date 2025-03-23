@@ -75,3 +75,10 @@ if (flashMessage) {
     localStorage.removeItem('flash_message');
     localStorage.removeItem('flash_type');
 }
+
+const resresh_btn = document.getElementById('refresh-page-btn');
+if (resresh_btn != null) {
+    resresh_btn.addEventListener('click', function() {
+        location.reload();
+    });
+}

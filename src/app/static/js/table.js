@@ -133,10 +133,3 @@ for (const tableId in tables) {
         sortTable(tableId);
     }
 }
-
-const resresh_btn = document.getElementById('refresh-page-btn');
-if (resresh_btn != null) {
-    resresh_btn.addEventListener('click', function() {
-        location.reload();
-    });
-}

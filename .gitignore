@@ -1,2 +1,4 @@
 .env
 build
+dist
+.webassets-cache

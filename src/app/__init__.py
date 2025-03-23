@@ -2,14 +2,16 @@ from flask import Flask
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
 from flask_socketio import SocketIO
-from .models import db, User, Permissions, PersonalSettings, GlobalSettings
+from .models import db, Permissions, User, PersonalSettings, GlobalSettings
 from flask_migrate import Migrate
+from flask_assets import Environment, Bundle
 
 import app.utils.common as utils
 from werkzeug.debug import DebuggedApplication
 
 socketio = SocketIO()
 migrate = Migrate()
+assets = Environment()
 
 def create_app():
     app = Flask(__name__)
@@ -19,6 +21,8 @@ def create_app():
 
     csrf = CSRFProtect()
     csrf.init_app(app)
+
+    assets.init_app(app)
 
     login_manager = LoginManager()
     login_manager.init_app(app)
@@ -34,6 +38,27 @@ def create_app():
 
     db.init_app(app)
     migrate.init_app(app, db)
+
+    app_css = Bundle(
+        "styles/common.css",
+        "styles/colors.css",
+        "styles/base.css",
+        "styles/modal.css",
+        "styles/icons.css",
+        filters="rcssmin",
+        output="dist/css/app.%(version)s.css"
+    )
+
+    app_js = Bundle(
+        "js/base.js",
+        "js/modal.js",
+        "js/table.js",
+        filters='rjsmin',
+        output="dist/js/app.%(version)s.js",
+    )
+
+    assets.register("app_css", app_css)
+    assets.register("app_js", app_js)
 
     from .index import index
     from .modules.main import main

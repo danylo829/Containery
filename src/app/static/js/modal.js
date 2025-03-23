@@ -3,7 +3,6 @@ function closeModal() {
 }
 
 function openModal(url, method, question, returnUrl) {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const confirmationModal = document.getElementById('confirmationModal');
     const confirmBtn = document.getElementById('confirmBtn');
     const modalQuestion = document.getElementById('modalQuestion');

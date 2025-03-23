@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Containery</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='icons/icon.svg') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/common.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/colors/system.css') }}">
+    {% assets "app_css" %}
+    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+    {% endassets %}
     <link rel="stylesheet" href="{{ url_for('auth.static', filename='styles/auth.css') }}">
 </head>
-<body>
+<body class="system">
     <header>
         {% block header %}
             <h1>Containery</h1>
