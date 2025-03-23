@@ -5,7 +5,6 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
     align-items: center;
     height: 100vh;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -14,22 +13,18 @@ body {
 header {
     background-color: var(--accent-color);
     color: white;
-    width: 20%;
     height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    top: 0;
-    left: 0;
     padding-inline: 5vw;
 }
 
 main {
-    margin-left: 20%;
+    margin-left: 25%;
     padding: 20px;
     box-sizing: border-box;
-    width: 80%;
+    max-width: 400px;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
@@ -38,26 +33,20 @@ h2 {
     text-align: center;
 }
 
-.auth-container, .flash-danger, .flash-message {
+.auth-container, .flash {
     background: var(--bg-color-box);
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: 2px 0 8px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin-top: 5vw;
-    width: 100%;
-    max-width: 400px;
-    box-sizing: border-box;
-    margin-top: 20px;
+    padding: 1rem;
 }
 
-.flash-message {
-    background-color: var(--accent-color);
+.flash {
     text-align: center;
+    margin-top: 1rem;
 }
 
-.flash-danger {
-    background-color: rgb(255, 164, 164);
-    text-align: center;
+.flash.error {
+    background-color: var(--error-bg);
 }
 
 .auth-container > form > input {
@@ -113,7 +102,9 @@ input[type="submit"]:hover {
         width: 100vw;
         position: fixed;
         height: unset;
-        align-items: unset;
+        top: 0;
+        left: 0;
+        padding-inline: unset;
     }
     main {
         margin: auto;
