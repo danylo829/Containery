@@ -372,8 +372,6 @@ td {
 
 .table-box {
     max-height: calc(100vh - 200px);
-    overflow-y: scroll;
-    padding-right: 1rem;
 }
 
 .table-box th, .table-box td {

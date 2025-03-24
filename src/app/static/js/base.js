@@ -1,10 +1,14 @@
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const spinner = document.querySelector('.loading-spinner');
 const actions = document.querySelector('.actions');
+const tableBoxes = document.querySelectorAll('.table-box');
 
 setTimeout(function() {
     spinner.classList.add('hidden');
 }, 300);
+
+checkScrollbar();
+window.addEventListener('resize', checkScrollbar);
 
 function handleResponse(response, returnUrl) {
     if (response.ok) {
@@ -81,4 +85,14 @@ if (resresh_btn != null) {
     resresh_btn.addEventListener('click', function() {
         location.reload();
     });
+}
+
+function checkScrollbar() {
+  tableBoxes.forEach(tableBox => {
+    if (tableBox.scrollHeight > tableBox.clientHeight) {
+      tableBox.style.paddingRight = '1rem';
+    } else {
+      tableBox.style.paddingRight = '0';
+    }
+  });
 }
