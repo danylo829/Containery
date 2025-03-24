@@ -53,6 +53,7 @@ def create_app():
         "js/base.js",
         "js/modal.js",
         "js/table.js",
+        "js/scrollbar.js",
         filters='rjsmin',
         output="dist/js/app.%(version)s.js",
     )

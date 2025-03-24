@@ -371,7 +371,8 @@ td {
 }
 
 .table-box {
-    max-height: calc(100vh - 200px);
+    max-height: calc(100vh - 200px);;
+    overflow-y: auto;
 }
 
 .table-box th, .table-box td {
