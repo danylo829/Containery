@@ -7,17 +7,21 @@ from flask_migrate import Migrate
 from flask_assets import Environment, Bundle
 
 import app.utils.common as utils
+from app.utils.docker import Docker
 from werkzeug.debug import DebuggedApplication
 
 socketio = SocketIO()
 migrate = Migrate()
 assets = Environment()
+docker = Docker()
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object('app.config.Config')
 
     socketio.init_app(app)
+
+    docker.init_app(app)
 
     csrf = CSRFProtect()
     csrf.init_app(app)

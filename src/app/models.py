@@ -296,9 +296,7 @@ class GlobalSettings(db.Model):
     value = db.Column(db.String(150), nullable=False)
 
     defaults = {
-        'docker_socket': '/var/run/docker.sock',
         'dashboard_refresh_interval': 5,
-        'log_retention_days': 30,
         'session_timeout': 1800,
         'password_min_length': 8,
     }

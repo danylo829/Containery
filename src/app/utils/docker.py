@@ -2,17 +2,18 @@ import json
 import socket
 from threading import Thread
 import requests_unixsocket
-from app.models import GlobalSettings
 
 class Docker:
     def __init__(self):
         self.exec_sessions = {}
 
-    # GENERAL
+    def init_app(self, app):
+        self.socket_path = app.config.get("DOCKER_SOCKET_PATH")
+        self.encoded_socket_path = app.config.get("DOCKER_SOCKET_PATH").replace('/', '%2F')
 
+    # GENERAL
     def perform_request(self, path, method='GET', payload=None):
-        encoded_socket_path = GlobalSettings.get_setting("docker_socket").replace('/', '%2F')
-        url = f'http+unix://{encoded_socket_path}{path}'
+        url = f'http+unix://{self.encoded_socket_path}{path}'
         session = requests_unixsocket.Session()
         try:
             if method == 'GET':
@@ -37,11 +38,11 @@ class Docker:
             return exec_instance_json.get("Id")
         return None
 
-    def start_exec_session(self, exec_id, sid, socketio, docker_socket, console_size=None):
+    def start_exec_session(self, exec_id, sid, socketio, console_size=None):
         """Start an exec session and handle IO"""
         try:
             sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            sock.connect(docker_socket)
+            sock.connect(self.socket_path)
             
             start_payload = {
                 "Detach": False,

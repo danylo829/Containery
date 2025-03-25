@@ -15,21 +15,6 @@
         <h2>General</h2>
         <table>
             <tr>
-                <td class="setting-label">{{ form.docker_socket.label }}</td>
-                <td>
-                    <div class="cell-wrapper">
-                        {{ form.docker_socket(class="setting-input") }}
-                        <div class="actions">
-                            <div>
-                                <a class="settings-revert-icon" onclick="resetSetting('docker_socket')">
-                                    {% include 'icons/revert.svg' %}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
                 <td class="setting-label">{{ form.dashboard_refresh_interval.label }}</td>
                 <td>
                     <div class="cell-wrapper">
@@ -37,21 +22,6 @@
                         <div class="actions">
                             <div>
                                 <a class="settings-revert-icon" onclick="resetSetting('dashboard_refresh_interval')">
-                                    {% include 'icons/revert.svg' %}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="setting-label">{{ form.log_retention_days.label }}</td>
-                <td>
-                    <div class="cell-wrapper">
-                        {{ form.log_retention_days(class="setting-input") }}
-                        <div class="actions">
-                            <div>
-                                <a class="settings-revert-icon" onclick="resetSetting('log_retention_days')">
                                     {% include 'icons/revert.svg' %}
                                 </a>
                             </div>

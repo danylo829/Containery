@@ -1,12 +1,10 @@
-from flask import Blueprint, request, redirect, flash, url_for
+from flask import Blueprint, current_app
 
-from app.utils.docker import Docker
+from app import docker
 from app.models import Permissions
 from app.decorators import permission
 
 api = Blueprint('container', __name__)
-
-docker = Docker()
 
 @api.route('/<id>/restart', methods=['POST'])
 @permission(Permissions.CONTAINER_RESTART)

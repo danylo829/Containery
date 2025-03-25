@@ -1,13 +1,11 @@
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, render_template, jsonify, current_app
 from flask_login import login_required
 
-from app.utils.docker import Docker
+from app import docker
 
 import psutil
 
 dashboard = Blueprint('dashboard', __name__, template_folder='templates', static_folder='static')
-
-docker = Docker()
 
 @dashboard.before_request
 @login_required

@@ -6,4 +6,4 @@ class Config:
     SQLALCHEMY_DATABASE_URI = getenv('SQLALCHEMY_DATABASE_URI', 'sqlite:////app_data/containery.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = getenv('SQLALCHEMY_TRACK_MODIFICATIONS', 'False') == 'True'
     DEBUG = getenv('DEBUG', 'False') == 'True'
-    STAGE= getenv('STAGE')
+    DOCKER_SOCKET_PATH = getenv('DOCKER_SOCKET_PATH', '/var/run/docker.sock')

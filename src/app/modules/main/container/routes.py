@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, url_for, request
+from flask import Blueprint, render_template, url_for, request, current_app
 from flask_socketio import emit
 
-from app.utils.docker import Docker
+from app import docker
 from app.utils.common import format_docker_timestamp
 from app.models import GlobalSettings
 
@@ -15,8 +15,6 @@ container = Blueprint('container', __name__, template_folder='templates', static
 from .api.routes import api
 
 container.register_blueprint(api, url_prefix='/api')
-
-docker = Docker()
 
 def container_info (id):
     response, status_code = docker.inspect_container(id)
@@ -213,12 +211,12 @@ def handle_start_session(data):
 
     emit('exec_id', {'execId': exec_id}, to=sid)
 
-    socketio.start_background_task(target=docker.start_exec_session, 
-                                    exec_id=exec_id,
-                                    sid=sid,
-                                    socketio=socketio,
-                                    docker_socket=GlobalSettings.get_setting("docker_socket"),
-                                    console_size=console_size)
+    # socketio.start_background_task(target=docker.start_exec_session, 
+    #                                 exec_id=exec_id,
+    #                                 sid=sid,
+    #                                 socketio=socketio,
+    #                                 console_size=console_size)
+    docker.start_exec_session(exec_id, sid, socketio, console_size)
 
 @socketio.on('input')
 def handle_command(data):

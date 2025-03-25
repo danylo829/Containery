@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, url_for, request
+from flask import Blueprint, render_template, url_for, request, current_app
 
-from app.utils.docker import Docker
+from app import docker
 from app.utils.common import format_docker_timestamp
 
 from app.decorators import permission
@@ -9,8 +9,6 @@ from app.models import Permissions
 import json
 
 network = Blueprint('network', __name__, template_folder='templates', static_folder='static')
-
-docker = Docker()
 
 from .api.routes import api
 
