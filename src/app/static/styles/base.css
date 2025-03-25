@@ -142,8 +142,7 @@ ul {
 .content-card {
     background-color: var(--bg-color-box);
     border-radius: 10px;
-    padding-inline: 2rem;
-    padding-bottom: 1rem;
+    padding: 1rem;
     box-shadow: 0 0 10px 6px rgba(0, 0, 0, 0.1);
     flex: 1 1 calc(33.333% - 2rem);
     min-width: 300px;
@@ -238,11 +237,6 @@ input[type="color"]::-webkit-color-swatch {
     justify-content: center;
     border-radius: 10px;
     margin-bottom: 10px;
-}
-
-.content-line {
-    width: -webkit-fill-available;
-    flex: 1;
 }
 
 .content-box h2 {
@@ -504,23 +498,14 @@ a:hover {
     color: var(--text-color);
     border: 1px solid grey;
     border-radius: 10px;
-    padding: 1.5rem;
+    padding: 2rem;
     font-size: 1.2rem;
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    gap: 1rem;
+    flex: 1 1;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    text-decoration: none;
-    cursor: pointer;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-}
-
-.dashboard-button span {
-    margin-top: 10px;
-    color: var(--text-color) !important;
 }
 
 .dashboard-button:hover {
@@ -533,11 +518,6 @@ a:hover {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    padding-top: 1rem;
-}
-
-.button-container {
-    flex: 1 1 calc(25% - 1rem);
 }
 
 .loading-spinner {

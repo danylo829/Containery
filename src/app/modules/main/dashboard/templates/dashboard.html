@@ -56,30 +56,22 @@
 
 <div class="content-card dashboard">
     <div class="buttons">
-        <div class="button-container">
-            <a href="{{ url_for('main.container.get_list') }}" class="dashboard-button">
-                {% include 'icons/containers.svg' %}  
-                <span>Containers</span>
-            </a>
-        </div>
-        <div class="button-container">
-            <a href="{{ url_for('main.image.get_list') }}"" class="dashboard-button">
-                {% include 'icons/images.svg' %}  
-                <span>Images</span>
-            </a>
-        </div>
-        <div class="button-container">
-            <a href="{{ url_for('main.volume.get_list') }}" class="dashboard-button">
-                {% include 'icons/volumes.svg' %}  
-                <span>Volumes</span>
-            </a>
-        </div>
-        <div class="button-container">
-            <a href="{{ url_for('main.network.get_list') }}" class="dashboard-button">
-                {% include 'icons/networks.svg' %}  
-                <span>Networks</span>
-            </a>
-        </div>
+        <a href="{{ url_for('main.container.get_list') }}" class="dashboard-button">
+            {% include 'icons/containers.svg' %}  
+            <span>Containers</span>
+        </a>
+        <a href="{{ url_for('main.image.get_list') }}"" class="dashboard-button">
+            {% include 'icons/images.svg' %}  
+            <span>Images</span>
+        </a>
+        <a href="{{ url_for('main.volume.get_list') }}" class="dashboard-button">
+            {% include 'icons/volumes.svg' %}  
+            <span>Volumes</span>
+        </a>
+        <a href="{{ url_for('main.network.get_list') }}" class="dashboard-button">
+            {% include 'icons/networks.svg' %}  
+            <span>Networks</span>
+        </a>
     </div>
 </div>
 

@@ -39,83 +39,83 @@
 }
 
 /* Containers */
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #containers-icon rect:nth-child(1) {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #containers-icon rect:nth-child(1) {
     transform: translate(-1px, -1px);
 }
 
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #containers-icon rect:nth-child(2) {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #containers-icon rect:nth-child(2) {
     transform: translate(1px, -1px);
 }
 
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #containers-icon rect:nth-child(3) {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #containers-icon rect:nth-child(3) {
     transform: translate(-1px, 1px);
 }
 
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #containers-icon rect:nth-child(4) {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #containers-icon rect:nth-child(4) {
     transform: translate(1px, 1px);
 }
 
 /* Images */
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #images-icon #sun {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #images-icon #sun {
     cx: 16;
     cy: 9;
 }
 
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #images-icon #mountains {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #images-icon #mountains {
     transform: translateY(2px);
 }
 
 /* Volumes */
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #volume-icon rect:nth-child(1) {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #volume-icon rect:nth-child(1) {
     transform: translateY(-1px);
 }
 
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #volume-icon rect:nth-child(2) {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #volume-icon rect:nth-child(2) {
     height: 6px;
     transform: translateY(-1px);
 }
 
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #volume-icon rect:nth-child(3) {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #volume-icon rect:nth-child(3) {
     transform: translateY(1px);
 }
 
 /* Networks */
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #networks-icon path:nth-child(1) {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #networks-icon path:nth-child(1) {
     transform: translateY(-2px);
 }
 
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #networks-icon path:nth-child(2) {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #networks-icon path:nth-child(2) {
     transform: translateY(-1px);
 }
 
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #networks-icon path:nth-child(3) {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #networks-icon path:nth-child(3) {
     transform: translateY(-0.5px);
 }
 
 /* Settings */
 
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #settings-icon path {
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #settings-icon path {
     transform: rotate(45deg);
 }
 
 /* Users */
 
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #users-icon #user-1,
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #users-icon #user-1,
 .actions div a:hover #user-add-icon #user-1 {
     transform: translateX(-1px);
 }
 
-:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover) #users-icon #user-2,
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #users-icon #user-2,
 .actions div a:hover #user-add-icon #plus-sign {
     transform: translateX(1px);
 }
 
 .actions a:not(:hover) svg *,
 #logout-icon:not(:hover) #arrow,
-:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover)) #settings-icon *,
-:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover)) #networks-icon *,
-:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover)) #containers-icon *,
-:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .button-container:hover)) #users-icon * {
+:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover)) #settings-icon *,
+:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover)) #networks-icon *,
+:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover)) #containers-icon *,
+:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover)) #users-icon * {
     transition: transform 0.3s cubic-bezier(0.33, 2.2, 0.6, 1);
 }
 
