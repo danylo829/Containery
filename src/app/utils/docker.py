@@ -67,58 +67,54 @@ class Docker:
                 'exec_id': exec_id
             }
 
-            # Start reading output in a separate thread
-            def read_output():
-                try:
-                    # Read the HTTP response headers
-                    response_data = b""
-                    while b"\r\n\r\n" not in response_data:
-                        chunk = sock.recv(1024)
-                        if not chunk:
-                            break
-                        response_data += chunk
+            try:
+                # Read the HTTP response headers
+                response_data = b""
+                while b"\r\n\r\n" not in response_data:
+                    chunk = sock.recv(1024)
+                    if not chunk:
+                        break
+                    response_data += chunk
 
-                    # Split headers and start of body
-                    headers, body = response_data.split(b"\r\n\r\n", 1)
+                # Split headers and start of body
+                headers, body = response_data.split(b"\r\n\r\n", 1)
+                
+                # If we have any body data from the split, send it
+                if body:
+                    socketio.emit('output', {'data': body.decode('utf-8', errors='replace')}, to=sid)
+
+                # Continue reading the stream
+                buffer = b""
+                while True:
+                    if sid not in self.exec_sessions:
+                        break
+
+                    chunk = sock.recv(1024)
+                    if not chunk:
+                        break
+
+                    buffer += chunk
                     
-                    # If we have any body data from the split, send it
-                    if body:
-                        socketio.emit('output', {'data': body.decode('utf-8', errors='replace')}, to=sid)
-
-                    # Continue reading the stream
-                    buffer = b""
-                    while True:
-                        if sid not in self.exec_sessions:
-                            break
-
-                        chunk = sock.recv(1024)
-                        if not chunk:
-                            break
-
-                        buffer += chunk
-                        
-                        # Try to process as much of the buffer as possible
-                        while buffer:
-                            try:
-                                # Try to decode the buffer
-                                data = buffer.decode('utf-8', errors='replace')
+                    # Try to process as much of the buffer as possible
+                    while buffer:
+                        try:
+                            # Try to decode the buffer
+                            data = buffer.decode('utf-8', errors='replace')
+                            socketio.emit('output', {'data': data}, to=sid)
+                            buffer = b""
+                        except UnicodeDecodeError:
+                            # If we can't decode, we might have a partial character
+                            # Keep the last byte in the buffer and try again
+                            buffer = buffer[-1:]
+                            data = buffer[:-1].decode('utf-8', errors='replace')
+                            if data:
                                 socketio.emit('output', {'data': data}, to=sid)
-                                buffer = b""
-                            except UnicodeDecodeError:
-                                # If we can't decode, we might have a partial character
-                                # Keep the last byte in the buffer and try again
-                                buffer = buffer[-1:]
-                                data = buffer[:-1].decode('utf-8', errors='replace')
-                                if data:
-                                    socketio.emit('output', {'data': data}, to=sid)
 
-                except Exception as e:
-                    socketio.emit('output', {'data': f"Error: {str(e)}"}, to=sid)
-                finally:
-                    self.cleanup_session(sid)
-
-            Thread(target=read_output, daemon=True).start()
-
+            except Exception as e:
+                socketio.emit('output', {'data': f"Error: {str(e)}"}, to=sid)
+            finally:
+                self.cleanup_session(sid)
+            
         except Exception as e:
             socketio.emit('output', {'data': f"Error starting exec session: {str(e)}"}, to=sid)
             self.cleanup_session(sid)

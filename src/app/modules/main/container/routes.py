@@ -211,13 +211,11 @@ def handle_start_session(data):
 
     emit('exec_id', {'execId': exec_id}, to=sid)
 
-    # socketio.start_background_task(target=docker.start_exec_session, 
-    #                                 exec_id=exec_id,
-    #                                 sid=sid,
-    #                                 socketio=socketio,
-    #                                 console_size=console_size)
-    docker.start_exec_session(exec_id, sid, socketio, console_size)
-
+    socketio.start_background_task(target=docker.start_exec_session, 
+                                    exec_id=exec_id,
+                                    sid=sid,
+                                    socketio=socketio,
+                                    console_size=console_size)
 @socketio.on('input')
 def handle_command(data):
     command = data['command']
