@@ -73,7 +73,7 @@ body.dark_mixed {
     --accent-color: #5cabff;
     --accent-color-darken: #bfd9ff;
 
-    --info-text: #121212;
-    --success-text: #121212;
-    --error-text: #121212;
+    --info-text: #ffffff;
+    --success-text: #ffffff;
+    --error-text: #ffffff;
 }
