@@ -539,7 +539,6 @@ a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1rem;
     overflow-wrap: anywhere;
 }
 
@@ -635,11 +634,6 @@ a#logout:hover {
 .flash-message.success {
     background-color: var(--success-bg);
     color: var(--success-text);
-}
-
-.flash-message.warning {
-    background-color: var(--warning-bg);
-    color: var(--warning-text);
 }
 
 .flash-message.error {
