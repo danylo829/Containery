@@ -1,3 +1,5 @@
-from app import create_app
+from app import ApplicationFactory
 
-app = create_app()
+app_factory = ApplicationFactory()
+
+app = app_factory.create_app()

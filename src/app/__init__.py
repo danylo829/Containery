@@ -1,83 +1,117 @@
+import os
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
 from flask_socketio import SocketIO
-from .models import db, Permissions, User, PersonalSettings, GlobalSettings
 from flask_migrate import Migrate
 from flask_assets import Environment, Bundle
-
-import app.utils.common as utils
-from app.utils.docker import Docker
 from werkzeug.debug import DebuggedApplication
 
+import app.utils.common as utils
+
+from app.models import db, Permissions, User, PersonalSettings, GlobalSettings
+from app.utils.docker import Docker
+
+csrf = CSRFProtect()
+login_manager = LoginManager()
 socketio = SocketIO()
 migrate = Migrate()
 assets = Environment()
 docker = Docker()
 
-def create_app():
-    app = Flask(__name__)
-    app.config.from_object('app.config.Config')
+class ApplicationFactory:
+    def __init__(self):
+        self.csrf = csrf
+        self.login_manager = login_manager
+        self.socketio = socketio
+        self.migrate = migrate
+        self.assets = assets
+        self.docker = docker
 
-    socketio.init_app(app)
+    def configure_extensions(self, app):
+        """Configure Flask extensions."""
+        self.socketio.init_app(app)
+        self.docker.init_app(app)
+        self.csrf.init_app(app)
+        self.assets.init_app(app)
 
-    docker.init_app(app)
+        self.login_manager.init_app(app)
+        self.login_manager.login_view = 'auth.login'
 
-    csrf = CSRFProtect()
-    csrf.init_app(app)
+        db.init_app(app)
+        self.migrate.init_app(app, db)
 
-    assets.init_app(app)
+    def register_blueprints(self, app):
+        """Register application blueprints."""
+        from .index import index
+        from .modules.main import main
+        from .modules.auth.routes import auth
+        from .modules.user.routes import user
+        from .modules.settings.routes import settings
+        
+        blueprints = [index, main, auth, user, settings]
+        for blueprint in blueprints:
+            app.register_blueprint(blueprint)
 
-    login_manager = LoginManager()
-    login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'
+    def configure_assets(self, app):
+        """Configure and register asset bundles."""
+        app_css = Bundle(
+            "styles/common.css",
+            "styles/colors.css",
+            "styles/base.css",
+            "styles/modal.css",
+            "styles/icons.css",
+            filters="rcssmin",
+            output="dist/css/app.%(version)s.css"
+        )
 
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
+        app_js = Bundle(
+            "js/base.js",
+            "js/modal.js",
+            "js/table.js",
+            "js/scrollbar.js",
+            filters='rjsmin',
+            output="dist/js/app.%(version)s.js",
+        )
 
-    @app.context_processor
-    def inject():
-        return dict(PersonalSettings=PersonalSettings, GlobalSettings=GlobalSettings, Permissions=Permissions, utils=utils)
+        self.assets.register("app_css", app_css)
+        self.assets.register("app_js", app_js)
 
-    db.init_app(app)
-    migrate.init_app(app, db)
+    def configure_context_processors(self, app):
+        """Add context processors to the application."""
+        @app.context_processor
+        def inject_context():
+            return dict(
+                PersonalSettings=PersonalSettings, 
+                GlobalSettings=GlobalSettings, 
+                Permissions=Permissions, 
+                utils=utils
+            )
 
-    app_css = Bundle(
-        "styles/common.css",
-        "styles/colors.css",
-        "styles/base.css",
-        "styles/modal.css",
-        "styles/icons.css",
-        filters="rcssmin",
-        output="dist/css/app.%(version)s.css"
-    )
+    def configure_user_loader(self):
+        """Configure the user loader for Flask-Login."""
+        @self.login_manager.user_loader
+        def load_user(user_id):
+            return User.query.get(int(user_id))
 
-    app_js = Bundle(
-        "js/base.js",
-        "js/modal.js",
-        "js/table.js",
-        "js/scrollbar.js",
-        filters='rjsmin',
-        output="dist/js/app.%(version)s.js",
-    )
+    def create_app(self, config_object='app.config.Config'):
+        """
+        Create and configure the Flask application.
+        
+        :param config_object: Path to the configuration object
+        :return: Configured Flask application
+        """
+        app = Flask(__name__)
+        
+        app.config.from_object(config_object)
 
-    assets.register("app_css", app_css)
-    assets.register("app_js", app_js)
+        self.configure_extensions(app)
+        self.configure_assets(app)
+        self.configure_context_processors(app)
+        self.configure_user_loader()
+        self.register_blueprints(app)
 
-    from .index import index
-    from .modules.main import main
-    from .modules.auth.routes import auth
-    from .modules.user.routes import user
-    from .modules.settings.routes import settings
-    
-    app.register_blueprint(index)
-    app.register_blueprint(main)
-    app.register_blueprint(auth)
-    app.register_blueprint(user)
-    app.register_blueprint(settings)
-
-    if app.debug:
-        app.wsgi_app = DebuggedApplication(app.wsgi_app, evalex=True, pin_security=False)
-    
-    return app
+        if app.debug:
+            app.wsgi_app = DebuggedApplication(app.wsgi_app, evalex=True, pin_security=False)
+        
+        return app
