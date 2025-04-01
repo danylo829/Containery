@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, SubmitField, SelectField, PasswordField, StringField, FieldList, FormField, HiddenField
 from wtforms.validators import DataRequired, EqualTo, Length
-from app.models import Role
 
 class PersonalSettingsForm(FlaskForm):
     theme = SelectField(

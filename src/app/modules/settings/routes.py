@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request, jsonify
 from flask_login import login_required, current_user
 
-from app.models import Permissions, GlobalSettings
-from app.decorators import permission
+from .models import GlobalSettings
+from .forms import GlobalSettingsForm
 
-from .forms import *
+from app.modules.user.models import Permissions
+from app.decorators import permission
 
 settings = Blueprint('settings', __name__, url_prefix='/settings', template_folder='templates')
 

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, jsonify, current_app
 from flask_login import login_required
 
-from app import docker
+from app.extensions import docker
 
 import psutil
 

@@ -1,35 +1,34 @@
-import os
 from flask import Flask
-from flask_wtf.csrf import CSRFProtect
-from flask_login import LoginManager
-from flask_socketio import SocketIO
-from flask_migrate import Migrate
-from flask_assets import Environment, Bundle
+
+from flask_assets import Bundle
 from werkzeug.debug import DebuggedApplication
 
 import app.utils.common as utils
+import app.extensions as extensions
 
-from app.models import db, Permissions, User, PersonalSettings, GlobalSettings
-from app.utils.docker import Docker
+from app.modules.user.models import Permissions, User, PersonalSettings
+from app.modules.settings.models import GlobalSettings
 
-csrf = CSRFProtect()
-login_manager = LoginManager()
-socketio = SocketIO()
-migrate = Migrate()
-assets = Environment()
-docker = Docker()
+from app.index import index
+from app.modules.main import main
+from app.modules.auth.routes import auth
+from app.modules.user.routes import user
+from app.modules.settings.routes import settings
 
 class ApplicationFactory:
     def __init__(self):
-        self.csrf = csrf
-        self.login_manager = login_manager
-        self.socketio = socketio
-        self.migrate = migrate
-        self.assets = assets
-        self.docker = docker
+        self.db = extensions.db
+        self.csrf = extensions.csrf
+        self.login_manager = extensions.login_manager
+        self.socketio = extensions.socketio
+        self.migrate = extensions.migrate
+        self.assets = extensions.assets
+        self.docker = extensions.docker
 
     def configure_extensions(self, app):
         """Configure Flask extensions."""
+        self.db.init_app(app)
+        self.migrate.init_app(app, self.db)
         self.socketio.init_app(app)
         self.docker.init_app(app)
         self.csrf.init_app(app)
@@ -38,22 +37,13 @@ class ApplicationFactory:
         self.login_manager.init_app(app)
         self.login_manager.login_view = 'auth.login'
 
-        db.init_app(app)
-        self.migrate.init_app(app, db)
-
     def register_blueprints(self, app):
         """Register application blueprints."""
-        from .index import index
-        from .modules.main import main
-        from .modules.auth.routes import auth
-        from .modules.user.routes import user
-        from .modules.settings.routes import settings
-        
         blueprints = [index, main, auth, user, settings]
         for blueprint in blueprints:
             app.register_blueprint(blueprint)
 
-    def configure_assets(self, app):
+    def configure_assets(self):
         """Configure and register asset bundles."""
         app_css = Bundle(
             "styles/common.css",
@@ -94,19 +84,18 @@ class ApplicationFactory:
         def load_user(user_id):
             return User.query.get(int(user_id))
 
-    def create_app(self, config_object='app.config.Config'):
+    def create_app(self):
         """
         Create and configure the Flask application.
         
-        :param config_object: Path to the configuration object
         :return: Configured Flask application
         """
         app = Flask(__name__)
         
-        app.config.from_object(config_object)
+        app.config.from_object('app.config.Config')
 
         self.configure_extensions(app)
-        self.configure_assets(app)
+        self.configure_assets()
         self.configure_context_processors(app)
         self.configure_user_loader()
         self.register_blueprints(app)

@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, url_for, session
-from app.models import User
+from app.modules.user.models import User
 
 index = Blueprint('index', __name__)
 

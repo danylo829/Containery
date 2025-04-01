@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
-from app.models import User, Role, Permissions, GlobalSettings
+
+from app.modules.user.models import Permissions, User
+from app.modules.settings.models import GlobalSettings
 from .forms import LoginForm, AdminSetupForm
 
 auth = Blueprint('auth', __name__, url_prefix='/auth', template_folder='templates', static_folder='static')

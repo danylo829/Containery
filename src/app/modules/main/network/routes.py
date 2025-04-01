@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, url_for, request, current_app
 
-from app import docker
+from app.extensions import docker
 from app.utils.common import format_docker_timestamp
 
 from app.decorators import permission
-from app.models import Permissions
+from app.modules.user.models import Permissions
 
 import json
 
