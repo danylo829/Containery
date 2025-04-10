@@ -2,10 +2,6 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute
 const spinner = document.querySelector('.loading-spinner');
 const actions = document.querySelector('.actions');
 
-setTimeout(function() {
-    spinner.classList.add('hidden');
-}, 300);
-
 function handleResponse(response, returnUrl) {
     if (response.ok) {
         localStorage.setItem('flash_message',  'Action performed successfully!');
