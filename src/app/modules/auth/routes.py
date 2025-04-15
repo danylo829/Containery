@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 
-from app.modules.user.models import Permissions, User
+from app.modules.user.models import Permissions, User, Role
 from app.modules.settings.models import GlobalSettings
 from .forms import LoginForm, AdminSetupForm
 
