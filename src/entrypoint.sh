@@ -1,6 +1,6 @@
 #!/bin/sh
 
-MIGRATIONS_DIR="/app_data/migrations"
+MIGRATIONS_DIR="/containery_data/migrations"
 
 if [ ! -d "$MIGRATIONS_DIR" ]; then
   echo "Initializing Flask-Migrate at $MIGRATIONS_DIR..."
