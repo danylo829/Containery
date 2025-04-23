@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+
+src/app/static/dist
+src/app/static/.webassets-cache
