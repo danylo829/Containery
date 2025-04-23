@@ -1,6 +1,11 @@
 # Containery
+![Version](https://img.shields.io/github/v/tag/danylo829/containery?label=version)
+![License](https://img.shields.io/github/license/danylo829/containery)
+![Image Size](https://img.shields.io/docker/image-size/danylo829/containery/latest)
+![Python](https://img.shields.io/badge/python-3.12-blue)
+![Last Commit](https://img.shields.io/github/last-commit/danylo829/containery)
+![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
 
-## Overview
 Containery is a container management web application that offers a powerful, fast, and lightweight interface to manage Docker containers. Whether you are an individual developer or managing a fleet of containers in production, Containery simplifies the process by providing an intuitive UI with essential container management capabilities.
 
 ## Features
@@ -22,7 +27,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - containery_data:/app_data
+      - containery_data:/containery_data
       - containery_static:/containery/app/static/dist
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
@@ -95,7 +100,7 @@ server {
 #### Development
 - **`SECRET_KEY`**: A secret key used for cryptographic operations. If not provided, a random 32-byte hexadecimal string will be generated.
 - **`CSRF_SECRET_KEY`**: A secret key specifically for CSRF protection. If not provided, a random 32-byte hexadecimal string will be generated.
-- **`SQLALCHEMY_DATABASE_URI`**: The database connection URI. Defaults to `sqlite:////app_data/containery.db` for local development.
+- **`SQLALCHEMY_DATABASE_URI`**: The database connection URI. Defaults to `sqlite:////containery_data/containery.db` for local development.
 - **`SQLALCHEMY_TRACK_MODIFICATIONS`**: A flag to enable or disable SQLAlchemy's event system. Defaults to `False`.
 - **`DEBUG`**: Enables or disables debug mode. Defaults to `False`.
 
