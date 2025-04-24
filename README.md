@@ -41,7 +41,7 @@ volumes:
 Once the application starts, you can access it by navigating to **[http://localhost:5000](http://localhost:5000)** in your browser.
 
 ### NGINX Reverse Proxy (Optional)
-If you need to expose the application over a domain or HTTPS, you can use NGINX as a reverse proxy. Below is a sample NGINX configuration:
+If you need to expose the application over a domain, add HTTPS or improve page loads by caching static content, you can use NGINX as a reverse proxy. Below is a sample NGINX configuration:
 
 ```nginx
 server {
