@@ -267,6 +267,9 @@ def view_role():
             })
 
     if form.validate_on_submit():
+        if role_id == 1:
+            flash('Cant edit super admin role.', 'error')
+            return redirect(url_for('user.get_role_list'))
         if not current_user.has_permission(Permissions.ROLE_EDIT):
             flash('You don\'t have permission to edit roles', 'error')
             return redirect(url_for('user.view_role', id=role_id))
