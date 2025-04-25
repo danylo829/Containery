@@ -1,5 +1,8 @@
 from flask import Flask
 
+from os import path
+from shutil import copytree, rmtree
+
 from flask_assets import Bundle
 from werkzeug.debug import DebuggedApplication
 
@@ -43,7 +46,7 @@ class ApplicationFactory:
         for blueprint in blueprints:
             app.register_blueprint(blueprint)
 
-    def configure_assets(self):
+    def configure_assets(self, app):
         """Configure and register asset bundles."""
         app_css = Bundle(
             "styles/common.css",
@@ -66,6 +69,16 @@ class ApplicationFactory:
 
         self.assets.register("app_css", app_css)
         self.assets.register("app_js", app_js)
+
+        print("Copying lib static files...")
+        src = path.join(app.static_folder, "lib")
+        dst = path.join(app.static_folder, "dist", "lib")
+        if path.exists(dst):
+            rmtree(dst)
+        if path.exists(src):
+            copytree(src, dst)
+        else:
+            print(f"Source directory '{src}' does not exist. Skipping copy.")
 
     def configure_context_processors(self, app):
         """Add context processors to the application."""
@@ -95,7 +108,7 @@ class ApplicationFactory:
         app.config.from_object('app.config.Config')
 
         self.configure_extensions(app)
-        self.configure_assets()
+        self.configure_assets(app)
         self.configure_context_processors(app)
         self.configure_user_loader()
         self.register_blueprints(app)
