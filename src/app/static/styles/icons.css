@@ -121,7 +121,8 @@
 
 /* Actions */
 
-.actions a:hover {
+.actions a:hover,
+a.action:hover {
     background-color: var(--bg-color-darker);
     transition: all 0.3s ease;
 }
@@ -197,4 +198,17 @@
 /* DND */
 #dnd-icon:hover line {
     transform: rotate(180deg);
+}
+
+/* Save */
+#save-icon:hover {
+    stroke: var(--accent-color);
+}
+
+#save-icon:hover polyline:first-child {
+    transform: rotate(180deg);
+}
+
+#save-icon:hover polyline:last-child {
+    transform: rotate(-180deg);
 }

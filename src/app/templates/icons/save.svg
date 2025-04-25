@@ -1,0 +1,5 @@
+<svg class="icons" id="save-icon" width="24" height="24" viewBox="0 0 24 24"
+     xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2">
+  <polyline points="22 4, 9 20" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="9 20, 2 12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

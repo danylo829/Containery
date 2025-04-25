@@ -780,7 +780,8 @@ select option {
     gap: 10px;
 }
 
-.actions a {
+.actions a,
+a.action {
     font-size: 0;
     border-radius: 5px;
 }

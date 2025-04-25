@@ -1,23 +1,27 @@
 {% extends "main.html" %}
 
 {% block custom_header %}
-<script src="{{ url_for('static', filename='js/user/add_role.js') }}" defer></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/user/add_role.css') }}">
+<script src="{{ url_for('user.static', filename='js/role.js') }}" defer></script>
+<link rel="stylesheet" href="{{ url_for('user.static', filename='styles/role.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="content-box">
-  <form method="POST">
+  <form method="POST" id="role-form">
     {{ form.hidden_tag() }}
     
     <div class="role-name-section">
-      {{ form.role_name(
-          size=20,
-          placeholder="Role name",
-          autocomplete="off",
-          required=true
-      ) }}
-      {{ form.submit(class_="submit-button") }}
+      {{ form.name() }}
+      <div class="controls flex align-center">
+        <a class="action" id="save-btn">
+          {% include 'icons/save.svg' %}
+        </a>
+        {% if role %}
+          <a class="action" id="delete-btn" data-id="{{ role.id }}">
+            {% include 'icons/delete.svg' %}
+          </a>
+        {% endif %}
+      </div>
     </div>
     
     <div class="permissions-grid">

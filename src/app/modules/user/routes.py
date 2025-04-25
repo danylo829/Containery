@@ -245,7 +245,7 @@ def get_role_list():
 @user.route('/role', methods=['GET', 'POST'])
 @permission(Permissions.ROLE_VIEW)
 def view_role():
-    form = EditRoleForm()
+    form = RoleForm()
 
     role_id = request.args.get('id', type=int)
 
@@ -258,6 +258,40 @@ def view_role():
         flash(str(le), 'error')
         return redirect(url_for('user.get_role_list'))
 
+    if form.validate_on_submit():
+        if role_id == 1:
+            flash('Can\'t edit super admin role.', 'error')
+            return redirect(url_for('user.get_role_list'))
+        if not current_user.has_permission(Permissions.ROLE_EDIT):
+            flash('You don\'t have permission to edit roles', 'error')
+            return redirect(url_for('user.view_role', id=role_id))
+
+        name = form.name.data.strip()
+        selected_permissions = [
+            Permissions(int(entry['permission_value'])) 
+            for entry in form.permissions.data if entry['enabled']
+        ]
+
+        try:
+            role.rename(name)
+
+            for permission in selected_permissions:
+                if permission not in role.get_permissions():
+                    role.add_permission(permission=permission)
+
+            for permission in role.get_permissions():
+                if permission not in selected_permissions:
+                    role.remove_permission(permission=permission)
+
+            flash(f"Role '{name}' updated successfully", 'success')
+
+        except ValueError as ve:
+            flash(str(ve), 'error')
+        except Exception as e:
+            flash(f"An unexpected error occurred: {str(e)}", 'error')
+        
+        return redirect(url_for('user.view_role', id=role_id))
+    
     if not form.permissions.entries:
         for permission in Permissions:
             is_enabled = permission.value in role.get_permissions_values()
@@ -266,53 +300,18 @@ def view_role():
                 'permission_value': permission.value
             })
 
-    if form.validate_on_submit():
-        if role_id == 1:
-            flash('Cant edit super admin role.', 'error')
-            return redirect(url_for('user.get_role_list'))
-        if not current_user.has_permission(Permissions.ROLE_EDIT):
-            flash('You don\'t have permission to edit roles', 'error')
-            return redirect(url_for('user.view_role', id=role_id))
+    form.name.data = role.name
 
-        name = form.role_name.data
-        selected_permissions = []
-        for entry in form.permissions.data:
-            if entry['enabled']:
-                selected_permissions.append(Permissions(int(entry['permission_value'])))
+    category_order = ['CONTAINER', 'IMAGE', 'NETWORK', 'VOLUME', 'USER', 'ROLE', 'GLOBAL']
 
-        if not name or not name.strip():
-            flash("Role name cannot be empty.", 'error')
-            return redirect(url_for('user.view_role', id=role_id))
+    categories = {}
+    for permission_form, permission in zip(form.permissions, Permissions):
+        category = permission.name.split('_')[0]
+        if category not in categories:
+            categories[category] = []
+        categories[category].append((permission_form, permission))
 
-        if len(name) > 20:
-            flash('Role name must be 20 characters or less', 'error')
-            return redirect(url_for('user.view_role', id=role_id))
-
-        try:
-            role.rename(name=name)
-            flash(f"Role '{role.name}' updated successfully.", 'success')
-
-            for permission in Permissions:
-                if permission.value in selected_permissions and permission.value not in role.get_permissions_values():
-                    try:
-                        role.add_permission(permission=permission)
-                    except ValueError as e:
-                        flash(str(e), 'error')
-
-                elif permission.value not in selected_permissions and permission.value in role.get_permissions_values():
-                    try:
-                        role.remove_permission(permission=permission)
-                    except ValueError as e:
-                        flash(str(e), 'error')
-
-        except ValueError as ve:
-            flash(str(ve), 'error')
-        except PermissionError:
-            flash("You are not allowed to rename this role.", 'error')
-        except Exception as e:
-            flash(f"An unexpected error occurred: {str(e)}", 'error')
-        
-        return redirect(url_for('user.view_role', id=role_id))
+    ordered_categories = {cat: categories[cat] for cat in category_order if cat in categories}
 
     breadcrumbs = [
         {"name": "Dashboard", "url": url_for('main.dashboard.index')},
@@ -323,17 +322,17 @@ def view_role():
     
     page_title = "View Role"
     
-    return render_template('user/view_role.html', 
-                           breadcrumbs=breadcrumbs, 
+    return render_template('user/role.html',
+                           breadcrumbs=breadcrumbs,
                            page_title=page_title,
+                           role=role,
                            form=form,
-                           zip=zip,
-                           role=role)
+                           categories=ordered_categories)
 
 @user.route('/role/add', methods=['GET', 'POST'])
 @permission(Permissions.ROLE_ADD)
 def add_role():
-    form = AddRoleForm()
+    form = RoleForm()
 
     if not form.permissions.entries:
         for permission in Permissions:
@@ -343,7 +342,7 @@ def add_role():
             })
 
     if form.validate_on_submit():
-        name = form.role_name.data.strip()
+        name = form.name.data.strip()
         selected_permissions = [
             Permissions(int(entry['permission_value'])) 
             for entry in form.permissions.data if entry['enabled']
@@ -354,10 +353,7 @@ def add_role():
             flash(f"Role '{name}' created successfully", 'success')
 
             for permission in selected_permissions:
-                try:
-                    role.add_permission(permission=permission)
-                except ValueError as e:
-                    flash(str(e), 'error')
+                role.add_permission(permission=permission)
 
             return redirect(url_for('user.get_role_list'))
 
@@ -365,6 +361,8 @@ def add_role():
             flash(str(ve), 'error')
         except Exception as e:
             flash(f"An unexpected error occurred: {str(e)}", 'error')
+    elif request.method == 'POST':
+        flash('Form validation failed.', 'error')
 
     category_order = ['CONTAINER', 'IMAGE', 'NETWORK', 'VOLUME', 'USER', 'ROLE', 'GLOBAL']
 
@@ -386,20 +384,22 @@ def add_role():
     
     page_title = "Add role"
 
-    return render_template('user/add_role.html',
+    return render_template('user/role.html',
                            breadcrumbs=breadcrumbs,
                            page_title=page_title,
                            form=form,
-                           categories=ordered_categories,  # Pass ordered categories
-                           zip=zip)
+                           categories=ordered_categories)
 
-@user.route('/role/delete', methods=['POST'])
+@user.route('/role/delete', methods=['DELETE'])
 @permission(Permissions.ROLE_EDIT)
 def delete_role():
-    role_id = request.form.get('role_id')
+    role_id = request.args.get('id', type=int)
+
+    if not role_id:
+        return jsonify({'message': 'Role ID is required.'}), 400
 
     try:
-        Role.delete_role(int(role_id))
+        Role.delete_role(role_id)
 
         return jsonify({'success': True}), 200
 

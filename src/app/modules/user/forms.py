@@ -79,12 +79,14 @@ class PermissionForm(FlaskForm):
     enabled = BooleanField('Enabled')
     permission_value = HiddenField()
 
-class AddRoleForm(FlaskForm):
-    role_name = StringField('Role Name')
-    permissions = FieldList(FormField(PermissionForm), label='Permissions')
-    submit = SubmitField('Add')
-
-class EditRoleForm(FlaskForm):
-    role_name = StringField('Role Name')
+class RoleForm(FlaskForm):
+    name = StringField(
+        'Role Name',
+        validators=[DataRequired()],
+        render_kw={
+            'placeholder': 'Role name',
+            'autocomplete': 'off'
+        }
+    )
     permissions = FieldList(FormField(PermissionForm), label='Permissions')
     submit = SubmitField('Save')

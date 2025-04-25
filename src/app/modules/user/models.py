@@ -209,10 +209,12 @@ class Role(db.Model):
             db.session.rollback()
             raise RuntimeError(f"Failed to delete role: {str(e)}")
 
-
     def rename(self, name):
         if not name or not isinstance(name, str):
             raise ValueError("Invalid role name")
+        
+        if len(name) > 20:
+            raise ValueError("Role name must be 20 characters or less.")
 
         self.name = name
         db.session.commit()
@@ -227,7 +229,7 @@ class Role(db.Model):
         return user_count
 
     def get_permissions(self):
-        return RolePermission.query.filter_by(role_id=self.id).all()
+        return [Permissions(permission.permission) for permission in RolePermission.query.filter_by(role_id=self.id).all()]
 
     def get_permissions_values(self):
         return [rp.permission for rp in RolePermission.query.filter_by(role_id=self.id).all()]
@@ -248,13 +250,12 @@ class Role(db.Model):
 
         return role
 
-
     def add_permission(self, permission):
         if not isinstance(permission, Permissions):
             raise ValueError("Permission must be an instance of Permissions Enum.")
 
         if any(rp.permission == permission.value for rp in self.permissions):
-            raise ValueError(f"Permission '{permission.name}' is already assigned to role '{self.name}'.")
+            return
 
         new_permission = RolePermission(role_id=self.id, permission=permission.value)
         db.session.add(new_permission)
@@ -266,7 +267,7 @@ class Role(db.Model):
 
         role_permission = RolePermission.query.filter_by(role_id=self.id, permission=permission.value).first()
         if not role_permission:
-            raise ValueError(f"Permission '{permission.name}' not found for role '{self.name}'.")
+            return
 
         db.session.delete(role_permission)
         db.session.commit()

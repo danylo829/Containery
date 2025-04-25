@@ -20,3 +20,15 @@
 *::-webkit-scrollbar-corner {
     background: transparent;
 }
+
+.flex {
+    display: flex;
+}
+
+.justify-space-between {
+    justify-content: space-between;
+}
+
+.align-center {
+    align-items: center;
+}
