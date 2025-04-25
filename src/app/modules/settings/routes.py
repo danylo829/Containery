@@ -7,7 +7,7 @@ from .forms import GlobalSettingsForm
 from app.modules.user.models import Permissions
 from app.decorators import permission
 
-settings = Blueprint('settings', __name__, url_prefix='/settings', template_folder='templates')
+settings = Blueprint('settings', __name__, url_prefix='/settings', template_folder='templates', static_folder='static')
 
 @settings.before_request
 @login_required
