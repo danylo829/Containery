@@ -1,6 +1,7 @@
 from flask import Flask
 
 from os import path
+from sys import argv
 from shutil import copytree, rmtree
 
 from flask_assets import Bundle
@@ -108,10 +109,14 @@ class ApplicationFactory:
         app.config.from_object('app.config.Config')
 
         self.configure_extensions(app)
-        self.configure_assets(app)
-        self.configure_context_processors(app)
-        self.configure_user_loader()
-        self.register_blueprints(app)
+
+        # Check if the application is running in a CLI context
+        # Prevents entaire app building in entrypoint
+        if not ('flask' in argv[0]):
+            self.configure_assets(app)
+            self.configure_context_processors(app)
+            self.configure_user_loader()
+            self.register_blueprints(app)
 
         if app.debug:
             app.wsgi_app = DebuggedApplication(app.wsgi_app, evalex=True, pin_security=False)
