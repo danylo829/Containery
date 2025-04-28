@@ -188,12 +188,11 @@ def add():
 @user.route('/delete', methods=['DELETE'])
 @permission(Permissions.USER_DELETE)
 def delete():
-    user_id = request.form.get('user_id')
+    user_id = request.args.get('id', type=int)
 
     try:
-        result = User.delete_user(int(user_id))
-
-        return jsonify({'success': True}), 200
+        User.delete_user(int(user_id))
+        return jsonify({'message': 'User deleted successfully.'}), 200
 
     except PermissionError as pe:
         return jsonify({'message': str(pe)}), 403
@@ -205,7 +204,7 @@ def delete():
         return jsonify({'message': str(le)}), 404
 
     except RuntimeError as re:
-        return jsonify({'message': 'Failed to delete role.'}), 500
+        return jsonify({'message': 'Failed to delete user.'}), 500
 
 
 @user.route('/list', methods=['GET'])

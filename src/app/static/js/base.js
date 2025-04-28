@@ -4,7 +4,7 @@ const actions = document.querySelector('.actions');
 
 function handleResponse(response, returnUrl) {
     if (response.ok) {
-        localStorage.setItem('flash_message',  'Action performed successfully!');
+        localStorage.setItem('flash_message',  'Success!');
         localStorage.setItem('flash_type', 'success');
         if (returnUrl) {
             window.location.href = returnUrl;
