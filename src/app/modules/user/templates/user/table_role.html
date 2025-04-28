@@ -34,7 +34,7 @@
                     <tr>
                         <td><a href="{{ url_for('user.view_role', id=role.id) }}">{{ role.name }}</a></td>
                         <td>{{ role.get_user_count() }}</td>
-                        <td>{{ utils.format_unix_timestamp(role.created_at) }}</td>
+                        <td>{{ common.format_unix_timestamp(role.created_at) }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -1,8 +1,8 @@
 from flask import Blueprint, current_app
 
-from app.extensions import docker
+from app.core.extensions import docker
 from app.modules.user.models import Permissions
-from app.decorators import permission
+from app.core.decorators import permission
 
 api = Blueprint('image', __name__)
 

@@ -1,5 +1,5 @@
-from app.extensions import db
-from app.utils.common import stable_hash
+from app.core.extensions import db
+from app.lib.common import stable_hash
 
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash

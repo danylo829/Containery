@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from .forms import *
 from .models import PersonalSettings, User, Role, Permissions
 from app.modules.settings.models import GlobalSettings
-from app.decorators import permission
+from app.core.decorators import permission
 
 user = Blueprint('user', __name__, url_prefix='/user', template_folder='templates', static_folder='static')
 

@@ -1,13 +1,13 @@
 from flask import Blueprint, render_template, url_for, request, current_app
 from flask_socketio import emit
 
-from app.extensions import docker
-from app.utils.common import format_docker_timestamp
+from app.core.extensions import docker
+from app.lib.common import format_docker_timestamp
 
 from app.modules.user.models import Permissions
-from app.decorators import permission
+from app.core.decorators import permission
 
-from app.extensions import socketio
+from app.core.extensions import socketio
 
 container = Blueprint('container', __name__, template_folder='templates', static_folder='static')
 

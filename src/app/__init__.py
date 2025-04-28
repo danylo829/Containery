@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from os import path
 from sys import argv
@@ -7,8 +7,9 @@ from shutil import copytree, rmtree
 from flask_assets import Bundle
 from werkzeug.debug import DebuggedApplication
 
-import app.utils.common as utils
-import app.extensions as extensions
+import app.lib.common as common
+import app.core.extensions as extensions
+import app.core.error_handlers as error_handlers
 
 from app.modules.user.models import Permissions, User, PersonalSettings
 from app.modules.settings.models import GlobalSettings
@@ -89,8 +90,12 @@ class ApplicationFactory:
                 PersonalSettings=PersonalSettings, 
                 GlobalSettings=GlobalSettings, 
                 Permissions=Permissions, 
-                utils=utils
+                common=common
             )
+        
+    def configure_error_pages(self, app):
+        app.register_error_handler(404, error_handlers.page_not_found)
+        app.register_error_handler(500, error_handlers.internal_server_error)
 
     def configure_user_loader(self):
         """Configure the user loader for Flask-Login."""
@@ -115,6 +120,7 @@ class ApplicationFactory:
         if not ('flask' in argv[0]):
             self.configure_assets(app)
             self.configure_context_processors(app)
+            self.configure_error_pages(app)
             self.configure_user_loader()
             self.register_blueprints(app)
 

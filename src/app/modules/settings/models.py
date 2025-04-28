@@ -1,4 +1,4 @@
-from app.extensions import db
+from app.core.extensions import db
 
 class GlobalSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)

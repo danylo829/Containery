@@ -5,7 +5,7 @@ from .models import GlobalSettings
 from .forms import GlobalSettingsForm
 
 from app.modules.user.models import Permissions
-from app.decorators import permission
+from app.core.decorators import permission
 
 settings = Blueprint('settings', __name__, url_prefix='/settings', template_folder='templates', static_folder='static')
 

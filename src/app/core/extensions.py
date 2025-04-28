@@ -5,7 +5,7 @@ from flask_socketio import SocketIO
 from flask_migrate import Migrate
 from flask_assets import Environment
 
-from app.utils.docker import Docker
+from app.lib.docker import Docker
 
 db = SQLAlchemy()
 csrf = CSRFProtect()

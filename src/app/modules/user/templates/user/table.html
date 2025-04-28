@@ -39,7 +39,7 @@
                 <tr>
                     <td><a href="{{ url_for('user.view_profile', id=user.id) }}">{{ user.username }}</a></td>
                     <td>{{ user.get_roles_str() }}</td>
-                    <td>{{ utils.format_unix_timestamp(user.created_at) }}</td>
+                    <td>{{ common.format_unix_timestamp(user.created_at) }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
