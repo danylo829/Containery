@@ -48,7 +48,6 @@ def profile():
         {"name": current_user.username, "url": None},
     ]
     page_title = 'User info'
-    endpoint = "user_info"
     
     return render_template('user/profile.html', 
                            breadcrumbs=breadcrumbs, 
@@ -77,13 +76,14 @@ def view_profile():
     available_roles = [role for role in all_roles if role not in user_roles]
     role_form.set_role_choices(available_roles)
 
-    if (password_form.submit.data or role_form.submit.data) and not current_user.has_permission(Permissions.USER_EDIT):
+    if request.method == 'POST' and not current_user.has_permission(Permissions.USER_EDIT):
         flash('You cannot edit users', 'error')
         return redirect(url_for('user.view_profile', id=user_id))
 
     if password_form.submit.data and password_form.validate_on_submit():
         if len(password_form.new_password.data) < password_min_length:
-            return redirect(url_for('user.view_profile'))
+            flash(f'Password length must be at least {password_min_length} characters long.', 'error')
+            return redirect(url_for('user.view_profile', id=user_id))
             
         user.update_password(password_form.new_password.data)
         flash('Password changed successfully!', 'success')
@@ -91,7 +91,6 @@ def view_profile():
 
     if role_form.submit.data and role_form.validate_on_submit():
         role = Role.get_role(int(role_form.role.data))
-        
         try:
             user.assign_role(role)
             flash(f"Role '{role.name}' assigned successfully.", 'success')
@@ -100,7 +99,6 @@ def view_profile():
 
         return redirect(url_for('user.view_profile', id=user_id))
 
-    
     breadcrumbs = [
         {"name": "Dashboard", "url": url_for('main.dashboard.index')},
         {"name": "Users", "url": url_for('user.get_list')},
