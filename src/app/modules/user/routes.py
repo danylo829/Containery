@@ -116,7 +116,7 @@ def view_profile():
                            role_form=role_form,
                            user=user)
 
-@user.route('/remove_role', methods=['POST'])
+@user.route('/remove_role', methods=['DELETE'])
 @permission(Permissions.ROLE_EDIT)
 def remove_role():
     user_id = request.form.get('user_id')
