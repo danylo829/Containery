@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_login import login_required
 
-main = Blueprint('main', __name__, static_folder='static', static_url_path='/static/main')
+main = Blueprint('main', __name__)
 
 from .dashboard.routes import dashboard
 from .container.routes import container
