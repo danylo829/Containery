@@ -1,7 +1,7 @@
-from flask import Blueprint, redirect, url_for, session
+from flask import redirect, url_for, session
 from app.modules.user.models import User
 
-index = Blueprint('index', __name__)
+from . import index
 
 @index.route('/', methods=['GET'])
 def root():

@@ -14,7 +14,7 @@ import app.core.error_handlers as error_handlers
 from app.modules.user.models import Permissions, User, PersonalSettings
 from app.modules.settings.models import GlobalSettings
 
-from app.index import index
+from app.modules.index import index
 from app.modules.main import main
 from app.modules.auth.routes import auth
 from app.modules.user.routes import user
