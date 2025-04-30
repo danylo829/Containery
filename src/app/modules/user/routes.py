@@ -1,22 +1,12 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, request, jsonify
-from flask_login import login_required, current_user
+from flask import render_template, flash, redirect, url_for, request, jsonify
+from flask_login import current_user
 
 from .forms import *
 from .models import PersonalSettings, User, Role, Permissions
 from app.modules.settings.models import GlobalSettings
 from app.core.decorators import permission
 
-user = Blueprint('user', __name__, url_prefix='/user', template_folder='templates', static_folder='static')
-
-@user.before_request
-@login_required
-def before_request():
-    pass
-
-@user.context_processor
-def inject_variables():
-    active_page = str(request.blueprint).split('.')[-1]
-    return dict(active_page=active_page)
+from . import user
 
 @user.route('/profile', methods=['GET', 'POST'])
 def profile():
@@ -42,16 +32,7 @@ def profile():
     # Set form data based on current settings
     settings_form.theme.data = PersonalSettings.get_setting(current_user.id, 'theme')
     
-    breadcrumbs = [
-        {"name": "Dashboard", "url": url_for('main.dashboard.index')},
-        {"name": "Users", "url": url_for('user.get_list')},
-        {"name": current_user.username, "url": None},
-    ]
-    page_title = 'User info'
-    
     return render_template('user/profile.html', 
-                           breadcrumbs=breadcrumbs, 
-                           page_title=page_title, 
                            settings_form=settings_form, 
                            password_form=password_form)
 
