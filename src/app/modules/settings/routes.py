@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, request, jsonify
-from flask_login import login_required, current_user
+from flask import render_template, flash, redirect, url_for, request, jsonify
+from flask_login import current_user
 
 from .models import GlobalSettings
 from .forms import GlobalSettingsForm
@@ -7,17 +7,7 @@ from .forms import GlobalSettingsForm
 from app.modules.user.models import Permissions
 from app.core.decorators import permission
 
-settings = Blueprint('settings', __name__, url_prefix='/settings', template_folder='templates', static_folder='static')
-
-@settings.before_request
-@login_required
-def before_request():
-    pass
-
-@settings.context_processor
-def inject_variables():
-    active_page = str(request.blueprint).split('.')[-1]
-    return dict(active_page=active_page)
+from . import settings
 
 @settings.route('', methods=['GET', 'POST'])
 @permission(Permissions.GLOBAL_SETTINGS_VIEW)

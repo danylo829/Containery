@@ -1,16 +1,10 @@
-from flask import Blueprint, render_template, jsonify, current_app
-from flask_login import login_required
+from flask import render_template, jsonify
 
 from app.core.extensions import docker
 
 import psutil
 
-dashboard = Blueprint('dashboard', __name__, template_folder='templates', static_folder='static')
-
-@dashboard.before_request
-@login_required
-def before_request():
-    pass
+from . import dashboard
 
 @dashboard.route('/', methods=['GET'])
 def index():

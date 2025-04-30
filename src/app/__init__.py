@@ -1,8 +1,9 @@
 from flask import Flask
 
-from os import path
 from sys import argv
+from os import path, listdir
 from shutil import copytree, rmtree
+from importlib import import_module
 
 from flask_assets import Bundle
 from werkzeug.debug import DebuggedApplication
@@ -13,12 +14,6 @@ import app.core.error_handlers as error_handlers
 
 from app.modules.user.models import Permissions, User, PersonalSettings
 from app.modules.settings.models import GlobalSettings
-
-from app.modules.index import index
-from app.modules.main import main
-from app.modules.auth.routes import auth
-from app.modules.user.routes import user
-from app.modules.settings.routes import settings
 
 class ApplicationFactory:
     def __init__(self):
@@ -43,10 +38,28 @@ class ApplicationFactory:
         self.login_manager.login_view = 'auth.login'
 
     def register_blueprints(self, app):
-        """Register application blueprints."""
-        blueprints = [index, main, auth, user, settings]
-        for blueprint in blueprints:
-            app.register_blueprint(blueprint)
+        """Register blueprints from app.modules where each module has a blueprint named after its folder."""
+        modules_path = path.join(app.root_path, 'modules')
+
+        for module_name in listdir(modules_path):
+            module_dir = path.join(modules_path, module_name)
+            init_file = path.join(module_dir, '__init__.py')
+
+            if not path.isdir(module_dir) or not path.isfile(init_file):
+                continue
+
+            try:
+                module_path = f'app.modules.{module_name}'
+                module = import_module(module_path)
+
+                blueprint = getattr(module, module_name)
+                app.register_blueprint(blueprint)
+                print(f"✔ Registered module: {module_name}")
+
+            except (ImportError, AttributeError) as e:
+                print(f"✘ Failed to load module '{module_name}': {e}")
+                exit(1)
+
 
     def configure_assets(self, app):
         """Configure and register asset bundles."""

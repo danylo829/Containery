@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, request, current_app
+from flask import render_template, url_for, request
 
 from app.modules.user.models import Permissions
 from app.core.decorators import permission
@@ -6,11 +6,7 @@ from app.lib.common import format_docker_timestamp, format_unix_timestamp
 
 from app.core.extensions import docker
 
-image = Blueprint('image', __name__, template_folder='templates', static_folder='static')
-
-from .api.routes import api
-
-image.register_blueprint(api, url_prefix='/api')
+from . import image
 
 def image_info(id):
     response, status_code = docker.inspect_image(id)

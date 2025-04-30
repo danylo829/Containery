@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, request, current_app
+from flask import render_template, url_for, request
 from flask_socketio import emit
 
 from app.core.extensions import docker
@@ -9,11 +9,7 @@ from app.core.decorators import permission
 
 from app.core.extensions import socketio
 
-container = Blueprint('container', __name__, template_folder='templates', static_folder='static')
-
-from .api.routes import api
-
-container.register_blueprint(api, url_prefix='/api')
+from . import container
 
 def container_info (id):
     response, status_code = docker.inspect_container(id)

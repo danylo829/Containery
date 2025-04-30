@@ -1,10 +1,8 @@
-from flask import Blueprint, current_app
-
 from app.core.extensions import docker
 from app.modules.user.models import Permissions
 from app.core.decorators import permission
 
-api = Blueprint('container', __name__)
+from . import api
 
 @api.route('/<id>/restart', methods=['POST'])
 @permission(Permissions.CONTAINER_RESTART)

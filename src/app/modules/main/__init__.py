@@ -3,11 +3,11 @@ from flask_login import login_required
 
 main = Blueprint('main', __name__)
 
-from .dashboard.routes import dashboard
-from .container.routes import container
-from .image.routes import image
-from .volume.routes import volume
-from .network.routes import network
+from .dashboard import dashboard
+from .container import container
+from .image import image
+from .volume import volume
+from .network import network
 
 main.register_blueprint(dashboard, url_prefix='/dashboard')
 main.register_blueprint(container, url_prefix='/container')

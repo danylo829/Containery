@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, request, current_app
+from flask import Blueprint, render_template, url_for, request
 
 from app.core.extensions import docker
 from app.lib.common import format_docker_timestamp
@@ -6,13 +6,7 @@ from app.lib.common import format_docker_timestamp
 from app.core.decorators import permission
 from app.modules.user.models import Permissions
 
-import json
-
-network = Blueprint('network', __name__, template_folder='templates', static_folder='static')
-
-from .api.routes import api
-
-network.register_blueprint(api, url_prefix='/api')
+from . import network
 
 def network_info(id):
     response, status_code = docker.inspect_network(id)

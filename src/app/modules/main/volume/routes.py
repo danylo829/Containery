@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, request, current_app
+from flask import render_template, url_for, request
 
 from app.core.extensions import docker
 from app.lib.common import format_docker_timestamp
@@ -6,11 +6,7 @@ from app.lib.common import format_docker_timestamp
 from app.core.decorators import permission
 from app.modules.user.models import Permissions
 
-volume = Blueprint('volume', __name__, template_folder='templates', static_folder='static')
-
-from .api.routes import api
-
-volume.register_blueprint(api, url_prefix='/api')
+from . import volume
 
 @volume.context_processor
 def inject_variables():
@@ -43,7 +39,6 @@ def get_list():
         {"name": "Volumes", "url": None},
     ]
     page_title = "Volumes List"
-    endpoint = "volume"
     return render_template('volume/table.html', rows=rows, breadcrumbs=breadcrumbs, page_title=page_title)
 
 @volume.route('/<name>', methods=['GET'])
