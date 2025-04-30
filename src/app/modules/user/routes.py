@@ -31,8 +31,17 @@ def profile():
     
     # Set form data based on current settings
     settings_form.theme.data = PersonalSettings.get_setting(current_user.id, 'theme')
+
+    breadcrumbs = [
+        {"name": "Dashboard", "url": url_for('main.dashboard.index')},
+        {"name": "Users", "url": url_for('user.get_list')},
+        {"name": current_user.username, "url": None},
+    ]
+    page_title = 'Profile'
     
     return render_template('user/profile.html', 
+                           breadcrumbs=breadcrumbs, 
+                           page_title=page_title, 
                            settings_form=settings_form, 
                            password_form=password_form)
 
