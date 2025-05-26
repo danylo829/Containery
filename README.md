@@ -6,7 +6,7 @@
 ![Last Commit](https://img.shields.io/github/last-commit/danylo829/containery)
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
 
-Containery is a container management web application that offers a powerful, fast, and lightweight interface to manage Docker containers. Whether you are an individual developer or managing a fleet of containers in production, Containery simplifies the process by providing an intuitive UI with essential container management capabilities.
+Containery is a container management web application that offers a powerful, fast, and lightweight interface to manage Docker containers. It is useful when you need to quickly check container status, view logs, or access a container's terminal.
 
 ## Features
 - **Docker Management**: Manage containers, images, networks, and volumes within a unified interface.
