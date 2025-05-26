@@ -1,6 +1,5 @@
 import json
 import socket
-from threading import Thread
 import requests_unixsocket
 
 class Docker:
@@ -12,7 +11,7 @@ class Docker:
         self.encoded_socket_path = app.config.get("DOCKER_SOCKET_PATH").replace('/', '%2F')
 
     # GENERAL
-    def perform_request(self, path, method='GET', payload=None):
+    def perform_request(self, path, method='GET', payload=None) -> tuple:
         url = f'http+unix://{self.encoded_socket_path}{path}'
         session = requests_unixsocket.Session()
         try:
