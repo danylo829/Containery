@@ -33,6 +33,13 @@ jobs:
         id: vars
         run: echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
 
+      - name: Get tag message
+        id: vars
+        run: |
+          echo "tagmsg<<EOF" >> $GITHUB_OUTPUT
+          git for-each-ref refs/tags/${{ github.ref_name }} --format='%(contents)' >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Build & push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -51,7 +58,6 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          body: |
-            ${{ github.event.head_commit.message }}
+          body: ${{ steps.vars.outputs.tagmsg }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
