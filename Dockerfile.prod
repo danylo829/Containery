@@ -1,7 +1,10 @@
 FROM python:3.12-slim
 
+ARG VERSION
+
 LABEL org.opencontainers.image.title="Containery"
 LABEL org.opencontainers.image.description="Open-source container management web UI"
+LABEL org.opencontainers.image.version=$VERSION
 LABEL org.opencontainers.image.source="https://github.com/danylo829/Containery"
 LABEL org.opencontainers.image.license="MIT"
 
