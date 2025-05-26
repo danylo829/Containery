@@ -8,3 +8,4 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = getenv('SQLALCHEMY_TRACK_MODIFICATIONS', 'False') == 'True'
     DEBUG = getenv('DEBUG', 'False') == 'True'
     DOCKER_SOCKET_PATH = getenv('DOCKER_SOCKET_PATH', '/var/run/docker.sock')
+    # ASSETS_DEBUG = True

@@ -1,7 +1,7 @@
 from flask import Flask
 
 from sys import argv
-from os import path, listdir
+from os import path, listdir, walk
 from shutil import copytree, rmtree
 from importlib import import_module
 
@@ -32,14 +32,26 @@ class ApplicationFactory:
         self.socketio.init_app(app)
         self.docker.init_app(app)
         self.csrf.init_app(app)
+
         self.assets.init_app(app)
 
         self.login_manager.init_app(app)
         self.login_manager.login_view = 'auth.login'
 
     def register_blueprints(self, app):
-        """Register blueprints from app.modules where each module has a blueprint named after its folder."""
+        """
+        Register blueprints from app.modules where each module has a blueprint named after its folder.
+        Add each module's static folder (recursively) to assets.load_path.
+        """
         modules_path = path.join(app.root_path, 'modules')
+        # Start with the main static folder
+        load_paths = [path.join(app.root_path, 'static')]
+
+        # Recursively find all static folders in modules
+        for root, dirs, files in walk(modules_path):
+            if 'static' in dirs:
+                static_path = path.join(root, 'static')
+                load_paths.append(static_path)
 
         for module_name in listdir(modules_path):
             module_dir = path.join(modules_path, module_name)
@@ -54,14 +66,19 @@ class ApplicationFactory:
 
                 blueprint = getattr(module, module_name)
                 app.register_blueprint(blueprint)
+                if hasattr(module, "register_assets"):
+                    module.register_assets(self.assets)
                 print(f"✔ Registered module: {module_name}")
 
             except (ImportError, AttributeError) as e:
                 print(f"✘ Failed to load module '{module_name}': {e}")
                 exit(1)
 
+        # Set the assets load_path after collecting all static folders
+        with app.app_context():
+            self.assets.load_path = load_paths
 
-    def configure_assets(self, app):
+    def configure_base_assets(self, app):
         """Configure and register asset bundles."""
         app_css = Bundle(
             "styles/common.css",
@@ -131,7 +148,7 @@ class ApplicationFactory:
         # Check if the application is running in a CLI context
         # Prevents entaire app building in entrypoint
         if not ('flask' in argv[0]):
-            self.configure_assets(app)
+            self.configure_base_assets(app)
             self.configure_context_processors(app)
             self.configure_error_pages(app)
             self.configure_user_loader()

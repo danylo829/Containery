@@ -52,11 +52,6 @@ def image_name(id):
     response, status_code = image_info(id)
     return response['repo_tags'][0] if 'repo_tags' in response and response['repo_tags'] and status_code in range(200, 300) else "Unamed Image"
 
-@image.context_processor
-def inject_variables():
-    active_page = str(request.blueprint).split('.')[-1]
-    return dict(active_page=active_page)
-
 @image.route('/list', methods=['GET'])
 @permission(Permissions.IMAGE_VIEW_LIST)
 def get_list():

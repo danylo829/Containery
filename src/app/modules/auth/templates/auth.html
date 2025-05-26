@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Containery</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='icons/icon.svg') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icons/favicon.svg') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
     {% assets "app_css" %}
     <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
     {% endassets %}
-    <link rel="stylesheet" href="{{ url_for('auth.static', filename='styles/auth.css') }}">
+    {% assets "auth_css" %}
+    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+    {% endassets %}
 </head>
 <body class="system">
     <header>

@@ -1,8 +1,12 @@
 {% extends "main.html" %}
 
 {% block custom_header %}
-    <link rel="stylesheet" href="{{ url_for('settings.static', filename='styles/settings.css') }}">
-    <script src="{{ url_for('settings.static', filename='js/settings.js') }}" defer></script>
+{% assets "settings_css" %}
+<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+{% endassets %}
+{% assets "settings_js" %}
+<script src="{{ ASSET_URL }}" defer></script>
+{% endassets %}
 {% endblock %}
 
 {% block content %}

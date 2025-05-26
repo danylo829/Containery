@@ -42,12 +42,6 @@ def network_info(id):
 
     return network, 200
 
-@network.context_processor
-def inject_variables():
-    active_page = str(request.blueprint).split('.')[-1]
-    return dict(active_page=active_page)
-
-
 @network.route('/list', methods=['GET'])
 @permission(Permissions.NETWORK_VIEW_LIST)
 def get_list():

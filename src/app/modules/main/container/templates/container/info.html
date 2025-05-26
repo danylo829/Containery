@@ -1,7 +1,9 @@
 {% extends "main.html" %}
 
 {% block custom_header %}
-    <script src="{{ url_for('main.container.static', filename='js/actions.js') }}" defer></script>
+    {% assets "container_js" %}
+        <script src="{{ ASSET_URL }}" defer></script>
+    {% endassets %}
 {% endblock %}
 
 {% block content %}

@@ -1,21 +1,25 @@
 from flask import Blueprint
 from flask_login import login_required
 
-main = Blueprint('main', __name__)
+module_name = __name__.split('.')[-1]
+main = Blueprint(module_name, __name__)
 
-from .dashboard import dashboard
-from .container import container
-from .image import image
-from .volume import volume
-from .network import network
+from . import dashboard, container, image, volume, network
 
-main.register_blueprint(dashboard, url_prefix='/dashboard')
-main.register_blueprint(container, url_prefix='/container')
-main.register_blueprint(image, url_prefix='/image')
-main.register_blueprint(volume, url_prefix='/volume')
-main.register_blueprint(network, url_prefix='/network')
+main.register_blueprint(dashboard.dashboard, url_prefix='/dashboard')
+main.register_blueprint(container.container, url_prefix='/container')
+main.register_blueprint(image.image, url_prefix='/image')
+main.register_blueprint(volume.volume, url_prefix='/volume')
+main.register_blueprint(network.network, url_prefix='/network')
 
 @main.before_request
 @login_required
 def before_request():
     pass
+
+def register_assets(assets):
+    dashboard.register_assets(assets)
+    container.register_assets(assets)
+    image.register_assets(assets)
+    volume.register_assets(assets)
+    network.register_assets(assets)

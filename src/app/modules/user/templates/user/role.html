@@ -1,8 +1,12 @@
 {% extends "main.html" %}
 
 {% block custom_header %}
-<script src="{{ url_for('user.static', filename='js/role.js') }}" defer></script>
-<link rel="stylesheet" href="{{ url_for('user.static', filename='styles/role.css') }}">
+{% assets "user_css" %}
+<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+{% endassets %}
+{% assets "user_js" %}
+<script src="{{ ASSET_URL }}" defer></script>
+{% endassets %}
 {% endblock %}
 
 {% block content %}

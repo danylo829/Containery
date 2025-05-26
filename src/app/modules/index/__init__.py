@@ -1,5 +1,6 @@
 from flask import Blueprint
 
-index = Blueprint('index', __name__)
+module_name = __name__.split('.')[-1]
+index = Blueprint(module_name, __name__)
 
 from . import routes

@@ -1,7 +1,9 @@
 {% extends "main.html" %}
 
 {% block custom_header %}
-    <script src="{{ url_for('main.network.static', filename='js/actions.js') }}" defer></script>
+    {% assets "network_js" %}
+        <script src="{{ ASSET_URL }}" defer></script>
+    {% endassets %}
 {% endblock %}
 
 {% block content %}

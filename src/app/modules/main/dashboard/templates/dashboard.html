@@ -1,7 +1,9 @@
 {% extends "main.html" %}
 
 {% block custom_header %}
-    <script src="{{ url_for('main.dashboard.static', filename='js/dashboard.js') }}" defer></script>
+    {% assets "dashboard_js" %}
+        <script src="{{ ASSET_URL }}" defer></script>
+    {% endassets %}
     <script>
         const intervalSeconds = "{{ GlobalSettings.get_setting('dashboard_refresh_interval') | safe }}";
     </script>
