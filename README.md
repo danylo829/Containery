@@ -1,24 +1,18 @@
-<p align="center">
+<div align="center">
+  
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/Containery-white.png">
     <img alt="Containery Logo" src="docs/images/Containery-black.png" height="120">
   </picture>
-</p>
-
-<p align="center">
-  <a href="https://github.com/danylo829/containery/releases">
-    <img alt="Version" src="https://img.shields.io/github/v/tag/danylo829/containery?label=version">
-  </a>
-  <a href="https://github.com/danylo829/containery/blob/main/LICENSE">
-    <img alt="License" src="https://img.shields.io/github/license/danylo829/containery">
-  </a>
-  <a href="https://github.com/danylo829/containery/pkgs/container/containery">
-    <img alt="Image Size" src="https://img.shields.io/docker/image-size/ghcr.io/danylo829/containery/latest?label=image%20size&logo=docker">
-  </a>
-  <img alt="Python" src="https://img.shields.io/badge/python-3.12-blue">
-  <img alt="Last Commit" src="https://img.shields.io/github/last-commit/danylo829/containery">
-  <img alt="Contributions Welcome" src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg">
-</p>
+  
+  ![Version](https://img.shields.io/github/v/tag/danylo829/containery?label=version)
+  ![License](https://img.shields.io/github/license/danylo829/containery)
+  ![Image Size](https://img.shields.io/docker/image-size/ghcr.io/danylo829/containery/latest?label=image%20size&logo=docker)
+  ![Python](https://img.shields.io/badge/python-3.12-blue)
+  ![Last Commit](https://img.shields.io/github/last-commit/danylo829/containery)
+  ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
+  
+</div>
 
 **Containery** is a container management web application that offers a powerful, fast, and lightweight interface to manage Docker containers. It is useful when you need to quickly check container status, view logs, or access a container's terminal.
 
