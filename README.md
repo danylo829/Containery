@@ -30,7 +30,7 @@ To deploy Containery, use the following `docker-compose.yml` configuration. Plea
 ```yaml
 services:
   app:
-    image: containery:latest
+    image: ghcr.io/danylo829/containery:latest
     container_name: containery
     restart: "unless-stopped"
     ports:
