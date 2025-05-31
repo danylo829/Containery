@@ -6,15 +6,15 @@ on:
       - 'v*'
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write
       packages: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -29,17 +29,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract tag version
-        id: vars
-        run: echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
-
-      - name: Get tag message
-        id: tagmsg
-        run: |
-          echo "message<<EOF" >> $GITHUB_OUTPUT
-          git for-each-ref refs/tags/${{ github.ref_name }} --format='%(contents)' >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
       - name: Build & push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -49,15 +38,30 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ steps.vars.outputs.tag }}
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}
           build-args: |
-            VERSION=${{ steps.vars.outputs.tag }}
+            VERSION=${{ github.ref_name }}
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract tag message
+        id: tag_info
+        run: .github/scripts/get-tag-message.sh >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          body: ${{ steps.tagmsg.outputs.message }}
+          name: ${{ github.ref_name }}
+          body: ${{ steps.tag_info.outputs.message }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
