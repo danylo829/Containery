@@ -1,4 +1,6 @@
-from flask import render_template, url_for, request
+from flask import render_template, url_for
+
+import json
 
 from app.core.extensions import docker
 from app.lib.common import format_docker_timestamp
@@ -15,6 +17,10 @@ def get_list():
     volumes = []
     if status_code not in range(200, 300):
         message = response.text if hasattr(response, 'text') else str(response)
+        try:
+            message = json.loads(message).get('message', message)
+        except json.JSONDecodeError:
+            pass
         return render_template('error.html', message=message, code=status_code), status_code
     else:
         volumes = response.json().get('Volumes', [])
@@ -42,7 +48,12 @@ def info(name):
     response, status_code = docker.inspect_volume(name)
     volume = []
     if status_code not in range(200, 300):
-        return render_template('error.html', message=response.text, code=status_code), status_code
+        message = response.text if hasattr(response, 'text') else str(response)
+        try:
+            message = json.loads(message).get('message', message)
+        except json.JSONDecodeError:
+            pass
+        return render_template('error.html', message=message, code=status_code), status_code
     else:
         volume = response.json()
 

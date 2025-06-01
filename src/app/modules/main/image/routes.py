@@ -1,4 +1,6 @@
-from flask import render_template, url_for, request
+from flask import render_template, url_for
+
+import json
 
 from app.modules.user.models import Permissions
 from app.core.decorators import permission
@@ -59,6 +61,10 @@ def get_list():
     images = []
     if status_code not in range(200, 300):
         message = response.text if hasattr(response, 'text') else str(response)
+        try:
+            message = json.loads(message).get('message', message)
+        except json.JSONDecodeError:
+            pass
         return render_template('error.html', message=message, code=status_code), status_code
     else:
         images = response.json()
@@ -90,6 +96,10 @@ def info(id):
     image = []
     if status_code not in range(200, 300):
         message = response.text if hasattr(response, 'text') else str(response)
+        try:
+            message = json.loads(message).get('message', message)
+        except json.JSONDecodeError:
+            pass
         return render_template('error.html', message=message, code=status_code), status_code
     else:
         image = response

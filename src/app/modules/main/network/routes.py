@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, url_for, request
+from flask import render_template, url_for
+
+import json
 
 from app.core.extensions import docker
 from app.lib.common import format_docker_timestamp
@@ -49,6 +51,10 @@ def get_list():
     networks = []
     if status_code not in range(200, 300):
         message = response.text if hasattr(response, 'text') else str(response)
+        try:
+            message = json.loads(message).get('message', message)
+        except json.JSONDecodeError:
+            pass
         return render_template('error.html', message=message, code=status_code), status_code
     else:
         networks = response.json()
@@ -81,6 +87,10 @@ def info(id):
     network = []
     if status_code not in range(200, 300):
         message = response.text if hasattr(response, 'text') else str(response)
+        try:
+            message = json.loads(message).get('message', message)
+        except json.JSONDecodeError:
+            pass
         return render_template('error.html', message=message, code=status_code), status_code
     else:
         network = response

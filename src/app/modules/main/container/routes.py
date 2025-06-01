@@ -1,6 +1,8 @@
 from flask import render_template, url_for, request
 from flask_socketio import emit
 
+import json
+
 from app.core.extensions import docker
 from app.lib.common import format_docker_timestamp
 
@@ -68,6 +70,10 @@ def get_list():
     containers = []
     if status_code not in range(200, 300):
         message = response.text if hasattr(response, 'text') else str(response)
+        try:
+            message = json.loads(message).get('message', message)
+        except json.JSONDecodeError:
+            pass
         return render_template('error.html', message=message, code=status_code), status_code
 
     else:
@@ -92,7 +98,6 @@ def get_list():
         {"name": "Containers", "url": None},
     ]
     page_title = "Container List"
-    endpoint = "container"
 
     return render_template('container/table.html', rows=rows, breadcrumbs=breadcrumbs, page_title=page_title)
 
@@ -103,6 +108,10 @@ def info(id):
     container = []
     if status_code not in range(200, 300):
         message = response.text if hasattr(response, 'text') else str(response)
+        try:
+            message = json.loads(message).get('message', message)
+        except json.JSONDecodeError:
+            pass
         return render_template('error.html', message=message, code=status_code), status_code
     else:
         container = response
@@ -124,6 +133,10 @@ def logs(id):
     logs = []
     if status_code not in range(200, 300):
         message = response.text if hasattr(response, 'text') else str(response)
+        try:
+            message = json.loads(message).get('message', message)
+        except json.JSONDecodeError:
+            pass
         return render_template('error.html', message=message, code=status_code), status_code
     else:
         logs = response
@@ -155,6 +168,10 @@ def processes(id):
         # Default error message
         else:
             message = response.text if hasattr(response, 'text') else str(response)
+        try:
+            message = json.loads(message).get('message', message)
+        except json.JSONDecodeError:
+            pass
         return render_template('error.html', message=message, code=status_code), status_code
     else:
         processes = response.json()

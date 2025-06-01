@@ -1,5 +1,7 @@
 from flask import render_template, jsonify
 
+import json
+
 from app.core.extensions import docker
 
 import psutil
@@ -12,6 +14,10 @@ def index():
     info = []
     if status_code not in range(200, 300):
         message = response.text if hasattr(response, 'text') else str(response)
+        try:
+            message = json.loads(message).get('message', message)
+        except json.JSONDecodeError:
+            pass
         return render_template('error.html', message=message, code=status_code), status_code
     else:
         info = response.json()
@@ -35,16 +41,10 @@ def get_usage():
     # Load average
     load_average = psutil.getloadavg()  # Returns a tuple (1min, 5min, 15min)
 
-    io_stats = psutil.disk_io_counters()
-    io_read_bytes = round(io_stats.read_bytes / 1024, 2)  # Convert to GB
-    io_write_bytes = round(io_stats.write_bytes / 1024, 2)  # Convert to GB
-
     return jsonify(
         cpu=cpu_usage,
         ram_percent=ram_usage_percent,
         ram_absolute=ram_usage_absolute,
         ram_total=ram_total,
-        load_average=load_average,
-        io_read_bytes=io_read_bytes,
-        io_write_bytes=io_write_bytes
+        load_average=load_average
     )
