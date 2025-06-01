@@ -1,6 +1,7 @@
 from app.core.extensions import db
 
 class GlobalSettings(db.Model):
+    __tablename__ = 'stg_global_settings'
     id = db.Column(db.Integer, primary_key=True)
     key = db.Column(db.String(150), unique=True, nullable=False)
     value = db.Column(db.String(150), nullable=False)

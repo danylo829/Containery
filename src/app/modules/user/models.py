@@ -46,6 +46,7 @@ permission_names = [
 Permissions = IntEnum('Permissions', {name: stable_hash(name) for name in permission_names})
 
 class User(UserMixin, db.Model):
+    __tablename__ = 'usr_user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(150), nullable=False)
@@ -158,6 +159,7 @@ class User(UserMixin, db.Model):
             raise RuntimeError(f"Failed to delete user: {str(e)}")
 
 class Role(db.Model):
+    __tablename__ = 'usr_role'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     created_at = db.Column(db.Integer, default=lambda: int(time()), nullable=False)
@@ -229,67 +231,47 @@ class Role(db.Model):
         return user_count
 
     def get_permissions(self):
-        return [Permissions(permission.permission) for permission in RolePermission.query.filter_by(role_id=self.id).all()]
-
-    def get_permissions_values(self):
-        return [rp.permission for rp in RolePermission.query.filter_by(role_id=self.id).all()]
-
-    @classmethod
-    def get_roles(cls):
-        return cls.query.all()
-
-    @classmethod
-    def get_role(cls, id):
-        if not isinstance(id, int) or id <= 0:
-            raise ValueError("Invalid role ID provided.")
-        
-        role = cls.query.filter_by(id=id).first()
-
-        if not role:
-            raise LookupError(f"Role with ID '{id}' not found.")
-
-        return role
+        return [Permissions.__members__.get(permission.permission) for permission in RolePermission.query.filter_by(role_id=self.id).all() if Permissions.__members__.get(permission.permission) is not None]
 
     def add_permission(self, permission):
-        if not isinstance(permission, Permissions):
-            raise ValueError("Permission must be an instance of Permissions Enum.")
-
-        if any(rp.permission == permission.value for rp in self.permissions):
+        if not isinstance(permission, int):
+            raise ValueError("Permission must be an integer value from Permissions Enum.")
+        if any(rp.permission == permission for rp in self.permissions):
             return
-
-        new_permission = RolePermission(role_id=self.id, permission=permission.value)
+        new_permission = RolePermission(role_id=self.id, permission=permission)
         db.session.add(new_permission)
         db.session.commit()
 
     def remove_permission(self, permission):
-        if not isinstance(permission, Permissions):
-            raise ValueError("Permission must be an instance of Permissions Enum.")
-
-        role_permission = RolePermission.query.filter_by(role_id=self.id, permission=permission.value).first()
+        if not isinstance(permission, int):
+            raise ValueError("Permission must be an integer value from Permissions Enum.")
+        role_permission = RolePermission.query.filter_by(role_id=self.id, permission=permission).first()
         if not role_permission:
             return
-
         db.session.delete(role_permission)
         db.session.commit()
 
 class RolePermission(db.Model):
+    __tablename__ = 'usr_role_permission'
     id = db.Column(db.Integer, primary_key=True)
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
+    role_id = db.Column(db.Integer, db.ForeignKey('usr_role.id'), nullable=False)
     permission = db.Column(db.Integer, nullable=False)
     
     role = db.relationship('Role', back_populates='permissions')
 
 class UserRole(db.Model):
+    __tablename__ = 'usr_user_role'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('usr_user.id'), nullable=False)
+    role_id = db.Column(db.Integer, db.ForeignKey('usr_role.id'), nullable=False)
 
     user = db.relationship('User', back_populates='user_roles')
     role = db.relationship('Role', back_populates='user_roles')
         
 class PersonalSettings(db.Model):
+    __tablename__ = 'usr_personal_settings'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('usr_user.id'), nullable=False)
     key = db.Column(db.String(150), nullable=False)
     value = db.Column(db.String(150), nullable=False)
 
