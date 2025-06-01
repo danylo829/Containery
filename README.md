@@ -6,11 +6,11 @@
   </picture>
   
   ![Version](https://img.shields.io/github/v/tag/danylo829/containery?label=version)
-  ![License](https://img.shields.io/github/license/danylo829/containery)
-  ![Image Size](https://img.shields.io/docker/image-size/ghcr.io/danylo829/containery/latest?label=image%20size&logo=docker)
+  ![Image Size](https://ghcr-badge.egpl.dev/danylo829/containery/size)
   ![Python](https://img.shields.io/badge/python-3.12-blue)
   ![Last Commit](https://img.shields.io/github/last-commit/danylo829/containery)
   ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
+  ![License](https://img.shields.io/github/license/danylo829/containery)
   
 </div>
 
