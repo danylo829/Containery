@@ -49,7 +49,7 @@ def install():
 
             for permission in Permissions:
                 try:
-                    admin_role.add_permission(permission)
+                    admin_role.add_permission(permission.value)
                 except ValueError as e:
                     flash(str(e), 'error')
 
