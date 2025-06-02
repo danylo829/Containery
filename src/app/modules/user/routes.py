@@ -3,6 +3,7 @@ from flask_login import current_user
 
 from .forms import *
 from .models import PersonalSettings, User, Role, Permissions
+
 from app.modules.settings.models import GlobalSettings
 from app.core.decorators import permission
 
@@ -71,7 +72,7 @@ def view_profile():
         return redirect(url_for('user.view_profile', id=user_id))
 
     if password_form.submit.data and password_form.validate_on_submit():
-        if len(password_form.new_password.data) < password_min_length:
+        if len(str(password_form.new_password.data)) < password_min_length:
             flash(f'Password length must be at least {password_min_length} characters long.', 'error')
             return redirect(url_for('user.view_profile', id=user_id))
             
@@ -143,7 +144,7 @@ def add():
     if add_user_form.submit.data and add_user_form.validate_on_submit():
         role_id = int(add_user_form.role.data)
 
-        if len(add_user_form.password.data) < password_min_length:
+        if len(str(add_user_form.password.data)) < password_min_length:
             flash(f'Minimal password length is {password_min_length} characters', 'error')
             return redirect(url_for('user.add'))
 
@@ -222,7 +223,6 @@ def get_role_list():
         {"name": "Roles", "url": None},
     ]
     page_title = 'Roles'
-    endpoint = "user_info"
     
     return render_template('user/table_role.html', 
                            breadcrumbs=breadcrumbs, 
@@ -253,9 +253,9 @@ def view_role():
             flash('You don\'t have permission to edit roles', 'error')
             return redirect(url_for('user.view_role', id=role_id))
 
-        name = form.name.data.strip()
+        name = str(form.name.data).strip()
         selected_permissions = [
-            Permissions(int(entry['permission_value'])) 
+            int(entry['permission_value'])
             for entry in form.permissions.data if entry['enabled']
         ]
 
@@ -329,9 +329,9 @@ def add_role():
             })
 
     if form.validate_on_submit():
-        name = form.name.data.strip()
+        name = str(form.name.data).strip()
         selected_permissions = [
-            Permissions(int(entry['permission_value'])) 
+            int(entry['permission_value'])
             for entry in form.permissions.data if entry['enabled']
         ]
 

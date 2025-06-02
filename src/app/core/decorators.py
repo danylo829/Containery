@@ -7,7 +7,7 @@ def permission(permission):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             if not current_user.has_permission(permission):
-                message = f'You do not have the necessary permission {permission.name}.'
+                message = f'You do not have the necessary permission.'
                 code = 403
                 if request.accept_mimetypes.best == 'application/json':
                     return jsonify({'error': 'Forbidden', 'message': message}), code

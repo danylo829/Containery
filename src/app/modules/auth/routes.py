@@ -38,7 +38,7 @@ def install():
     
     if form.validate_on_submit():
         username = str(form.username.data).strip()
-        password = form.password.data
+        password = str(form.password.data)
 
         if len(password) < password_min_length:
             return redirect(url_for('auth.install'))
