@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const contenBox = document.querySelector('.content-box');
     const form = document.getElementById('start-form');
     const terminalWrapper = document.getElementById('terminal-wrapper');
     const container = document.getElementById('terminal-container');

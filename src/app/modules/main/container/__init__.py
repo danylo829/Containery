@@ -12,14 +12,24 @@ def inject_variables():
     return dict(active_page=module_name)
 
 def register_assets(assets):
-    js = Bundle(
-            "js/actions.js",
-            "js/logs.js",
-            "js/terminal.js",
-            filters='rjsmin',
-            output=f"dist/js/{module_name}.%(version)s.js",
-        )
+    actions_js = Bundle(
+        "js/container_actions.js",
+        filters='rjsmin',
+        output=f"dist/js/{module_name}_actions.%(version)s.js",
+    )
+    logs_js = Bundle(
+        "js/logs.js",
+        filters='rjsmin',
+        output=f"dist/js/{module_name}_logs.%(version)s.js",
+    )
+    terminal_js = Bundle(
+        "js/terminal.js",
+        filters='rjsmin',
+        output=f"dist/js/{module_name}_terminal.%(version)s.js",
+    )
 
-    assets.register(f"{module_name}_js", js)
+    assets.register(f"{module_name}_actions_js", actions_js)
+    assets.register(f"{module_name}_logs_js", logs_js)
+    assets.register(f"{module_name}_terminal_js", terminal_js)
 
 from . import routes

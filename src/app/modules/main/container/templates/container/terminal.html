@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='dist/lib/xterm/xterm.css') }}"/>
     <script src="{{ url_for('static', filename='dist/lib/xterm/xterm.js') }}" defer></script>
     <script src="{{ url_for('static', filename='dist/lib/socket.io/socket.io.min.js') }}"></script>
-    {% assets "container_js" %}
+    {% assets "container_terminal_js" %}
         <script src="{{ ASSET_URL }}" defer></script>
     {% endassets %}
 {% endblock %}
