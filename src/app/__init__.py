@@ -4,6 +4,7 @@ from sys import argv
 from os import path, listdir, walk
 from shutil import copytree, rmtree
 from importlib import import_module
+from datetime import timedelta
 
 from flask_assets import Bundle
 from werkzeug.debug import DebuggedApplication
@@ -114,6 +115,7 @@ class ApplicationFactory:
 
     def configure_context_processors(self, app):
         """Add context processors to the application."""
+        
         @app.context_processor
         def inject_context():
             return dict(
@@ -129,9 +131,21 @@ class ApplicationFactory:
 
     def configure_user_loader(self):
         """Configure the user loader for Flask-Login."""
+
         @self.login_manager.user_loader
         def load_user(user_id):
             return User.query.get(int(user_id))
+
+    def configure_session_timeout(self, app):
+        """Configure session timeout based on global settings."""
+
+        @app.before_request
+        def set_dynamic_session_timeout():
+            try:
+                timeout = int(GlobalSettings.get_setting('session_timeout'))
+            except Exception:
+                timeout = 1800  # fallback default
+            app.permanent_session_lifetime = timedelta(seconds=timeout)
 
     def create_app(self):
         """
@@ -140,7 +154,6 @@ class ApplicationFactory:
         :return: Configured Flask application
         """
         app = Flask(__name__)
-        
         app.config.from_object('app.config.Config')
 
         self.configure_extensions(app)
@@ -152,6 +165,7 @@ class ApplicationFactory:
             self.configure_context_processors(app)
             self.configure_error_pages(app)
             self.configure_user_loader()
+            self.configure_session_timeout(app)
             self.register_blueprints(app)
 
         if app.debug:

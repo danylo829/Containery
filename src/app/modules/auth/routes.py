@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, session
 from flask_login import login_user, logout_user, login_required, current_user
 
 from app.modules.user.models import Permissions, User, Role
@@ -21,6 +21,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
+            session.permanent = True
             return redirect(url_for('index.root'))
         else:
             flash('Invalid username or password', 'error')
