@@ -1,8 +1,9 @@
-from flask import render_template, flash, redirect, url_for, session
+from flask import render_template, flash, redirect, url_for, session, request
 from flask_login import login_user, logout_user, login_required, current_user
 
 from app.modules.user.models import Permissions, User, Role
 from app.modules.settings.models import GlobalSettings
+from app.lib.common import is_safe_url
 from .forms import LoginForm, AdminSetupForm
 
 from . import auth
@@ -15,6 +16,7 @@ def login():
         return redirect(url_for('auth.install'))
 
     form = LoginForm()
+    next_page = request.args.get('next')
     if form.validate_on_submit():
         username = str(form.username.data).strip()
         password = form.password.data
@@ -22,11 +24,13 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             session.permanent = True
+            if next_page and is_safe_url(next_page, request.host_url):
+                return redirect(next_page)
             return redirect(url_for('index.root'))
         else:
             flash('Invalid username or password', 'error')
 
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, next=next_page)
 
 @auth.route('/install', methods=['GET', 'POST'])
 def install():
