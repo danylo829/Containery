@@ -82,6 +82,13 @@ ul {
     font-size: 1rem;
 }
 
+.sidebar .bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+}
+
 .main-content {
     flex-grow: 1;
     display: flex;
@@ -411,11 +418,7 @@ td {
     min-width: 66px;
 }
 
-.sidebar.closed .nav-text {
-    visibility: hidden;
-}
-
-.sidebar.closed .sidebar-title {
+.sidebar.closed .bottom{
     visibility: hidden;
 }
 

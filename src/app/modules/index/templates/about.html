@@ -1,0 +1,33 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+{% assets 'about_css' %}
+<link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets %}
+{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <div class="about-logo">
+        {% set theme = PersonalSettings.get_setting(current_user.id, 'theme').lower() %}
+        {% if theme == 'system' %}
+            <picture>
+                <source media="(prefers-color-scheme: dark)" srcset="{{ url_for('static', filename='images/Containery-white.png') }}">
+                <img alt="Containery Logo" src="{{ url_for('static', filename='images/Containery-black.png') }}" height="120">
+            </picture>
+        {% elif 'dark' in theme %}
+            <img alt="Containery Logo" src="{{ url_for('static', filename='images/Containery-white.png') }}" height="120">
+        {% else %}
+            <img alt="Containery Logo" src="{{ url_for('static', filename='images/Containery-black.png') }}" height="120">
+        {% endif %}
+    </div>
+    <div class="about-section about-description">
+        <p><strong>Containery</strong> is a web based container management tool that provides a fast, lightweight, and intuitive interface for managing Docker containers. Whether you're a software engineer, DevOps, QA, or anyone who needs to interact with containers, Containery makes it easy to monitor status, view logs, and access terminals for quick insights and control.</p>
+    </div>
+    <div class="about-section about-meta">
+        <div>Version: <strong>{{ version }}</strong></div>
+        <div>License: <strong>MIT</strong></div>
+        <div>Source: <a href="https://github.com/danylo829/containery" target="_blank">GitHub</a></div>
+    </div>
+</div>
+{% endblock %}

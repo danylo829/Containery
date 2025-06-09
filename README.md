@@ -1,21 +1,20 @@
 <div align="center">
-  
+
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/Containery-white.png">
-    <img alt="Containery Logo" src="docs/images/Containery-black.png" height="120">
+    <source media="(prefers-color-scheme: dark)" srcset="src/app/static/images/Containery-white.png">
+    <img alt="Containery Logo" src="src/app/static/images/Containery-black.png" height="120">
   </picture>
-  
+
   ![Version](https://img.shields.io/github/v/tag/danylo829/containery?label=version)
   ![Image Size](https://ghcr-badge.egpl.dev/danylo829/containery/size)
   ![Python](https://img.shields.io/badge/python-3.12-blue)
   ![Last Commit](https://img.shields.io/github/last-commit/danylo829/containery)
   ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
   ![License](https://img.shields.io/github/license/danylo829/containery)
-  
+
 </div>
 
-**Containery** is a container management web application that offers a powerful, fast, and lightweight interface to manage Docker containers. It is useful when you need to quickly check container status, view logs, or access a container's terminal.
-
+**Containery** is a web-based container management tool that provides a fast, lightweight, and intuitive interface for managing Docker containers. Whether you're a software engineer, DevOps, QA, or anyone who needs to interact with containers, Containery makes it easy to monitor status, view logs, and access terminals for quick insights and control.
 
 ## Features
 - **Docker Management**: Manage containers, images, networks, and volumes within a unified interface.
@@ -24,7 +23,6 @@
 - **User Management**: Authentication, user profiles, and roles. Ensure that each member has the right level of access to perform their tasks efficiently.
 
 ## Deployment
-
 To deploy Containery, use the following `docker-compose.yml` configuration. Please note that the `docker-compose.yml` in the repository is set up for development purposes.
 
 ```yaml

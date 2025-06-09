@@ -1,0 +1,25 @@
+.about-logo {
+    display: flex;
+    justify-content: center;
+}
+
+.about-description {
+    font-size: 1.15rem;
+    text-align: center;
+}
+
+.about-meta {
+    text-align: center;
+    color: #888;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 600px) {
+    .about-description {
+        text-align: justify;
+    }
+
+    .about-logo img, .about-logo picture {
+        height: 100px;
+    }
+}
