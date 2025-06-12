@@ -11,4 +11,10 @@ def register_assets(assets):
         filters='rjsmin',
         output="dist/js/dashboard.%(version)s.js",
     )
+    css = Bundle(
+        "styles/dashboard.css",
+        filters='rcssmin',
+        output="dist/css/dashboard.%(version)s.css",
+    )
+    assets.register("dashboard_css", css)
     assets.register("dashboard_js", js)

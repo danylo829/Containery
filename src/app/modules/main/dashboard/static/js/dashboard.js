@@ -38,4 +38,19 @@ document.addEventListener('visibilitychange', function() {
     }
 });
 
+const closeBtn = document.querySelector('.update-notification .close-btn');
+const notification = document.querySelector('.update-notification');
+if (closeBtn && notification) {
+    closeBtn.addEventListener('click', function() {
+        notification.style.display = 'none';
+        fetch('/dashboard/dismiss-update-notification', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            }
+        });
+    });
+}
+
 startUpdating();

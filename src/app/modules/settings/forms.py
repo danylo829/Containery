@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, ColorField, SubmitField
+from wtforms import IntegerField, SubmitField
 from wtforms.validators import DataRequired, NumberRange
 
 class GlobalSettingsForm(FlaskForm):

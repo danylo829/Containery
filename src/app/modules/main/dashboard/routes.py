@@ -1,11 +1,13 @@
-from flask import render_template, jsonify
+from flask import render_template, jsonify, session
 
 import json
+import psutil
 
 from app.core.extensions import docker
 
-import psutil
+from app.config import Config
 
+import app.modules.main.dashboard.utils as utils
 from . import dashboard
 
 @dashboard.route('/', methods=['GET'])
@@ -22,11 +24,17 @@ def index():
     else:
         info = response.json()
 
-    breadcrumbs = [
-        {"name": "Dashboard", "url": None},
-    ]
+    latest_version, show_update_notification = utils.check_for_update()
+
     page_title = "Dashboard"
-    return render_template('dashboard.html', info=info, breadcrumbs=breadcrumbs, page_title=page_title)
+    return render_template(
+        'dashboard.html',
+        info=info,
+        page_title=page_title,
+        show_update_notification=show_update_notification,
+        latest_version=latest_version,
+        installed_version=Config.VERSION
+    )
 
 @dashboard.route('/usage', methods=['GET'])
 def get_usage():
@@ -48,3 +56,8 @@ def get_usage():
         ram_total=ram_total,
         load_average=load_average
     )
+
+@dashboard.route('/dismiss-update-notification', methods=['POST'])
+def dismiss_update_notification():
+    session['dismiss_update_notification'] = True
+    return jsonify({'success': True}), 200

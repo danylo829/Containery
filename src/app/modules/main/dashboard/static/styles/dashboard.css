@@ -1,0 +1,21 @@
+.update-notification {
+    width: 100vw;
+    flex: unset;
+    border: 1px solid var(--accent-color);
+}
+
+.dashboard h2,
+.update-notification h2 {
+    margin-top: unset;
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: var(--text-color);
+    cursor: pointer;
+}

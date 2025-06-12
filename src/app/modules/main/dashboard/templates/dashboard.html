@@ -1,6 +1,9 @@
 {% extends "main.html" %}
 
 {% block custom_header %}
+    {% assets "dashboard_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
     {% assets "dashboard_js" %}
         <script src="{{ ASSET_URL }}" defer></script>
     {% endassets %}
@@ -11,7 +14,7 @@
 
 {% block content %}
 <div class="content-card dashboard">
-    <h2>System info</h2>
+    <h2>System Info</h2>
     <p><strong>OSType: </strong>{{ info['OSType'] }}</p>
     <p><strong>Operating System: </strong>{{ info['OperatingSystem'] }}</p>
     <p><strong>Hostname: </strong>{{ info['Name'] }}</p>
@@ -77,4 +80,17 @@
     </div>
 </div>
 
+{% if show_update_notification %}
+<div class="content-card update-notification" style="position: relative;">
+    <button class="close-btn" aria-label="Close notification">&times;</button>
+    <h2>New Version Available!</h2>
+    <p>
+        A new version of Containery is available: <strong>{{ latest_version }}</strong><br>
+        You are running: <strong>{{ installed_version }}</strong>
+    </p>
+    <p>
+        <a href="https://github.com/danylo829/containery/releases/latest" target="_blank" rel="noopener">View Release Notes</a>
+    </p>
+</div>
+{% endif %}
 {% endblock %}

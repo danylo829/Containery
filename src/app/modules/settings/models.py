@@ -10,6 +10,8 @@ class GlobalSettings(db.Model):
         'dashboard_refresh_interval': 5,
         'session_timeout': 1800,
         'password_min_length': 8,
+        'latest_version': '',
+        'latest_version_checked_at': '',
     }
 
     @classmethod
@@ -27,14 +29,6 @@ class GlobalSettings(db.Model):
     def set_setting(cls, key, value):
         if key not in cls.defaults:
             raise KeyError(f"The setting '{key}' is not defined in defaults.")
-
-        if key == 'dashboard_refresh_interval' or key == 'log_retention_days' or key == 'session_timeout':
-            try:
-                value = int(value)
-                if value <= 0:
-                    raise ValueError(f"The value for '{key}' must be a positive integer.")
-            except ValueError:
-                raise ValueError(f"The value for '{key}' must be an integer.")
 
         try:
             setting = cls.query.filter_by(key=key).first()
