@@ -161,6 +161,10 @@ ul {
     flex: 1 1 calc(50% - 2rem);
 }
 
+.content-card h2 {
+    margin-top: 0;
+}
+
 .breadcrumbs {
     font-size: 0.9rem;
     overflow-wrap: anywhere;
