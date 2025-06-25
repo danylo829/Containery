@@ -53,15 +53,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Extract tag message
-        id: tag_info
-        run: .github/scripts/get-tag-message.sh >> "$GITHUB_OUTPUT"
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
-          body: ${{ steps.tag_info.outputs.message }}
+          body_path: release-notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
