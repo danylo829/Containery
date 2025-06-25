@@ -111,6 +111,28 @@ server {
 - **`SQLALCHEMY_TRACK_MODIFICATIONS`**: A flag to enable or disable SQLAlchemy's event system. Defaults to `False`.
 - **`DEBUG`**: Enables or disables debug mode. Defaults to `False`.
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/images/dashboard.png" alt="Dashboard" width="600" />
+  <br><em>Dashboard view</em>
+</p>
+
+<p align="center">
+  <img src="docs/images/container_list.png" alt="Container List" width="600" />
+  <br><em>Container list</em>
+</p>
+
+<p align="center">
+  <img src="docs/images/terminal.png" alt="Terminal" width="600" />
+  <br><em>Container terminal</em>
+</p>
+
+<p align="center">
+  <img src="docs/images/role_add.png" alt="Role Add" width="600" />
+  <br><em>Role management</em>
+</p>
+
 ## Roadmap
 - **OIDC Authentication**
 - **Remote Docker host support**
