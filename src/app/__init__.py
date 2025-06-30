@@ -128,6 +128,7 @@ class ApplicationFactory:
     def configure_error_pages(self, app):
         app.register_error_handler(404, error_handlers.page_not_found)
         app.register_error_handler(500, error_handlers.internal_server_error)
+        app.register_error_handler(400, error_handlers.bad_request)
 
     def configure_user_loader(self):
         """Configure the user loader for Flask-Login."""

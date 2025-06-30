@@ -14,3 +14,10 @@ def internal_server_error(e):
         return render_template('error.html', code=code, message=e), code
     else:
         return render_template('error_unauthenticated.html', code=code, message=e), code
+
+def bad_request(e):
+    code = 400
+    if current_user.is_authenticated:
+        return render_template('error.html', code=code, message=e), code
+    else:
+        return render_template('error_unauthenticated.html', code=code, message=e), code
