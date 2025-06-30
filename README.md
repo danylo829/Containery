@@ -6,7 +6,7 @@
   </picture>
 
   ![Version](https://img.shields.io/github/v/tag/danylo829/containery?label=version)
-  ![Image Size](https://ghcr-badge.egpl.dev/danylo829/containery/size)
+  ![Image Size](https://img.shields.io/badge/image%20size-170MB-blue)
   ![Python](https://img.shields.io/badge/python-3.12-blue)
   ![Last Commit](https://img.shields.io/github/last-commit/danylo829/containery)
   ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
