@@ -102,11 +102,10 @@ ul {
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
+    height: 3rem;
     background-color: transparent;
     color: var(--text-color);
-    top: 0;
     width: -webkit-fill-available;
-    z-index: 1;
 }
 
 .main-header h2 {
@@ -318,15 +317,18 @@ form td {
     word-wrap: break-word;
 }
 
+tr {
+    border-bottom: 1px solid var(--accent-color);
+}
+
+tr:last-child {
+    border-bottom: none;
+}
+
 th, td {
     padding: 0.75rem;
     text-align: left;
-    border-bottom: 1px solid var(--accent-color);
-    white-space: nowrap; /* Prevent wrapping */
-}
-
-table.add-role td {
-    border-bottom: 1px solid var(--accent-color);
+    white-space: nowrap;
 }
 
 table.add-role {
@@ -335,10 +337,6 @@ table.add-role {
 
 table.add-role tr td:last-child {
     text-align: right;
-}
-
-th {
-    cursor: pointer;
 }
 
 th[data-sort]:after {
@@ -359,20 +357,24 @@ th[data-sort].descending:after {
 th {
     background-color: var(--accent-color);
     color: var(--bg-color);
-    white-space: nowrap; /* Prevent wrapping */
-    overflow: hidden; /* Hide the overflow text */
-    text-overflow: ellipsis; /* Show ellipsis if text overflows */
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 td {
-    white-space: normal; /* Prevent wrapping inside cells */
-    word-wrap: normal; /* Default word-wrap behavior */
+    white-space: normal;
+    word-wrap: normal;
+}
+
+form table tr {
+    border-bottom: none;
 }
 
 .content-card .table-box {
     max-height: 40vh;
     overflow-x: hidden;
-    margin-bottom: 1rem;
 }
 
 .table-box {
@@ -719,9 +721,14 @@ input[type="checkbox"][disabled] + label:before {
 
 input[type="submit"] {
     background: var(--accent-color);
-    color: white;
+    color: var(--bg-color);
+    border: none;
     font-size: medium;
     cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background: var(--accent-color-darken);
 }
 
 select {
@@ -815,7 +822,7 @@ span.delete:hover {
 .role-badge {
     display: inline-block;
     background-color: var(--accent-color);
-    color: white;
+    color: var(--bg-color);
     padding: 5px 10px;
     border-radius: 10px;
     font-size: 0.8em;

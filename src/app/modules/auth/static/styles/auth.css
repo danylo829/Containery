@@ -1,9 +1,4 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    margin: 0;
-    padding: 0;
     display: flex;
     align-items: center;
     height: 100vh;
@@ -18,13 +13,12 @@ header {
     align-items: center;
     justify-content: center;
     padding-inline: 5vw;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 main {
     margin-left: 25%;
-    padding: 20px;
-    box-sizing: border-box;
-    max-width: 400px;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
@@ -60,32 +54,6 @@ h2 {
 label {
     display: block;
     margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--accent-color);
-    border-radius: 10px;
-    box-sizing: border-box;
-    background: var(--bg-color);
-    color: var(--text-color);
-}
-
-input[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 10px;
-    background: var(--accent-color);
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-input[type="submit"]:hover {
-    background: var(--accent-color-darken);
 }
 
 .validation-error {

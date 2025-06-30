@@ -14,3 +14,7 @@
     color: var(--text-color);
     cursor: pointer;
 }
+
+tr:last-child {
+    border-bottom: 1px solid var(--accent-color);
+}
