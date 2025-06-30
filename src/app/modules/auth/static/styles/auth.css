@@ -40,6 +40,10 @@ h2 {
     padding: 1rem;
 }
 
+.error-container {
+    margin-left: 25%;
+}
+
 .flash {
     text-align: center;
     margin-top: 1rem;

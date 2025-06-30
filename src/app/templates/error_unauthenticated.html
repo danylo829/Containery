@@ -1,13 +1,11 @@
 {% extends "auth.html" %}
 
 {% block content %}
-    <div class="auth-container">
-        <div class="error-container">
-            <div class="error-box">
-                {% include 'icons/error.svg' %} 
-                <h1 class="error-code">{{ code }}</h1>
-            </div>
-            <p class="error-text">{{ message }}</p>
+    <div class="error-container">
+        <div class="error-box">
+            {% include 'icons/error.svg' %} 
+            <h1 class="error-code">{{ code }}</h1>
         </div>
+        <p class="error-text">{{ message }}</p>
     </div>
 {% endblock %}
