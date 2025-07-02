@@ -356,7 +356,6 @@ th[data-sort].descending:after {
 
 th {
     background-color: var(--accent-color);
-    color: var(--bg-color);
     cursor: pointer;
     white-space: nowrap;
     overflow: hidden;
