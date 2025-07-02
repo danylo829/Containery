@@ -62,8 +62,16 @@ class AddUserForm(FlaskForm):
             Length(min=password_min_length, message=f"Password must be at least {password_min_length} characters long.")
         )
 
-    username = StringField('Username', validators=[DataRequired(), Length(max=24, min=1)])
-    password = PasswordField('Password', validators=[DataRequired()])
+    username = StringField(
+        'Username',
+        validators=[DataRequired(), Length(max=24, min=1)],
+        render_kw={'autocomplete': 'off'}
+    )
+    password = PasswordField(
+        'Password',
+        validators=[DataRequired()],
+        render_kw={'autocomplete': 'new-password'}
+    )
     role = SelectField(
         'Role',
         choices=[],
