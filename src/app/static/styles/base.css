@@ -783,14 +783,16 @@ select option {
     transition: opacity 0.3s ease;
 }
 
-.title .actions div {
-    justify-content: end;
-}
-
-.actions div {
+.actions {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 1rem;
+}
+
+.content-card .actions {
+    gap: unset;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .actions a,

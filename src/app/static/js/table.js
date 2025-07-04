@@ -96,8 +96,9 @@ function sortTable(tableId) {
 }
 
 const searchField = document.getElementById('search');
+const searchReset = document.getElementById('search-reset');
 
-if (searchField != null) {
+if (searchField) {
     let currentTable = null;
 
     for (const tableId in tables) {
@@ -106,6 +107,14 @@ if (searchField != null) {
             currentTable = tableId;
             break;
         }
+    }
+
+    if (searchReset) {
+        searchReset.addEventListener('click', function() {
+            searchField.value = '';
+            localStorage.removeItem(`lastSearchValue_${currentTable}`);
+            search(searchField.value, currentTable);
+        });
     }
 
     if (currentTable !== null) {

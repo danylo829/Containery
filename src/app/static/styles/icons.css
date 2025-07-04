@@ -101,21 +101,22 @@
 /* Users */
 
 :is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #users-icon #user-1,
-.actions div a:hover #user-add-icon #user-1 {
+.actions a:hover #user-add-icon #user-1 {
     transform: translateX(-1px);
 }
 
 :is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #users-icon #user-2,
-.actions div a:hover #user-add-icon #plus-sign {
+.actions a:hover #user-add-icon #plus-sign {
     transform: translateX(1px);
 }
 
-.actions a:not(:hover) svg *,
-#logout-icon:not(:hover) #arrow,
-:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover)) #settings-icon *,
-:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover)) #networks-icon *,
-:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover)) #containers-icon *,
-:not(:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover)) #users-icon * {
+.actions a:hover svg *,
+#logout-icon:hover #arrow,
+#clear-icon:hover *,
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #settings-icon *,
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #networks-icon *,
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #containers-icon *,
+:is(.nav-menu li a:hover, .nav-menu li.active a, .buttons a:hover) #users-icon * {
     transition: transform 0.3s cubic-bezier(0.33, 2.2, 0.6, 1);
 }
 
@@ -211,4 +212,20 @@ a.action:hover {
 
 #save-icon:hover polyline:last-child {
     transform: rotate(-180deg);
+}
+
+/* Clear */
+#clear-icon *{
+    color: gray;
+}
+
+#clear-icon:hover * {
+    stroke: var(--error-bg);
+}
+#clear-icon:hover *:first-child {
+    transform: rotate(90deg);
+}
+
+#clear-icon:hover *:last-child {
+    transform: rotate(-90deg);
 }

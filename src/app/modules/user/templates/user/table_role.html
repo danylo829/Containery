@@ -1,25 +1,16 @@
 {% extends "main.html" %}
-
-{% block custom_header %}
-{% endblock %}
+{% from 'box-top-panel-macros.html' import box_top_panel %}
 
 {% block content %}
 <div class="content-box">
-    <div class="search-box">
-        <input type="text" id="search" placeholder="Search">
-        <div class="actions">
-            <div class="secondary">
-                {% if current_user.has_permission(Permissions.ROLE_ADD) %}
-                    <a href="{{ url_for('user.add_role') }}">
-                        {% include 'icons/add.svg' %}  
-                    </a>
-                {% endif %}        
-                <a id="refresh-page-btn">
-                    {% include 'icons/restart.svg' %}  
-                </a>
-            </div>
-        </div>
-    </div>
+    {% set extra_buttons %}
+        {% if current_user.has_permission(Permissions.ROLE_ADD) %}
+            <a href="{{ url_for('user.add_role') }}">
+                {% include 'icons/add.svg' %}  
+            </a>
+        {% endif %}  
+    {% endset %}
+    {{ box_top_panel(extra_buttons) }}
     <div class="table-box">
         <table id="roles-table">
             <thead>

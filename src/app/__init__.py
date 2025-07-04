@@ -87,6 +87,7 @@ class ApplicationFactory:
             "styles/base.css",
             "styles/modal.css",
             "styles/icons.css",
+            "styles/search-box.css",
             filters="rcssmin",
             output="dist/css/app.%(version)s.css"
         )

@@ -1,20 +1,12 @@
 {% extends "main.html" %}
+{% from 'box-top-panel-macros.html' import box_top_panel %}
 
 {% block custom_header %}
 {% endblock %}
 
 {% block content %}
 <div class="content-box">
-    <div class="search-box">
-        <input type="text" id="search" placeholder="Search">
-        <div class="actions">
-            <div>
-                <a id="refresh-page-btn">
-                    {% include 'icons/restart.svg' %}  
-                </a>
-            </div>
-        </div>
-    </div>
+    {{ box_top_panel() }}
     <div class="table-box">
         <table id="container-table">
             <thead>
