@@ -16,3 +16,10 @@ def is_safe_url(target: str, host_url: str) -> bool:
     ref_url = urlparse(host_url)
     test_url = urlparse(urljoin(host_url, target))
     return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
+
+def bytes_to_human_readable(num_bytes):
+    for unit in ['B', 'KB', 'MB', 'GB', 'TB', 'PB']:
+        if num_bytes < 1024.0:
+            return f"{num_bytes:.2f} {unit}"
+        num_bytes /= 1024.0
+    return f"{num_bytes:.2f} PB"

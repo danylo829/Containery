@@ -14,6 +14,7 @@ def inject_variables():
 def register_assets(assets):
     js = Bundle(
         "js/actions.js",
+        "js/network_list_actions.js",
         filters='rjsmin',
         output=f"dist/js/{module_name}.%(version)s.js",
     )

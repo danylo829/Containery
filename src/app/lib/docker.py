@@ -11,21 +11,25 @@ class Docker:
         self.encoded_socket_path = app.config.get("DOCKER_SOCKET_PATH").replace('/', '%2F')
 
     # GENERAL
-    def perform_request(self, path, method='GET', payload=None) -> tuple:
+    def perform_request(self, path, method='GET', payload=None, params=None) -> tuple:
         url = f'http+unix://{self.encoded_socket_path}{path}'
         session = requests_unixsocket.Session()
+
         try:
             if method == 'GET':
-                response = session.get(url)
-            if method == 'DELETE':
-                response = session.delete(url)
+                response = session.get(url, params=params)
+            elif method == 'DELETE':
+                response = session.delete(url, params=params)
             elif method == 'POST':
-                response = session.post(url, json=payload)
+                response = session.post(url, json=payload, params=params)
+            else:
+                return f"Unsupported HTTP method: {method}", 400
 
             return response, response.status_code
 
         except Exception as e:
             return str(e), 500
+
     
     # EXEC
 
@@ -203,6 +207,9 @@ class Docker:
     def delete_container(self, container_id):
         return self.perform_request(f'/containers/{container_id}', method='DELETE')
 
+    def prune_containers(self):
+        return self.perform_request('/containers/prune', method='POST')
+
     # IMAGE
 
     def get_images(self):
@@ -213,6 +220,9 @@ class Docker:
 
     def delete_image(self, image_id):
         return self.perform_request(f'/images/{image_id}', method='DELETE')
+
+    def prune_images(self, params=None):
+        return self.perform_request('/images/prune', method='POST', params=params)
 
     # VOLUME
 
@@ -225,6 +235,9 @@ class Docker:
     def delete_volume(self, volume_id):
         return self.perform_request(f'/volumes/{volume_id}', method='DELETE')
 
+    def prune_volumes(self):
+        return self.perform_request('/volumes/prune', method='POST')
+
     # NETWORK
 
     def get_networks(self):
@@ -235,4 +248,7 @@ class Docker:
 
     def delete_network(self, network_id):
         return self.perform_request(f'/networks/{network_id}', method='DELETE')
+
+    def prune_networks(self):
+        return self.perform_request('/networks/prune', method='POST')
 

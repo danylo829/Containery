@@ -2,11 +2,21 @@
 {% from 'box-top-panel-macros.html' import box_top_panel %}
 
 {% block custom_header %}
+    {% assets "volume_js" %}
+        <script src="{{ ASSET_URL }}" defer></script>
+    {% endassets %}
 {% endblock %}
 
 {% block content %}
 <div class="content-box">
-    {{ box_top_panel() }}
+    {% set extra_buttons %}
+        {% if current_user.has_permission(Permissions.VOLUME_DELETE) %}
+            <a class="prune-btn" title="Prune unused volumes">
+                {% include 'icons/prune.svg' %}
+            </a>
+        {% endif %}
+    {% endset %}
+    {{ box_top_panel(extra_buttons) }}
     <div class="table-box">
         <table id="volume-table">
             <thead>

@@ -4,7 +4,16 @@ const actions = document.querySelector('.actions');
 
 function handleResponse(response, returnUrl) {
     if (response.ok) {
-        localStorage.setItem('flash_message',  'Success!');
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            response.json().then(data => {
+                if (data && data.message) {
+                    localStorage.setItem('flash_message', data.message);
+                }
+            });
+        } else {
+            localStorage.setItem('flash_message',  'Success!');
+        }
         localStorage.setItem('flash_type', 'success');
         if (returnUrl) {
             window.location.href = returnUrl;

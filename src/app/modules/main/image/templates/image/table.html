@@ -2,11 +2,21 @@
 {% from 'box-top-panel-macros.html' import box_top_panel %}
 
 {% block custom_header %}
+    {% assets "image_js" %}
+        <script src="{{ ASSET_URL }}" defer></script>
+    {% endassets %}
 {% endblock %}
 
 {% block content %}
 <div class="content-box">
-    {{ box_top_panel() }}
+    {% set extra_buttons %}
+        {% if current_user.has_permission(Permissions.IMAGE_DELETE) %}
+            <a class="prune-btn" title="Prune unused images">
+                {% include 'icons/prune.svg' %}
+            </a>
+        {% endif %}
+    {% endset %}
+    {{ box_top_panel(extra_buttons) }}
     <div class="table-box">
         <table id="image-table">
             <thead>
@@ -19,7 +29,7 @@
             <tbody id="image-list">
                 {% for row in rows %}
                 <tr>
-                    <td><a href="{{ url_for('main.image.info', id=row.id) }}"">{{ row.repo_tags }}</a></td>
+                    <td><a href="{{ url_for('main.image.info', id=row.id) }}">{{ row.repo_tags }}</a></td>
                     <td>{{ row.created }}</td>
                     <td>{{ row.size }}</td>
                 </tr>
