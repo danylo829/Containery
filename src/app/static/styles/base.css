@@ -304,7 +304,7 @@ table {
 }
 
 thead {
-    color: #ffffff;
+    color: var(--bg-color);
     position: sticky;
     top: 0;
     z-index: 1;
@@ -733,7 +733,7 @@ input[type="checkbox"][disabled] + label:before {
 input[type="submit"],
 button.full {
     background: var(--accent-color);
-    color: white;
+    color: var(--bg-color);
     border: none;
     font-size: medium;
     cursor: pointer;

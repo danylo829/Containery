@@ -3,8 +3,8 @@ body {
     --success-bg: var(--success-bg-base);
     --error-bg: var(--error-bg-base);
     
-    --accent-color-dark-theme: #5cabff;
-    --accent-color-dark-theme-darken: #5299E5;
+    --accent-color-dark-theme: #66bfff;
+    --accent-color-dark-theme-darken: #33aaff;
     
     --accent-color-light-theme: #0077ff;
     --accent-color-light-theme-darken: #3392FF;
