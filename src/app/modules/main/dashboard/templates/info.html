@@ -1,0 +1,155 @@
+{% extends "main.html" %}
+
+{% block custom_header %}
+    {% assets "dashboard_info_js" %}
+        <script src="{{ ASSET_URL }}" defer></script>
+    {% endassets %}
+{% endblock %}
+
+{% block content %}
+    {% if info %}
+        <!-- Docker Data Card -->
+        <div class="content-card single">
+            <h2>Docker Data</h2>
+            <div class="table-box">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Total</th>
+                            <th>Active</th>
+                            <th>Size</th>
+                            <th>Reclaimable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Images</td>
+                            <td>{{ df.Images | length }}</td>
+                            <td>{{ df.Images | selectattr('Containers', 'gt', 0) | list | length }}</td>
+                            <td>{{ df.Images | map(attribute='Size') | sum | filesizeformat }}</td>
+                            <td>
+                                {% set total = df.Images | map(attribute='Size') | sum %}
+                                {% set reclaimable = df.Images | map(attribute='SharedSize') | sum %}
+                                {{ reclaimable | filesizeformat }} ({{ ((reclaimable / total * 100) if total else 0) | round(0) }}%)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Containers</td>
+                            <td>{{ df.Containers | length }}</td>
+                            <td>{{ df.Containers | selectattr('State', 'equalto', 'running') | list | length }}</td>
+                            <td>{{ df.Containers | map(attribute='SizeRootFs') | sum | filesizeformat }}</td>
+                            <td>0B (0%)</td>
+                        </tr>
+                        <tr>
+                            <td>Local Volumes</td>
+                            <td>{{ df.Volumes | length }}</td>
+                            <td>{{ df.Volumes | selectattr('UsageData.RefCount', 'gt', 0) | list | length }}</td>
+                            <td>{{ df.Volumes | map(attribute='UsageData.Size') | sum | filesizeformat }}</td>
+                            <td>
+                                {% set total = df.Volumes | map(attribute='UsageData.Size') | sum %}
+                                {% set reclaimable = df.Volumes | selectattr('UsageData.RefCount', 'equalto', 0) | map(attribute='UsageData.Size') | sum %}
+                                {{ reclaimable | filesizeformat }} ({{ ((reclaimable / total * 100) if total else 0) | round(0) }}%)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Build Cache</td>
+                            <td>{{ df.BuildCache | length }}</td>
+                            <td>{{ df.BuildCache | selectattr('InUse', 'equalto', true) | list | length }}</td>
+                            <td>{{ df.BuildCache | map(attribute='Size') | sum | filesizeformat }}</td>
+                            <td>
+                                {% set total = df.BuildCache | map(attribute='Size') | sum %}
+                                {% set reclaimable = df.BuildCache | selectattr('InUse', 'equalto', false) | map(attribute='Size') | sum %}
+                                {{ reclaimable | filesizeformat }} ({{ ((reclaimable / total * 100) if total else 0) | round(0) }}%)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="full prune-btn">Clean All</button>
+        </div>
+        
+        <!-- Host Overview Card -->
+        <div class="content-card">
+            <h2>Host Overview</h2>
+            <div class="table-box">
+                <table>
+                    <tbody>
+                        <tr><td><strong>Name</strong></td><td>{{ info.Name }}</td></tr>
+                        <tr><td><strong>Operating System</strong></td><td>{{ info.OperatingSystem }} ({{ info.OSVersion }})</td></tr>
+                        <tr><td><strong>Architecture</strong></td><td>{{ info.Architecture }}</td></tr>
+                        <tr><td><strong>Kernel Version</strong></td><td>{{ info.KernelVersion }}</td></tr>
+                        <tr><td><strong>Docker Version</strong></td><td>{{ info.ServerVersion }}</td></tr>
+                        <tr><td><strong>Docker Root Dir</strong></td><td>{{ info.DockerRootDir }}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Containers & Images Card -->
+        <div class="content-card">
+            <h2>Containers & Images</h2>
+            <div class="table-box">
+                <table>
+                    <tbody>
+                        <tr><td><strong>Total Containers</strong></td><td>{{ info.Containers }}</td></tr>
+                        <tr><td><strong>Running</strong></td><td>{{ info.ContainersRunning }}</td></tr>
+                        <tr><td><strong>Paused</strong></td><td>{{ info.ContainersPaused }}</td></tr>
+                        <tr><td><strong>Stopped</strong></td><td>{{ info.ContainersStopped }}</td></tr>
+                        <tr><td><strong>Images</strong></td><td>{{ info.Images }}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Resources Card -->
+        <div class="content-card">
+            <h2>Resources</h2>
+            <div class="table-box">
+                <table>
+                    <tbody>
+                        <tr><td><strong>CPUs</strong></td><td>{{ info.NCPU }}</td></tr>
+                        <tr><td><strong>Total Memory</strong></td><td>{{ (info.MemTotal // (1024*1024*1024)) ~ ' GB' }}</td></tr>
+                        <tr><td><strong>Memory Limit</strong></td><td>{{ 'Yes' if info.MemoryLimit else 'No' }}</td></tr>
+                        <tr><td><strong>Swap Limit</strong></td><td>{{ 'Yes' if info.SwapLimit else 'No' }}</td></tr>
+                        <tr><td><strong>Pids Limit</strong></td><td>{{ 'Yes' if info.PidsLimit else 'No' }}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Storage & Drivers Card -->
+        <div class="content-card">
+            <h2>Storage & Drivers</h2>
+            <div class="table-box">
+                <table>
+                    <tbody>
+                        <tr><td><strong>Storage Driver</strong></td><td>{{ info.Driver }}</td></tr>
+                        <tr><td><strong>Backing Filesystem</strong></td><td>{{ info.DriverStatus[0][1] if info.DriverStatus and info.DriverStatus[0] }}</td></tr>
+                        <tr><td><strong>Cgroup Driver</strong></td><td>{{ info.CgroupDriver }}</td></tr>
+                        <tr><td><strong>Cgroup Version</strong></td><td>{{ info.CgroupVersion }}</td></tr>
+                        <tr><td><strong>Logging Driver</strong></td><td>{{ info.LoggingDriver }}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Network & Plugins Card -->
+        <div class="content-card">
+            <h2>Network & Plugins</h2>
+            <div class="table-box">
+                <table>
+                    <tbody>
+                        <tr><td><strong>Network Plugins</strong></td><td>{{ info.Plugins.Network | join(', ') }}</td></tr>
+                        <tr><td><strong>Volume Plugins</strong></td><td>{{ info.Plugins.Volume | join(', ') }}</td></tr>
+                        <tr><td><strong>Log Plugins</strong></td><td>{{ info.Plugins.Log | join(', ') }}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <div class="content-card">
+            <p>No information available.</p>
+        </div>
+    {% endif %}
+{% endblock %}

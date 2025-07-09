@@ -1,7 +1,7 @@
 let updateInterval;
 
 function updateUsage() {
-    fetch('/dashboard/usage')
+    fetch('/dashboard/api/usage')
         .then(response => response.json())
         .then(data => {
             // Update CPU usage
@@ -43,7 +43,7 @@ const notification = document.querySelector('.update-notification');
 if (closeBtn && notification) {
     closeBtn.addEventListener('click', function() {
         notification.style.display = 'none';
-        fetch('/dashboard/dismiss-update-notification', {
+        fetch('/dashboard/api/dismiss-update-notification', {
             method: 'POST',
             headers: {
                 'X-CSRFToken': csrfToken,

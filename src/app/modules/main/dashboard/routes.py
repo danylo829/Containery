@@ -1,7 +1,6 @@
-from flask import render_template, jsonify, session
+from flask import render_template
 
 import json
-import psutil
 
 from app.core.extensions import docker
 
@@ -36,28 +35,28 @@ def index():
         installed_version=Config.VERSION
     )
 
-@dashboard.route('/usage', methods=['GET'])
-def get_usage():
-    # CPU usage
-    cpu_usage = psutil.cpu_percent(interval=1)
+@dashboard.route('/info', methods=['GET'])
+def info():
+    response, status_code = docker.info()
+    response_df, status_code_df = docker.df()
+    info = []
+    df = []
+    if status_code not in range(200, 300):
+        message = response.text if hasattr(response, 'text') else str(response)
+        try:
+            message = json.loads(message).get('message', message)
+        except json.JSONDecodeError:
+            pass
+        return render_template('error.html', message=message, code=status_code), status_code
+    else:
+        info = response.json()
 
-    # RAM usage
-    ram_usage_percent = psutil.virtual_memory().percent
-    ram_usage_absolute = round((psutil.virtual_memory().used / 1024 / 1024 / 1024), 2)
-    ram_total = round((psutil.virtual_memory().total / 1024 / 1024 / 1024), 2)
+    if status_code_df in range(200, 300):
+        df = response_df.json()
 
-    # Load average
-    load_average = psutil.getloadavg()  # Returns a tuple (1min, 5min, 15min)
-
-    return jsonify(
-        cpu=cpu_usage,
-        ram_percent=ram_usage_percent,
-        ram_absolute=ram_usage_absolute,
-        ram_total=ram_total,
-        load_average=load_average
-    )
-
-@dashboard.route('/dismiss-update-notification', methods=['POST'])
-def dismiss_update_notification():
-    session['dismiss_update_notification'] = True
-    return jsonify({'success': True}), 200
+    page_title = "Dashboard"
+    breadcrumbs = [
+        {'name': 'Dashboard', 'url': '/'},
+        {'name': 'Info', 'url': ''}
+    ]
+    return render_template('info.html', page_title=page_title, info=info, df=df, breadcrumbs=breadcrumbs)

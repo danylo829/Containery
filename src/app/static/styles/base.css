@@ -118,6 +118,7 @@ ul {
 
 .content {
     padding-inline: 1rem;
+    padding-bottom: 1rem;
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -160,6 +161,10 @@ ul {
     flex: 1 1 calc(50% - 2rem);
 }
 
+.content-card.single {
+    flex: 1 1 calc(100% - 2rem);
+}
+
 .content-card h2 {
     margin-top: 0;
 }
@@ -198,7 +203,8 @@ ul {
 }
 
 input,
-select {
+select,
+button.full {
     width: 100%;
     padding: 10px;
     height: 5vh;
@@ -326,6 +332,10 @@ tr:last-child {
     border-bottom: none;
 }
 
+tbody tr:only-child {
+    border-bottom: 1px solid var(--accent-color);
+}
+
 th, td {
     padding: 0.75rem;
     text-align: left;
@@ -369,7 +379,7 @@ td {
 }
 
 form table tr {
-    border-bottom: none;
+    border-bottom: none !important;
 }
 
 .content-card .table-box {
@@ -655,7 +665,8 @@ input[type="text"][disabled] {
     cursor: not-allowed;
 }
 
-input[type="submit"][disabled] {
+input[type="submit"][disabled],
+button[disabled] {
     border: 1px solid grey;
     cursor: not-allowed;
     background-color: grey;
@@ -719,15 +730,21 @@ input[type="checkbox"][disabled] + label:before {
     background-color: #ddd;
 }
 
-input[type="submit"] {
+input[type="submit"],
+button.full {
     background: var(--accent-color);
-    color: var(--bg-color);
+    color: white;
     border: none;
     font-size: medium;
     cursor: pointer;
 }
 
-input[type="submit"]:hover {
+button.full {
+    margin-top: 1rem;
+}
+
+input[type="submit"]:hover,
+button.full:hover {
     background: var(--accent-color-darken);
 }
 

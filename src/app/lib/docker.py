@@ -146,6 +146,9 @@ class Docker:
 
     def info(self):
         return self.perform_request('/info')
+    
+    def df(self):
+        return self.perform_request('/system/df')
 
     # CONTAINER
 
@@ -223,6 +226,9 @@ class Docker:
 
     def prune_images(self, params=None):
         return self.perform_request('/images/prune', method='POST', params=params)
+    
+    def prune_build_cache(self):
+        return self.perform_request('/build/prune', method='POST')
 
     # VOLUME
 
