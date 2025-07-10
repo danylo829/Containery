@@ -108,15 +108,6 @@
             </div>
         </div>
     </div>
-    <div id="confirmationModal" class="modal">
-        <div class="modal-content">
-            <p id="modalQuestion">Are you sure you want to perform this action?</p>
-            <div class="button-group">
-                <button id="cancelBtn" class="btn cancel">Cancel</button>
-                <button id="confirmBtn" class="btn delete">Confirm</button>
-            </div>
-        </div>
-    </div>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="flash-messages">
