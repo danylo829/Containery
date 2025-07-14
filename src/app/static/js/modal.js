@@ -6,6 +6,10 @@ function createModal() {
     const modalContent = document.createElement('div');
     modalContent.className = 'modal-content';
 
+    const header = document.createElement('h2');
+    header.textContent = 'Confirmation';
+    header.style.textAlign = 'center';
+
     const question = document.createElement('p');
     question.id = 'modalQuestion';
     question.textContent = 'Are you sure you want to perform this action?';
@@ -24,10 +28,13 @@ function createModal() {
     confirmBtn.textContent = 'Confirm';
 
     // Build hierarchy
+    modalContent.appendChild(header);
+    modalContent.appendChild(question);
+    
     buttonGroup.appendChild(cancelBtn);
     buttonGroup.appendChild(confirmBtn);
-    modalContent.appendChild(question);
     modalContent.appendChild(buttonGroup);
+
     modal.appendChild(modalContent);
 
     return modal;
@@ -49,7 +56,6 @@ function openModal(url, method, question, returnUrl) {
     const actions = document.querySelector('.actions');
 
     modalQuestion.textContent = question;
-    confirmationModal.style.display = 'block';
 
     confirmBtn.addEventListener('click', function () {
         const spinner = document.querySelector('.loading-spinner');
