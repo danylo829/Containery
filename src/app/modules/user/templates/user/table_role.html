@@ -5,7 +5,7 @@
 <div class="content-box">
     {% set extra_buttons %}
         {% if current_user.has_permission(Permissions.ROLE_ADD) %}
-            <a href="{{ url_for('user.add_role') }}">
+            <a href="{{ url_for('user.add_role') }}" title="Add Role">
                 {% include 'icons/add.svg' %}  
             </a>
         {% endif %}  

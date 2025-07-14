@@ -25,7 +25,7 @@
                         {{ form.dashboard_refresh_interval(class="setting-input") }}
                         <div class="actions">
                             <div>
-                                <a class="settings-revert-icon" onclick="resetSetting('dashboard_refresh_interval')">
+                                <a class="settings-revert-icon" onclick="resetSetting('dashboard_refresh_interval')" title="Revert Changes">
                                     {% include 'icons/revert.svg' %}
                                 </a>
                             </div>
@@ -46,7 +46,7 @@
                         {{ form.session_timeout(class="setting-input") }}
                         <div class="actions">
                             <div>
-                                <a class="settings-revert-icon" onclick="resetSetting('session_timeout')">
+                                <a class="settings-revert-icon" onclick="resetSetting('session_timeout')" title="Revert Changes">
                                     {% include 'icons/revert.svg' %}
                                 </a>
                             </div>
@@ -61,7 +61,7 @@
                         {{ form.password_min_length(class="setting-input") }}
                         <div class="actions">
                             <div>
-                                <a class="settings-revert-icon" onclick="resetSetting('password_min_length')">
+                                <a class="settings-revert-icon" onclick="resetSetting('password_min_length')" title="Revert Changes">
                                     {% include 'icons/revert.svg' %}
                                 </a>
                             </div>

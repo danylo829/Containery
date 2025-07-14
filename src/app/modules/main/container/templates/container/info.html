@@ -15,35 +15,35 @@
                 <div class="actions">
                     <div>
                         <!-- Start Container -->
-                        <a class="start-btn" data-id="{{ container.general_info.id }}">
+                        <a class="start-btn" data-id="{{ container.general_info.id }}" title="Start Container">
                             {% include 'icons/start.svg' %}  
                         </a>
 
                         <!-- Stop Container -->
-                        <a class="stop-btn" data-id="{{ container.general_info.id }}">
+                        <a class="stop-btn" data-id="{{ container.general_info.id }}" title="Stop Container">
                             {% include 'icons/stop.svg' %}  
                         </a>
 
                         <!-- Restart Container -->
-                        <a class="restart-btn" data-id="{{ container.general_info.id }}">
+                        <a class="restart-btn" data-id="{{ container.general_info.id }}" title="Restart Container">
                             {% include 'icons/restart.svg' %}  
                         </a>
                         <!-- Delete/Kill Container -->
-                        <a class="delete-btn" data-id="{{ container.general_info.id }}">
+                        <a class="delete-btn" data-id="{{ container.general_info.id }}" title="Delete Container">
                             {% include 'icons/delete.svg' %}
                         </a>
                     </div>
                     <div>
                         <!-- Terminal -->
-                        <a class="terminal-btn" href="{{ url_for('main.container.console', id=container.general_info.id) }}">
+                        <a class="terminal-btn" href="{{ url_for('main.container.console', id=container.general_info.id) }}" title="Open Terminal">
                             {% include 'icons/terminal.svg' %}
                         </a>
                         <!-- Processes -->
-                        <a class="processes-btn" href="{{ url_for('main.container.processes', id=container.general_info.id) }}">
+                        <a class="processes-btn" href="{{ url_for('main.container.processes', id=container.general_info.id) }}" title="View Processes">
                             {% include 'icons/processes.svg' %}
                         </a>
                         <!-- Logs -->
-                        <a class="logs-btn" href="{{ url_for('main.container.logs', id=container.general_info.id) }}">
+                        <a class="logs-btn" href="{{ url_for('main.container.logs', id=container.general_info.id) }}" title="View Logs">
                             {% include 'icons/logs.svg' %}
                         </a>
                     </div>
