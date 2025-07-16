@@ -1,4 +1,24 @@
 
+<a name="v1.1"></a>
+## [v1.1](https://github.com/danylo829/containery/compare/v1.0...v1.1)
+
+### Bug Fixes
+
+- **core:** Build confirmation modal dynamically
+- **styles:** Update accent colors for dark theme
+- **user:** Display user roles as separate badges
+- **user:** Remove autocomplete username and password on user creation form
+
+### Features
+
+- **ci:** Provide image description
+- **core:** Provide tooltips on various buttons
+- **core:** Implement Docker prune support (containers, images, networks and volumes)
+- **core:** Add clear button to search fields
+- **core:** Add handler for Bad Request errors
+- **style:** Improve modal styles and animations
+
+
 <a name="v1.0"></a>
 ## [v1.0](https://github.com/danylo829/containery/compare/v0.1.2...v1.0)
 
