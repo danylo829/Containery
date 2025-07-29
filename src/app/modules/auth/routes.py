@@ -1,9 +1,11 @@
 from flask import render_template, flash, redirect, url_for, session, request
 from flask_login import login_user, logout_user, login_required, current_user
 
-from app.modules.user.models import Permissions, User, Role
+from app.modules.user.models import User, Role
 from app.modules.settings.models import GlobalSettings
 from app.lib.common import is_safe_url
+
+from .helpers import create_admin_role
 from .forms import LoginForm, AdminSetupForm
 
 from . import auth
@@ -16,16 +18,22 @@ def login():
         return redirect(url_for('auth.install'))
 
     form = LoginForm()
+
     next_page = request.args.get('next')
+    
     if form.validate_on_submit():
         username = str(form.username.data).strip()
         password = form.password.data
+        
         user = User.query.filter_by(username=username).first()
+        
         if user and user.check_password(password):
             login_user(user)
             session.permanent = True
+
             if next_page and is_safe_url(next_page, request.host_url):
                 return redirect(next_page)
+            
             return redirect(url_for('index.root'))
         else:
             flash('Invalid username or password', 'error')
@@ -49,25 +57,23 @@ def install():
             return redirect(url_for('auth.install'))
 
         try:
-            admin_role = Role.create_role('admin')
-            flash(f"Role 'admin' created successfully.", 'success')
-
-            for permission in Permissions:
-                try:
-                    admin_role.add_permission(permission.value)
-                except ValueError as e:
-                    flash(str(e), 'error')
-
             user = User.create_user(username=username, password=password)
+            if not user or not isinstance(user, User):
+                flash("User creation failed. Please try again.", 'error')
+                return redirect(url_for('auth.install'))
+            
+            admin_role = create_admin_role()
+            if not admin_role or not isinstance(admin_role, Role):
+                flash("Failed to create admin role. Please try again.", 'error')
+                return redirect(url_for('auth.install'))
+
             user.assign_role(admin_role)
 
             flash("Admin user created successfully.", 'success')
             return redirect(url_for('index.root'))
 
-        except ValueError as ve:
-            flash(str(ve), 'error')
         except Exception as e:
-            flash(f"An unexpected error occurred: {str(e)}", 'error')
+            flash(str(e), 'error')
 
     return render_template('install.html', form=form)
 
