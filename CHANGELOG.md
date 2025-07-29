@@ -1,4 +1,16 @@
 
+<a name="v1.2"></a>
+## [v1.2](https://github.com/danylo829/containery/compare/v1.1...v1.2)
+
+### Bug Fixes
+
+- **auth:** Fix admin creation logic
+
+### Features
+
+- **core:** Add error message hint
+
+
 <a name="v1.1"></a>
 ## [v1.1](https://github.com/danylo829/containery/compare/v1.0...v1.1)
 

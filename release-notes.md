@@ -1,21 +1,13 @@
-# Containery 1.1 is out!
+# Containery 1.2 is out!
 
-Happy to announce a minor update that brings essential improvements like Docker prune support, cleaner modal styles, and many others.
+This release fixes a critical bug that could prevent admin account creation under certain conditions.
 
 ### Bug Fixes
 
-- **core:** Build confirmation modal dynamically
-- **styles:** Update accent colors for dark theme
-- **user:** Display user roles as separate badges
-- **user:** Remove autocomplete username and password on user creation form
+- **auth:** Fix admin creation logic
 
 ### Features
 
-- **ci:** Provide image description
-- **core:** Provide tooltips on various buttons
-- **core:** Implement Docker prune support (containers, images, networks and volumes)
-- **core:** Add clear button to search fields
-- **core:** Add handler for Bad Request errors
-- **style:** Improve modal styles and animations
+- **core:** Add error message hint
 
 Feedback, issues, and contributions are welcome.  
