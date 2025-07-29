@@ -17,6 +17,7 @@ def internal_server_error(e):
 
 def bad_request(e):
     code = 400
+    e = f"{e} Try reloading the page."
     if current_user.is_authenticated:
         return render_template('error.html', code=code, message=e), code
     else:
